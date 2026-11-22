@@ -1,0 +1,372 @@
+@import "tailwindcss";
+/* eslint-ignore-nextline */
+@theme {
+  /* Monochrome ramp: 50–200 = light text, 300–600 = emerald accents,
+     700–950 = dark surfaces. Black & white base + emerald highlights. */
+  --color-emerald-50: #fafafa;
+  --color-emerald-100: #e5e5e5;
+  --color-emerald-200: #d4d4d4;
+  --color-emerald-300: #34d399;
+  --color-emerald-400: #10b981;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #525252;
+  --color-emerald-800: #3f3f3f;
+  --color-emerald-900: #2a2a2a;
+  --color-emerald-950: #1f1f1f;
+
+  --font-sans: "Figtree", sans-serif;
+  --font-serif: "Figtree", sans-serif;
+  --font-menu: "Bebas Neue", sans-serif;
+}
+
+body {
+  background: var(--fa-page-bg, var(--color-emerald-950));
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/* Light theme — remaps the emerald & gray scales used site-wide      */
+/* ------------------------------------------------------------------ */
+:root {
+  --fa-page-bg: #000000;
+}
+
+html.light {
+  --fa-page-bg: #fafafa;
+
+  --color-emerald-50: #fafafa;
+  --color-emerald-100: #e5e5e5;
+  --color-emerald-200: #d4d4d4;
+  --color-emerald-300: #a3a3a3;
+  --color-emerald-400: #10b981;
+  --color-emerald-500: #059669;
+  --color-emerald-600: #047857;
+  --color-emerald-700: #525252;
+  --color-emerald-800: #3f3f3f;
+  --color-emerald-900: #1f1f1f;
+  --color-emerald-950: #111111;
+
+  --color-gray-50: #111827;
+  --color-gray-100: #1f2937;
+  --color-gray-200: #374151;
+  --color-gray-300: #4b5563;
+  --color-gray-400: #6b7280;
+  --color-gray-500: #9ca3af;
+  --color-gray-600: #6b7280;
+  --color-gray-700: #9ca3af;
+  --color-gray-800: #d1d5db;
+  --color-gray-900: #e5e7eb;
+  --color-gray-950: #f3f4f6;
+}
+
+/* Light-mode patches: neutral text, emerald reserved for accents */
+html.light .text-emerald-100 { color: #525252; }
+html.light .text-emerald-200 { color: #404040; }
+html.light .text-emerald-300 { color: #047857; }
+html.light .text-emerald-400 { color: #047857; }
+html.light .text-emerald-900 { color: #262626; }
+html.light .text-emerald-800 { color: #404040; }
+html.light .text-emerald-700 { color: #525252; }
+html.light .text-red-400,
+html.light .text-red-300 { color: #dc2626; }
+html.light .text-emerald-700\/60,
+html.light .text-emerald-700\/70 { color: #525252; }
+html.light .text-emerald-800\/60,
+html.light .text-emerald-800\/70 { color: #404040; }
+html.light .hover\:bg-emerald-50:hover { background-color: #f0f0f0; }
+
+/* Navbar stays white in light mode */
+html.light .site-navbar {
+  background-color: #ffffff;
+  border-bottom-color: #10b981;
+}
+
+/* Dark theme — navbar uses dark surfaces, light text */
+html:not(.light) .site-navbar,
+html:not(.light) .site-navbar .bg-white { background-color: #0a0a0a; }
+html:not(.light) .site-navbar .border-gray-100,
+html:not(.light) .site-navbar .border-gray-200,
+html:not(.light) .site-navbar.border-gray-100 { border-color: #262626; }
+html:not(.light) .site-navbar .text-emerald-950 { color: #fafafa; }
+html:not(.light) .site-navbar .hover\:bg-emerald-100:hover { background-color: #1f1f1f; }
+html:not(.light) .site-navbar .hover\:text-emerald-500:hover,
+html:not(.light) .site-navbar .hover\:text-emerald-400:hover { color: #34d399; }
+html:not(.light) .site-navbar input,
+html:not(.light) .site-navbar select { color-scheme: dark; }
+
+/* Dark theme — remove visible borders/dividers for a flat look */
+html:not(.light) .border-emerald-900\/30,
+html:not(.light) .border-emerald-900\/40,
+html:not(.light) .border-emerald-900\/50,
+html:not(.light) .border-emerald-900\/60,
+html:not(.light) .border-emerald-900\/70,
+html:not(.light) .border-emerald-900\/80,
+html:not(.light) .border-emerald-800,
+html:not(.light) .border-gray-100,
+html:not(.light) .border-gray-200,
+html:not(.light) .border-gray-300,
+html:not(.light) .border-\[\#e5e5e5\],
+html:not(.light) .border-\[\#f0f0f0\] { border-color: transparent; }
+html:not(.light) .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+html:not(.light) .divide-\[\#f0f0f0\] > :not([hidden]) ~ :not([hidden]) { border-color: transparent; }
+html:not(.light) footer.border-t { border-top-color: transparent; }
+
+/* Dark theme — match rows hover black instead of light green */
+html:not(.light) .hover\:bg-\[\#ecfdf5\]:hover { background-color: #000000; }
+
+/* Strong text that stays readable on dark event cards */
+.fa-ink { color: #000000; }
+.fa-ink--goal { color: #047857; }
+html:not(.light) .fa-ink { color: #ffffff; }
+html:not(.light) .fa-ink--goal { color: #34d399; }
+
+/* Modal panels stay white in light mode */
+html.light .fa-modal { background-color: #ffffff; }
+
+/* Flat design: white cards on light-gray page, no visible borders */
+html.light .bg-emerald-950\/60,
+html.light .bg-emerald-950\/70,
+html.light .bg-emerald-950\/80 { background-color: #ffffff; }
+html.light .bg-emerald-900\/40,
+html.light .bg-emerald-900\/50 { background-color: #f5f5f5; }
+html.light .border-emerald-900\/30,
+html.light .border-emerald-900\/40,
+html.light .border-emerald-900\/60,
+html.light .border-emerald-900\/70,
+html.light .border-emerald-900\/80 { border-color: transparent; }
+html.light .border-emerald-200 { border-color: #f0f0f0; }
+
+/* Form controls keep a light gray fill so they stay visible without borders */
+html.light input.bg-emerald-950\/60,
+html.light input.bg-emerald-950\/70,
+html.light select.bg-emerald-950\/70,
+html.light input.bg-emerald-900\/60,
+html.light select.bg-emerald-900\/60 {
+  background-color: #f5f5f5;
+  border-color: #e5e5e5;
+  color: #1f2937;
+}
+html.light .placeholder\:text-emerald-50::placeholder,
+html.light .placeholder\:text-emerald-100::placeholder {
+  color: #9ca3af;
+}
+
+/* Dark surfaces (sidebar, dashboard header) — keep accents readable on #111 */
+html.light .fa-dark-surface .text-emerald-400 { color: #34d399; }
+html.light .fa-dark-surface .text-emerald-300 { color: #6ee7b7; }
+
+/* Article links keep the emerald accent */
+html.light .article-content a { color: #047857; }
+
+/* Breaking news bar stays dark in both themes — keep light text */
+
+/* Dark theme — inactive match-page tabs readable in white */
+html:not(.light) .fa-tab-inactive { color: #fff; }
+html:not(.light) .fa-tab-inactive:hover { background-color: rgba(16,185,129,0.25); }
+
+/* Dark theme — stats bars go white */
+html:not(.light) .fa-statbar-track { background-color: rgba(255,255,255,0.15); }
+html:not(.light) .fa-statbar-home { background-color: #fff; }
+html:not(.light) .fa-statbar-away { background-color: rgba(255,255,255,0.35); }
+
+/* Custom toast — matches site theme */
+.fa-toast {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 0.9rem !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: 0.8rem 1.1rem !important;
+  max-width: 420px !important;
+}
+.fa-toast [data-icon] { font-size: 1rem; }
+.fa-toast [data-close-button] {
+  color: #9ca3af !important;
+  border: none !important;
+  background: transparent !important;
+}
+html:not(.light) .fa-toast {
+  background: #141414 !important;
+  color: #fafafa !important;
+  border-color: #2a2a2a !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+html:not(.light) .fa-toast [data-close-button] { color: #6b7280 !important; }
+
+/* Auto-scrolling marquee (competitions strip) — pauses on hover */
+@keyframes fa-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: fa-marquee 40s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Article content (Tiptap HTML output) */
+.article-content {
+  color: var(--color-gray-100, #f3f4f6);
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+.article-content h1,
+.article-content h2,
+.article-content h3 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  color: var(--color-gray-50, #fff);
+  margin: 1.8rem 0 0.8rem;
+  line-height: 1.25;
+}
+.article-content h1 { font-size: 1.9rem; }
+.article-content h2 { font-size: 1.55rem; }
+.article-content h3 { font-size: 1.25rem; }
+.article-content p { margin: 1rem 0; }
+.article-content a {
+  color: var(--color-emerald-300, #4bff88);
+  text-decoration: underline;
+}
+.article-content ul,
+.article-content ol {
+  margin: 1rem 0;
+  padding-left: 1.6rem;
+}
+.article-content ul { list-style: disc; }
+.article-content ol { list-style: decimal; }
+.article-content li { margin: 0.35rem 0; }
+.article-content blockquote {
+  border-left: 4px solid var(--color-emerald-500, #0d9f4a);
+  padding: 0.5rem 1.2rem;
+  margin: 1.4rem 0;
+  font-style: italic;
+  color: var(--color-gray-300, #d1d5db);
+  background: rgba(13, 159, 74, 0.08);
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+.article-content img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin: 1.2rem auto;
+  display: block;
+}
+.article-content hr {
+  border: none;
+  border-top: 1px solid rgba(75, 255, 136, 0.25);
+  margin: 2rem 0;
+}
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4rem 0;
+  font-size: 0.95rem;
+}
+.article-content th,
+.article-content td {
+  border: 1px solid rgba(75, 255, 136, 0.25);
+  padding: 0.5rem 0.8rem;
+  text-align: left;
+}
+.article-content th {
+  background: rgba(13, 159, 74, 0.15);
+  font-weight: 700;
+}
+.article-content mark {
+  background: rgba(75, 255, 136, 0.3);
+  color: inherit;
+  padding: 0 0.15rem;
+  border-radius: 0.2rem;
+}
+
+/* Tiptap editor */
+.tiptap-editor .tiptap {
+  outline: none;
+  min-height: 26rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #111827;
+}
+.tiptap-editor .tiptap h1 { font-size: 1.9rem; font-weight: 800; margin: 1.2rem 0 0.6rem; }
+.tiptap-editor .tiptap h2 { font-size: 1.5rem; font-weight: 800; margin: 1.1rem 0 0.5rem; }
+.tiptap-editor .tiptap h3 { font-size: 1.2rem; font-weight: 700; margin: 1rem 0 0.4rem; }
+.tiptap-editor .tiptap p { margin: 0.6rem 0; }
+.tiptap-editor .tiptap ul { list-style: disc; padding-left: 1.5rem; margin: 0.6rem 0; }
+.tiptap-editor .tiptap ol { list-style: decimal; padding-left: 1.5rem; margin: 0.6rem 0; }
+.tiptap-editor .tiptap blockquote {
+  border-left: 4px solid #10b455;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #4b5563;
+  font-style: italic;
+}
+.tiptap-editor .tiptap img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin: 1rem auto;
+  display: block;
+}
+.tiptap-editor .tiptap a { color: #0d9f4a; text-decoration: underline; }
+.tiptap-editor .tiptap hr { border: none; border-top: 1px solid #a7f3d0; margin: 1.5rem 0; }
+.tiptap-editor .tiptap table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  table-layout: fixed;
+}
+.tiptap-editor .tiptap td,
+.tiptap-editor .tiptap th {
+  border: 1px solid #a7f3d0;
+  padding: 0.4rem 0.6rem;
+  vertical-align: top;
+  position: relative;
+}
+.tiptap-editor .tiptap th { background: #ecfdf5; font-weight: 700; }
+.tiptap-editor .tiptap .selectedCell:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 159, 74, 0.1);
+  pointer-events: none;
+}
+.tiptap-editor .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ---------- Motion ---------- */
+@keyframes fa-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fa-fade-up {
+  animation: fa-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.fa-fade-up-1 { animation-delay: 0.06s; }
+.fa-fade-up-2 { animation-delay: 0.12s; }
+.fa-fade-up-3 { animation-delay: 0.18s; }
+.fa-stagger > * {
+  animation: fa-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.fa-stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.fa-stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.fa-stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.fa-stagger > *:nth-child(5) { animation-delay: 0.2s; }
+.fa-stagger > *:nth-child(6) { animation-delay: 0.25s; }
+.fa-stagger > *:nth-child(7) { animation-delay: 0.3s; }
+.fa-stagger > *:nth-child(8) { animation-delay: 0.35s; }
+.fa-stagger > *:nth-child(n+9) { animation-delay: 0.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .fa-fade-up, .fa-fade-up-1, .fa-fade-up-2, .fa-fade-up-3,
+  .fa-stagger > * { animation: none; }
+}

@@ -1,0 +1,177 @@
+import React, { useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { usePostReadData } from "../hooks/usePostReadData";
+import { usePostData } from "../hooks/usePostData";
+import Spinner from "./Spinner";
+import {
+  RiChat4Line,
+  RiUser3Line,
+  RiTimeLine,
+  RiArrowLeftLine,
+} from "react-icons/ri";
+import { formatDateTime } from "../utils/helpers";
+import { Container } from "./Container";
+import SaveArticleButton, { ShareButtons } from "../components/user/SaveArticleButton";
+import CommentsSection from "../components/user/CommentsSection";
+import AdBanner from "../components/AdBanner";
+
+const isHtml = str => typeof str === "string" && /<\w+[^>]*>/.test(str);
+
+const RelatedCard = ({ post }) => (
+  <Link
+    to={`/news/${post.slug}`}
+    className="block bg-emerald-950/60 border border-emerald-900/60 rounded-xl overflow-hidden hover:border-emerald-500/50 transition-colors"
+  >
+    <div
+      className="h-28 bg-emerald-900/40 bg-cover bg-center"
+      style={{
+        backgroundImage: post.featuredImage
+          ? `url(${post.featuredImage})`
+          : undefined,
+      }}
+    />
+    <div className="p-3">
+      <h4 className="font-serif text-gray-100 text-sm leading-snug line-clamp-2">
+        {post.title}
+      </h4>
+      <p className="text-gray-500 text-[0.65rem] mt-1.5 uppercase tracking-wider">
+        {formatDateTime(post.created_at)}
+      </p>
+    </div>
+  </Link>
+);
+
+const ReadPost = () => {
+  const { t } = useTranslation();
+  const { slug } = useParams();
+  const { data: post, isLoading } = usePostReadData(slug);
+  const { data: allPosts = [] } = usePostData();
+
+  useEffect(() => {
+    if (!post) return;
+    document.title = `${post.title} — Football Autopsie`;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta && post.excerpt) meta.setAttribute("content", post.excerpt);
+  }, [post]);
+
+  if (isLoading) return <Spinner />;
+  if (!post) {
+    return (
+      <Container>
+        <div className="py-24 text-center">
+          <h1 className="text-2xl font-bold text-gray-100 mb-3">
+            {t("Article introuvable")}
+          </h1>
+          <Link to="/news" className="text-emerald-400 hover:underline">
+            ← {t("Retour aux actualités")}
+          </Link>
+        </div>
+      </Container>
+    );
+  }
+
+  const category = post?.Categories ?? null;
+  const related = (allPosts ?? [])
+    .filter(p => p.id !== post.id)
+    .slice(0, 3);
+
+  return (
+    <Container>
+      <div className="max-w-7xl mx-auto">
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem] grid-cols-1 gap-10 py-8">
+        <article className="max-w-3xl">
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-1.5 text-emerald-400 text-sm font-semibold hover:text-emerald-300 mb-5"
+          >
+            <RiArrowLeftLine /> {t("Toutes les actualités")}
+          </Link>
+
+          {category && (
+            <span
+              className="inline-block px-3 py-1 rounded-full text-[0.65rem] font-black uppercase tracking-widest"
+              style={{
+                backgroundColor: category.color || "#10b455",
+                color: "#052e16",
+              }}
+            >
+              {category.name}
+            </span>
+          )}
+
+          <h1 className="font-serif text-gray-50 text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
+            {post.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-gray-400 text-xs italic mb-6">
+            <span className="flex items-center gap-1.5 not-italic font-semibold text-gray-300">
+              <RiUser3Line /> {post.authorId ?? t("Rédaction Football Autopsie")}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <RiTimeLine /> {post.readingTime ?? "—"} {t("min de lecture")}
+            </span>
+            <span>{formatDateTime(post.created_at)}</span>
+          </div>
+
+          <div className="flex items-center gap-2 mb-6">
+            <SaveArticleButton postId={post.id} />
+            <ShareButtons title={post.title} />
+          </div>
+
+          <AdBanner variant="leaderboard" className="mb-6" />
+
+          {post.excerpt && (
+            <p className="font-serif text-xl text-gray-300 leading-relaxed border-l-4 border-emerald-500 pl-5 mb-6">
+              {post.excerpt}
+            </p>
+          )}
+
+          {post.featuredImage && (
+            <figure className="mb-6">
+              <img
+                className="w-full rounded-2xl"
+                src={post.featuredImage}
+                alt={post.title}
+              />
+              <figcaption className="text-gray-500 text-xs py-2 italic">
+                {t("Image : Football Autopsie")}
+              </figcaption>
+            </figure>
+          )}
+
+          <div className="article-content">
+            {isHtml(post.content) ? (
+              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            ) : (
+              <p className="whitespace-pre-line">{post.content}</p>
+            )}
+          </div>
+
+          <AdBanner variant="leaderboard" className="mb-8" />
+
+          <CommentsSection postId={post.id} />
+        </article>
+
+        <aside className="lg:sticky lg:top-24 self-start">
+          <AdBanner variant="rectangle" className="mb-6" />
+          {related.length > 0 && (
+            <div>
+              <h3 className="text-xs font-semibold text-emerald-400 mb-4">
+                {t("À lire aussi")}
+              </h3>
+              <div className="flex flex-col gap-4">
+                {related.map(p => (
+                  <RelatedCard key={p.id} post={p} />
+                ))}
+              </div>
+            </div>
+          )}
+        </aside>
+      </div>
+      </div>
+    </Container>
+  );
+};
+
+export default ReadPost;
