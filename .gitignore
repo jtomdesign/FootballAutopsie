@@ -41,3 +41,7 @@ supabase/migrations/
 
 # Local agent config
 .devin/config.local.json
+
+# WordPress migration outputs (regenerable)
+wordpress_import.sql
+scripts/wp-image-map.json
