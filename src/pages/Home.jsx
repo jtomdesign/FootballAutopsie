@@ -251,7 +251,7 @@ const Home = () => {
             action={
               <Link
                 to="/news"
-                className="flex items-center gap-1 text-emerald-600 text-sm font-semibold hover:text-emerald-700"
+                className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
               >
                 {t("Tout voir")} <HiArrowRight />
               </Link>
@@ -281,7 +281,7 @@ const Home = () => {
               action={
                 <Link
                   to="/ligues"
-                  className="flex items-center gap-1 text-emerald-600 text-sm font-semibold hover:text-emerald-700"
+                  className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
                 >
                   {t("Toutes")} <HiArrowRight />
                 </Link>
@@ -322,7 +322,7 @@ const Home = () => {
               action={
                 <Link
                   to="/scores"
-                  className="flex items-center gap-1 text-emerald-600 text-sm font-semibold hover:text-emerald-700"
+                  className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
                 >
                   {t("Scores")} <HiArrowRight />
                 </Link>
@@ -346,7 +346,7 @@ const Home = () => {
               action={
                 <Link
                   to="/matchs"
-                  className="flex items-center gap-1 text-emerald-600 text-sm font-semibold hover:text-emerald-700"
+                  className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
                 >
                   {t("Tous les matchs")} <HiArrowRight />
                 </Link>
@@ -373,7 +373,7 @@ const Home = () => {
             action={
               <Link
                 to="/ligues"
-                className="flex items-center gap-1 text-emerald-600 text-sm font-semibold hover:text-emerald-700"
+                className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
               >
                 {t("Compétitions")} <HiArrowRight />
               </Link>
