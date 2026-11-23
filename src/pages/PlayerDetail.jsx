@@ -19,6 +19,9 @@ import {
   RiMapPinLine,
 } from "react-icons/ri";
 
+// API sometimes returns {} for missing stats — only render primitives.
+const display = v => (v == null || typeof v === "object" ? "—" : v);
+
 const InfoItem = ({ label, value, icon: Icon }) => {
   const { t } = useTranslation();
   return (
@@ -27,7 +30,7 @@ const InfoItem = ({ label, value, icon: Icon }) => {
       {Icon && <Icon className="text-emerald-500" />}
       {t(label)}
     </p>
-    <p className="text-gray-100 font-semibold mt-1">{value ?? "—"}</p>
+    <p className="text-gray-100 font-semibold mt-1">{display(value)}</p>
   </div>
   );
 };
@@ -36,7 +39,7 @@ const StatCell = ({ label, value }) => {
   const { t } = useTranslation();
   return (
   <div className="text-center py-3 border-b border-emerald-900/40 last:border-0">
-    <p className="text-xl font-black text-emerald-400 tabular-nums">{value ?? "—"}</p>
+    <p className="text-xl font-black text-emerald-400 tabular-nums">{display(value)}</p>
     <p className="text-[0.6rem] uppercase tracking-wider text-gray-500 mt-0.5">
       {t(label)}
     </p>
@@ -157,7 +160,7 @@ const PlayerDetail = () => {
               </div>
             </div>
             <div className="flex flex-col items-center gap-3 shrink-0">
-              {games.number != null && (
+              {typeof games.number === "number" && games.number != null && (
                 <div className="w-16 h-16 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
                   <span className="text-2xl font-black text-emerald-400">
                     {games.number}
@@ -217,7 +220,9 @@ const PlayerDetail = () => {
             <SectionHeader
               title={t("Statistiques")}
               subtitle={`${current.league.name}${
-                current.league.country ? ` · ${current.league.country}` : ""
+                current.league.country?.name ?? current.league.country
+                  ? ` · ${current.league.country?.name ?? current.league.country}`
+                  : ""
               } — ${t("Saison {{season}}", { season: current.league.season ?? "" })}`}
             />
             <div className="mb-8">
@@ -284,10 +289,14 @@ const PlayerDetail = () => {
                     </p>
                   </div>
                   <span className="text-emerald-400 font-bold tabular-nums">
-                    {s.goals?.total ?? 0} {t("buts")}
+                    {typeof s.goals?.total === "number" ? s.goals.total : 0}{" "}
+                    {t("buts")}
                   </span>
                   <span className="text-gray-400 tabular-nums">
-                    {s.games?.appearences ?? 0} {t("matchs")}
+                    {typeof s.games?.appearences === "number"
+                      ? s.games.appearences
+                      : 0}{" "}
+                    {t("matchs")}
                   </span>
                 </div>
               ))}
