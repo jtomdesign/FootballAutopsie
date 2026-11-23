@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
@@ -28,7 +28,7 @@ const POST_META = post => (
     {categoryName(post) && (
       <span className="text-emerald-400 font-bold">{categoryName(post)}</span>
     )}
-    <span>{formatDate(post.created_at)}</span>
+    <span className="normal-case text-[0.6rem] tracking-normal">{formatDate(post.created_at)}</span>
     <span>{post.readingTime ?? "—"} min</span>
   </div>
 );
@@ -118,6 +118,30 @@ const News = () => {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("recent");
   const [layout, setLayout] = useState("list"); // list | grid
+  const [visible, setVisible] = useState(10);
+  const sentinelRef = useRef(null);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisible(10);
+  }, [activeCategory, feed, query, sort]);
+
+  const shown = filtered.slice(0, visible);
+  const hasMore = visible < filtered.length;
+
+  // Auto-load the next batch when the sentinel scrolls into view
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+    const obs = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) setVisible(v => v + 10);
+      },
+      { rootMargin: "400px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [hasMore, visible]);
 
   const favNames = favorites
     .map(f => f.entity_name?.toLowerCase())
@@ -243,13 +267,13 @@ const News = () => {
         {filtered.length ? (
           layout === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fa-stagger">
-              {filtered.map(post => (
+              {shown.map(post => (
                 <NewsCard key={post.id} post={post} />
               ))}
             </div>
           ) : (
             <div className="flex flex-col gap-4 fa-stagger">
-              {filtered.map(post => (
+              {shown.map(post => (
                 <ArticleRow key={post.id} post={post} />
               ))}
             </div>
@@ -260,6 +284,8 @@ const News = () => {
             message={t("Aucun article ne correspond à ce filtre pour le moment.")}
           />
         )}
+
+        {hasMore && <div ref={sentinelRef} className="h-10" aria-hidden="true" />}
       </div>
     </Container>
   );
