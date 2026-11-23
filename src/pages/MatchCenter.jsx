@@ -481,21 +481,22 @@ const MatchCenter = () => {
                   {homeTeam.name}
                 </span>
               </Link>
-              {homeScorers.length > 0 && (
-                <div className="flex flex-col items-center gap-0.5">
-                  {homeScorers.map((s, i) => {
-                    const pid = playerIds[normName(s.name)];
-                    const cls = "text-[0.7rem] text-emerald-400 hover:underline";
-                    return pid ? (
-                      <Link key={`${s.name}-${s.minute}-${i}`} to={`/joueurs/${pid}`} className={cls}>
-                        ⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
-                      </Link>
-                    ) : (
-                      <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
-                    );
-                  })}
-                </div>
-              )}
+              <div className="flex flex-col items-center gap-0.5 min-h-[3.4rem]">
+                {homeScorers.slice(0, 3).map((s, i) => {
+                  const pid = playerIds[normName(s.name)];
+                  const cls = "text-[0.7rem] text-emerald-400 hover:underline whitespace-nowrap";
+                  return pid ? (
+                    <Link key={`${s.name}-${s.minute}-${i}`} to={`/joueurs/${pid}`} className={cls}>
+                      ⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
+                    </Link>
+                  ) : (
+                    <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
+                  );
+                })}
+                {homeScorers.length > 3 && (
+                  <span className="text-[0.65rem] text-gray-500">+{homeScorers.length - 3}</span>
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col items-center px-1 sm:px-4">
@@ -542,21 +543,22 @@ const MatchCenter = () => {
                   {awayTeam.name}
                 </span>
               </Link>
-              {awayScorers.length > 0 && (
-                <div className="flex flex-col items-center gap-0.5">
-                  {awayScorers.map((s, i) => {
-                    const pid = playerIds[normName(s.name)];
-                    const cls = "text-[0.7rem] text-emerald-400 hover:underline";
-                    return pid ? (
-                      <Link key={`${s.name}-${s.minute}-${i}`} to={`/joueurs/${pid}`} className={cls}>
-                        ⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
-                      </Link>
-                    ) : (
-                      <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
-                    );
-                  })}
-                </div>
-              )}
+              <div className="flex flex-col items-center gap-0.5 min-h-[3.4rem]">
+                {awayScorers.slice(0, 3).map((s, i) => {
+                  const pid = playerIds[normName(s.name)];
+                  const cls = "text-[0.7rem] text-emerald-400 hover:underline whitespace-nowrap";
+                  return pid ? (
+                    <Link key={`${s.name}-${s.minute}-${i}`} to={`/joueurs/${pid}`} className={cls}>
+                      ⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
+                    </Link>
+                  ) : (
+                    <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
+                  );
+                })}
+                {awayScorers.length > 3 && (
+                  <span className="text-[0.65rem] text-gray-500">+{awayScorers.length - 3}</span>
+                )}
+              </div>
             </div>
           </div>
 
