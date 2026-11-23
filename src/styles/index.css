@@ -420,3 +420,11 @@ html.light .fa-input {
   background-color: var(--fa-input-bg);
   color: var(--fa-input-text);
 }
+
+@keyframes fa-menu-drop {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fa-menu-drop {
+  animation: fa-menu-drop 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

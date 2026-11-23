@@ -8,8 +8,6 @@ import {
   RiUser3Fill,
   RiUser3Line,
   RiSearchLine,
-  RiMenuLine,
-  RiCloseLine,
   RiSunLine,
   RiMoonLine,
 } from "react-icons/ri";
@@ -18,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/authentication/authSlice";
 import { signOut } from "../services/auth";
 import NotificationBell from "../components/user/NotificationBell";
+import HamburgerIcon from "./HamburgerIcon";
 
 const NAV_LINKS = [
   { to: "/", key: "Accueil" },
@@ -136,7 +135,7 @@ const Navbar = () => {
               onClick={() => setMenuOpen(o => !o)}
               aria-label={t("Menu")}
             >
-              {menuOpen ? <RiCloseLine className="text-2xl" /> : <RiMenuLine className="text-2xl" />}
+              <HamburgerIcon open={menuOpen} className="text-emerald-950" />
             </button>
           </div>
         </div>
@@ -144,7 +143,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="xl:hidden border-t border-gray-100 bg-white">
+        <div className="xl:hidden border-t border-gray-100 bg-white fa-menu-drop">
           <Container>
             <nav className="flex flex-col py-3">
               {NAV_LINKS.map(link => (

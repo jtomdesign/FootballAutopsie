@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { RiEyeFill, RiMenuLine, RiCloseLine } from "react-icons/ri";
+import { RiEyeFill } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/authentication/authSlice";
 import { signOut } from "../services/auth";
 import Sidebar from "../ui/Sidebar";
+import HamburgerIcon from "../ui/HamburgerIcon";
 import { useSEO } from "../utils/seo";
 
 const MOBILE_LINKS = [
@@ -52,7 +53,7 @@ const Dashboard = () => {
                 onClick={() => setMenuOpen(o => !o)}
                 aria-label="Menu"
               >
-                {menuOpen ? <RiCloseLine className="text-xl" /> : <RiMenuLine className="text-xl" />}
+                <HamburgerIcon open={menuOpen} className="text-emerald-100/80" />
               </button>
               {user?.avatarUrl ? (
                 <img
@@ -93,7 +94,7 @@ const Dashboard = () => {
           </div>
 
           {menuOpen && (
-            <nav className="lg:hidden px-5 pb-4 flex gap-2 flex-wrap">
+            <nav className="lg:hidden px-5 pb-4 flex gap-2 flex-wrap fa-menu-drop">
               {MOBILE_LINKS.map(l => (
                 <Link
                   key={l.to}
