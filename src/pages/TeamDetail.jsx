@@ -13,6 +13,7 @@ import {
 } from "../hooks/football";
 import { getCurrentSeason } from "../services/football/leagues";
 import SectionHeader from "../components/football/SectionHeader";
+import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
 import MatchList from "../components/football/MatchList";
 import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
@@ -37,6 +38,40 @@ const TeamDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { data: team, isLoading } = useTeam(id);
+  useSEO({
+    title: team?.name,
+    description: team
+      ? metaDescription(
+          `${team.name}${team.country ? ` (${team.country})` : ""} : matchs, résultats, effectif, statistiques et actualités du club sur Football Autopsie.`,
+        )
+      : undefined,
+    path: `/equipes/${id}`,
+    image: team?.logo || undefined,
+    jsonLd: team
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "SportsTeam",
+            name: team.name,
+            url: `${SITE_URL}/equipes/${team.id}`,
+            logo: team.logo || undefined,
+            sport: "Football",
+            location: team.country
+              ? { "@type": "Country", name: team.country }
+              : undefined,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Équipes", item: `${SITE_URL}/equipes` },
+              { "@type": "ListItem", position: 3, name: team.name, item: `${SITE_URL}/equipes/${team.id}` },
+            ],
+          },
+        ]
+      : undefined,
+  });
   const { data: followers } = useEntityFollowers("team", team?.id);
   const { data: leagues = [] } = useTeamLeagues(id);
   const [season, setSeason] = useState(null);

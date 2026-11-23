@@ -40,9 +40,11 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import UserRoute from "./ui/UserRoute";
 import { useSessionRestore } from "./hooks/useAuth";
 import { ThemeProvider } from "./theme/ThemeContext";
+import { useSiteIntegrations } from "./utils/seo";
 
 const AuthBootstrap = () => {
   useSessionRestore();
+  useSiteIntegrations();
   return null;
 };
 

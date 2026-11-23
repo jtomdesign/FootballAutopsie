@@ -27,6 +27,7 @@ import {
   RiSaveLine,
   RiLiveLine,
 } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const FavoriteChip = ({ fav }) => {
   const { t } = useTranslation();
@@ -269,6 +270,7 @@ const SavedMatches = () => {
 };
 
 const MyFootball = () => {
+  useSEO({ title: "Mon espace", path: "/mon-espace", noindex: true });
   const { t } = useTranslation();
   const { user } = useSelector(s => s.user);
   const { data: favorites = [] } = useFavorites();

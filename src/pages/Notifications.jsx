@@ -17,8 +17,10 @@ import {
   RiDeleteBinLine,
   RiCheckDoubleLine,
 } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const Notifications = () => {
+  useSEO({ title: "Notifications", path: "/notifications", noindex: true });
   const { t } = useTranslation();
   const typeLabel = {
     match_live: t("Match en direct"),

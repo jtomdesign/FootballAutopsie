@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
 import { RiDribbbleLine, RiArrowLeftLine } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const NotFound = () => {
   const { t } = useTranslation();
+  useSEO({ title: "Page introuvable", noindex: true });
   return (
     <Container>
       <div className="flex flex-col items-center justify-center py-28 px-6 text-center">

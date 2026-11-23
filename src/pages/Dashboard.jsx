@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/authentication/authSlice";
 import { signOut } from "../services/auth";
 import Sidebar from "../ui/Sidebar";
+import { useSEO } from "../utils/seo";
 
 const MOBILE_LINKS = [
   { to: "/dashboard", label: "Vue d'ensemble", end: true },
@@ -20,6 +21,7 @@ const MOBILE_LINKS = [
 const ROLE_LABELS = { admin: "Administrateur", editor: "Éditeur", user: "Utilisateur" };
 
 const Dashboard = () => {
+  useSEO({ title: "Tableau de bord", path: "/dashboard", noindex: true });
   const { user } = useSelector(store => store.user);
   const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);

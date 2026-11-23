@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { usePostReadData } from "../hooks/usePostReadData";
@@ -15,6 +15,7 @@ import { Container } from "./Container";
 import SaveArticleButton, { ShareButtons } from "../components/user/SaveArticleButton";
 import CommentsSection from "../components/user/CommentsSection";
 import AdBanner from "../components/AdBanner";
+import { useSEO, metaDescription, SITE_NAME, SITE_URL } from "../utils/seo";
 
 const isHtml = str => typeof str === "string" && /<\w+[^>]*>/.test(str);
 
@@ -48,12 +49,69 @@ const ReadPost = () => {
   const { data: post, isLoading } = usePostReadData(slug);
   const { data: allPosts = [] } = usePostData();
 
-  useEffect(() => {
-    if (!post) return;
-    document.title = `${post.title} — Football Autopsie`;
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta && post.excerpt) meta.setAttribute("content", post.excerpt);
-  }, [post]);
+  const category =
+    post?.Categories?.name ?? post?.Categories?.[0]?.name ?? null;
+
+  useSEO({
+    title: post?.title,
+    description: metaDescription(post?.excerpt),
+    path: `/news/${post?.slug ?? slug}`,
+    image: post?.featuredImage || undefined,
+    type: "article",
+    publishedTime: post?.created_at || undefined,
+    modifiedTime: post?.updated_at || undefined,
+    jsonLd: post
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: post.title,
+            description: metaDescription(post.excerpt),
+            image: post.featuredImage ? [post.featuredImage] : undefined,
+            datePublished: post.created_at,
+            dateModified: post.updated_at ?? post.created_at,
+            inLanguage: "fr",
+            articleSection: category ?? undefined,
+            keywords: category ?? undefined,
+            author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+            publisher: {
+              "@type": "Organization",
+              name: SITE_NAME,
+              url: SITE_URL,
+              logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.jpg` },
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `${SITE_URL}/news/${post.slug}`,
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Accueil",
+                item: SITE_URL,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Actualités",
+                item: `${SITE_URL}/news`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: post.title,
+                item: `${SITE_URL}/news/${post.slug}`,
+              },
+            ],
+          },
+        ]
+      : undefined,
+  });
 
   if (isLoading) return <Spinner />;
   if (!post) {

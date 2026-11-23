@@ -4,12 +4,14 @@ import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import Spinner from "../ui/Spinner";
+import { useSEO } from "../utils/seo";
 
 const inputCls =
   "w-full py-3.5 px-4 bg-emerald-900/40 text-gray-100 font-medium placeholder:text-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-shadow";
 
 const Account = () => {
   const { t } = useTranslation();
+  useSEO({ title: "Mon compte", path: "/compte", noindex: true });
   const [mode, setMode] = useState("login"); // login | signup
   const { submit, isPending, googleLogin } = useAuth(mode);
 

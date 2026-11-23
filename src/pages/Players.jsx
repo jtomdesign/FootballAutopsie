@@ -12,6 +12,7 @@ import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
 import { CardGridSkeleton } from "../components/football/Skeleton";
 import { RiSearchLine } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const PlayerCard = ({ player }) => {
   const { t } = useTranslation();
@@ -66,6 +67,11 @@ const PlayerCard = ({ player }) => {
 
 const Players = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Joueurs de football — profils et statistiques",
+    description: "Profils des joueurs de football : statistiques, clubs, palmarès etactualités sur Football Autopsie.",
+    path: "/joueurs",
+  });
   const [search, setSearch] = useState("");
   const [leagueId, setLeagueId] = useState(FEATURED_LEAGUES[0].id);
   const trimmed = search.trim();
@@ -89,7 +95,7 @@ const Players = () => {
   return (
     <Container>
       <div className="py-8">
-        <SectionHeader
+        <SectionHeader level={1}
           title={t("Joueurs")}
           subtitle={
             trimmed

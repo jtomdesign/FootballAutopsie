@@ -17,6 +17,7 @@ import {
   RiListCheck,
 } from "react-icons/ri";
 import AdBanner from "../components/AdBanner";
+import { useSEO } from "../utils/seo";
 
 const categoryName = post =>
   post?.Categories?.name ?? post?.Categories?.[0]?.name ?? null;
@@ -94,6 +95,12 @@ const selectCls =
 
 const News = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Actualités football — News, transferts et analyses",
+    description:
+      "Toute l'actualité football sur Football Autopsie : news, transferts, analyses, résultats et faits marquants du football mondial.",
+    path: "/news",
+  });
   const { data: posts = [], isLoading } = usePostData();
   const { data: categories = [] } = useCategories();
   const { data: favorites = [] } = useFavorites();
@@ -139,7 +146,7 @@ const News = () => {
   return (
     <Container>
       <div className="py-8 max-w-7xl mx-auto">
-        <SectionHeader title={t("News")} subtitle={t("Toute l'actualité Football Autopsie")} />
+        <SectionHeader level={1} title={t("News")} subtitle={t("Toute l'actualité Football Autopsie")} />
 
         <AdBanner variant="leaderboard" className="mb-6" />
 

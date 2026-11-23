@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import { Container } from "../ui/Container";
 import SectionHeader from "../components/football/SectionHeader";
+import { useSEO } from "../utils/seo";
 import { supabase } from "../services/supabase";
 import {
   RiMailLine,
@@ -30,6 +31,11 @@ const InfoCard = ({ icon: Icon, title, children }) => (
 
 const Contact = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Contact — Football Autopsie",
+    description: "Contactez la rédaction de Football Autopsie : news, partenariats, corrections et contributions.",
+    path: "/contact",
+  });
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sending, setSending] = useState(false);
 
@@ -60,7 +66,7 @@ const Contact = () => {
   return (
     <Container>
       <div className="py-10 max-w-5xl mx-auto">
-        <SectionHeader
+        <SectionHeader level={1}
           title={t("Contact")}
           subtitle={t("Une question, une suggestion, un partenariat ? Écrivez-nous.")}
         />

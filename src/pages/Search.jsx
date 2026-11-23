@@ -15,6 +15,7 @@ import {
   shiftDays,
 } from "../services/football/endpoints";
 import SectionHeader from "../components/football/SectionHeader";
+import { useSEO } from "../utils/seo";
 import MatchList from "../components/football/MatchList";
 import TeamLogo from "../components/football/TeamLogo";
 import EmptyState from "../components/football/EmptyState";
@@ -46,6 +47,11 @@ const ResultGroup = ({ title, children, empty }) => {
 
 const Search = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Recherche",
+    path: "/recherche",
+    noindex: true,
+  });
   const [searchParams, setSearchParams] = useSearchParams();
   const [input, setInput] = useState(searchParams.get("q") ?? "");
   const query = useDebounced(input.trim());

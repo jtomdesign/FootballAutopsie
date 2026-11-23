@@ -7,6 +7,7 @@ import { usePlayer } from "../hooks/football";
 import { getCurrentSeason } from "../services/football/leagues";
 import { useEntityFollowers } from "../hooks/user";
 import SectionHeader from "../components/football/SectionHeader";
+import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
 import TeamLogo from "../components/football/TeamLogo";
 import EmptyState from "../components/football/EmptyState";
 import Spinner from "../ui/Spinner";
@@ -53,6 +54,42 @@ const PlayerDetail = () => {
   const { id } = useParams();
   const { data: player, isLoading } = usePlayer(id);
   const { data: followers } = useEntityFollowers("player", player?.id);
+  useSEO({
+    title: player?.name,
+    description: player
+      ? metaDescription(
+          `Profil de ${player.name}${player.nationality ? ` (${player.nationality})` : ""}${player.position ? `, ${player.position}` : ""} : statistiques, club, palmarès et actualités sur Football Autopsie.`,
+        )
+      : undefined,
+    path: `/joueurs/${id}`,
+    image: player?.photo || undefined,
+    jsonLd: player
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: player.name,
+            url: `${SITE_URL}/joueurs/${player.id}`,
+            image: player.photo || undefined,
+            jobTitle: player.position || undefined,
+            nationality: player.nationality
+              ? { "@type": "Country", name: player.nationality }
+              : undefined,
+            birthDate: player.birth?.date || undefined,
+            birthPlace: player.birth?.place || undefined,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Joueurs", item: `${SITE_URL}/joueurs` },
+              { "@type": "ListItem", position: 3, name: player.name, item: `${SITE_URL}/joueurs/${player.id}` },
+            ],
+          },
+        ]
+      : undefined,
+  });
 
   if (isLoading) return <Spinner />;
   if (!player)

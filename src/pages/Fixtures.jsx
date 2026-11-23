@@ -5,6 +5,7 @@ import { useFixturesByDate, useLeagues } from "../hooks/football";
 import { todayParam, shiftDays } from "../services/football/endpoints";
 import { formatMatchDay } from "../utils/helpers";
 import SectionHeader from "../components/football/SectionHeader";
+import { useSEO } from "../utils/seo";
 import MatchList from "../components/football/MatchList";
 import { MatchListSkeleton } from "../components/football/Skeleton";
 import EmptyState from "../components/football/EmptyState";
@@ -25,6 +26,11 @@ const STATUS_FILTERS = [
 
 const Fixtures = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Calendrier et résultats football",
+    description: "Calendrier des matchs de football, résultats et prochaines rencontres des grands championnats sur Football Autopsie.",
+    path: "/matchs",
+  });
   const [date, setDate] = useState(todayParam());
   const [leagueFilter, setLeagueFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -71,7 +77,7 @@ const Fixtures = () => {
   return (
     <Container>
       <div className="py-8">
-        <SectionHeader title={t("Matchs")} subtitle={t("Calendrier et résultats")} />
+        <SectionHeader level={1} title={t("Matchs")} subtitle={t("Calendrier et résultats")} />
 
         {/* Date navigation */}
         <div className="flex items-center justify-center gap-3 mb-6">

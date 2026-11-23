@@ -9,6 +9,7 @@ import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
 import { CardGridSkeleton } from "../components/football/Skeleton";
 import { RiSearchLine } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const TeamCard = ({ team }) => {
   const { t } = useTranslation();
@@ -32,6 +33,11 @@ const TeamCard = ({ team }) => {
 
 const Teams = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Équipes de football — clubs et sélections",
+    description: "Découvrez les équipes de football : clubs des grands championnats, sélections nationales, effectifs et statistiques sur Football Autopsie.",
+    path: "/equipes",
+  });
   const [search, setSearch] = useState("");
   const [leagueId, setLeagueId] = useState(FEATURED_LEAGUES[0].id);
   const trimmed = search.trim();
@@ -49,7 +55,7 @@ const Teams = () => {
   return (
     <Container>
       <div className="py-8">
-        <SectionHeader
+        <SectionHeader level={1}
           title={t("Équipes")}
           subtitle={
             trimmed

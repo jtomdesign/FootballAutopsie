@@ -9,6 +9,7 @@ import TeamLogo from "../components/football/TeamLogo";
 import FollowButton from "../components/user/FollowButton";
 import ImageDownloadButton from "../components/football/ImageDownloadButton";
 import { formatMatchDay, formatMatchTime, countryFlag } from "../utils/helpers";
+import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
 import {
   RiErrorWarningLine,
   RiArrowLeftLine,
@@ -352,6 +353,54 @@ const MatchCenter = () => {
   const { id } = useParams();
   const { data: match, isLoading } = useFixture(id);
   const [tab, setTab] = React.useState("chronologie");
+  useSEO({
+    title: match
+      ? `${match.homeTeam?.name ?? "?"} vs ${match.awayTeam?.name ?? "?"}${match.league?.name ? ` — ${match.league.name}` : ""}`
+      : undefined,
+    description: match
+      ? metaDescription(
+          `Match ${match.homeTeam?.name ?? "?"} vs ${match.awayTeam?.name ?? "?"}${match.league?.name ? ` en ${match.league.name}` : ""} : score en direct, chronologie, compositions, statistiques et events sur Football Autopsie.`,
+        )
+      : undefined,
+    path: `/match/${id}`,
+    jsonLd: match
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "SportsEvent",
+            name: `${match.homeTeam?.name ?? "?"} vs ${match.awayTeam?.name ?? "?"}`,
+            sport: "Football",
+            startDate: match.date || undefined,
+            location: match.venue
+              ? { "@type": "Place", name: match.venue }
+              : undefined,
+            homeTeam: match.homeTeam
+              ? { "@type": "SportsTeam", name: match.homeTeam.name, url: `${SITE_URL}/equipes/${match.homeTeam.id}` }
+              : undefined,
+            awayTeam: match.awayTeam
+              ? { "@type": "SportsTeam", name: match.awayTeam.name, url: `${SITE_URL}/equipes/${match.awayTeam.id}` }
+              : undefined,
+            organizer: match.league?.name
+              ? { "@type": "SportsOrganization", name: match.league.name }
+              : undefined,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Matchs", item: `${SITE_URL}/matchs` },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: `${match.homeTeam?.name ?? "?"} vs ${match.awayTeam?.name ?? "?"}`,
+                item: `${SITE_URL}/match/${match.id}`,
+              },
+            ],
+          },
+        ]
+      : undefined,
+  });
   const [teamTab, setTeamTab] = React.useState("home");
   const pitchRef = React.useRef(null);
 
@@ -455,6 +504,10 @@ const MatchCenter = () => {
   return (
     <Container>
       <div className="py-8 max-w-5xl mx-auto">
+        <h1 className="sr-only">
+          {homeTeam.name} vs {awayTeam.name}
+          {league?.name ? ` — ${league.name}` : ""}
+        </h1>
         <div className="flex items-center justify-between mb-6">
           <Link
             to="/matchs"

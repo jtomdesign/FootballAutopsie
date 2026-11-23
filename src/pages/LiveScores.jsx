@@ -7,15 +7,21 @@ import MatchList from "../components/football/MatchList";
 import { MatchListSkeleton } from "../components/football/Skeleton";
 import EmptyState from "../components/football/EmptyState";
 import { RiLiveLine } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const LiveScores = () => {
   const { t, i18n } = useTranslation();
+  useSEO({
+    title: "Scores en direct — Football Autopsie",
+    description: "Scores football en direct, matchs en cours et résultats en temps réel sur Football Autopsie.",
+    path: "/scores",
+  });
   const { data: live = [], isLoading, dataUpdatedAt } = useLiveFixtures();
 
   return (
     <Container>
       <div className="py-8">
-        <SectionHeader
+        <SectionHeader level={1}
           title={t("Scores en direct")}
           subtitle={
             live.length

@@ -9,6 +9,7 @@ import EmptyState from "../components/football/EmptyState";
 import { CardGridSkeleton } from "../components/football/Skeleton";
 import TeamLogo from "../components/football/TeamLogo";
 import { RiSearchLine } from "react-icons/ri";
+import { useSEO } from "../utils/seo";
 
 const LeagueCard = ({ league }) => {
   const { t } = useTranslation();
@@ -44,6 +45,11 @@ const INITIAL_COUNT = 36;
 
 const Ligues = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Compétitions de football — championnats et coupes",
+    description: "Toutes les compétitions de football : Ligue 1, Premier League, La Liga, Serie A, Bundesliga, Ligue des Champions et bien plus sur Football Autopsie.",
+    path: "/ligues",
+  });
   const { data: leagues = [], isLoading } = useLeagues();
   const [search, setSearch] = useState("");
   const [showAll, setShowAll] = useState(false);
@@ -62,7 +68,7 @@ const Ligues = () => {
   return (
     <Container>
       <div className="py-8">
-        <SectionHeader
+        <SectionHeader level={1}
           title={t("Compétitions")}
           subtitle={t("Championnats et coupes suivis par Football Autopsie")}
         />

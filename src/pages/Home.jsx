@@ -23,6 +23,7 @@ import { HiArrowRight, HiBolt } from "react-icons/hi2";
 import { RiTrophyFill } from "react-icons/ri";
 import Spinner from "../ui/Spinner";
 import AdBanner from "../components/AdBanner";
+import { useSEO } from "../utils/seo";
 
 const categoryName = post => post?.Categories?.name ?? post?.Categories?.[0]?.name ?? null;
 
@@ -187,6 +188,12 @@ const WeekendResultsBar = () => {
 
 const Home = () => {
   const { t } = useTranslation();
+  useSEO({
+    title: "Football Autopsie — Football, News & Scores en direct",
+    description:
+      "Football Autopsie : actualités football, matchs en direct, scores, classements, équipes et joueurs des grands championnats.",
+    path: "/",
+  });
   const scorerCardRefs = React.useRef({});
   const { data: posts = [], isLoading: postsLoading } = usePostData();
   const { data: allLive = [], isLoading: liveLoading } = useLiveFixtures();
@@ -225,6 +232,9 @@ const Home = () => {
       <WeekendResultsBar />
 
       <Container>
+        <h1 className="sr-only">
+          Football Autopsie — Actualités, scores et statistiques football
+        </h1>
         {/* Hero news */}
         <section className="mt-6">
           <SectionHeader

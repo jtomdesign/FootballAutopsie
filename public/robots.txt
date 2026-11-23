@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /compte
+Disallow: /mon-espace
+Disallow: /notifications
+Disallow: /api/
+
+Sitemap: https://www.footautopsie.com/sitemap.xml

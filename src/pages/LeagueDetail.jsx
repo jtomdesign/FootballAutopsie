@@ -11,6 +11,7 @@ import {
 } from "../hooks/football";
 import { getCurrentSeason } from "../services/football/leagues";
 import SectionHeader from "../components/football/SectionHeader";
+import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
 import LeagueTable from "../components/football/LeagueTable";
 import MatchList from "../components/football/MatchList";
 import EmptyState from "../components/football/EmptyState";
@@ -26,6 +27,29 @@ const LeagueDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { data: league, isLoading } = useLeague(id);
+  useSEO({
+    title: league ? `${league.name}${league.country ? ` (${league.country})` : ""}` : undefined,
+    description: league
+      ? metaDescription(
+          `Classement, résultats, buteurs, passeurs et statistiques de ${league.name}${league.country ? ` (${league.country})` : ""} — suivis en direct sur Football Autopsie.`,
+        )
+      : undefined,
+    path: `/ligues/${id}`,
+    image: league?.logo || undefined,
+    jsonLd: league
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+              { "@type": "ListItem", position: 2, name: "Compétitions", item: `${SITE_URL}/ligues` },
+              { "@type": "ListItem", position: 3, name: league.name, item: `${SITE_URL}/ligues/${league.id}` },
+            ],
+          },
+        ]
+      : undefined,
+  });
   const [season, setSeason] = useState(null);
   const scorersRef = useRef(null);
   const assistsRef = useRef(null);
