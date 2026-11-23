@@ -200,33 +200,42 @@ const PlayerDetail = () => {
         {/* Personal info */}
         <SectionHeader title={t("Profil")} />
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-          <InfoItem label={t("Âge")} value={player.age} icon={RiPulseLine} />
-          <InfoItem
-            label={t("Date de naissance")}
-            value={fmtDate(player.birth?.date)}
-            icon={RiCakeLine}
-          />
-          <InfoItem
-            label={t("Nationalité")}
-            value={player.nationality}
-            icon={RiMapPinLine}
-          />
-          <InfoItem label={t("Taille")} value={player.height} />
-          <InfoItem label={t("Poids")} value={player.weight} />
-          <InfoItem
-            label={t("Club")}
-            value={player.team?.name}
-            icon={RiTeamLine}
-          />
-          <InfoItem
-            label={t("Poste")}
-            value={player.position ?? current.position}
-            icon={RiShieldUserLine}
-          />
-          <InfoItem
-            label={t("Blessé")}
-            value={player.injured ? t("Oui") : t("Non")}
-          />
+          {player.age != null && (
+            <InfoItem label={t("Âge")} value={player.age} icon={RiPulseLine} />
+          )}
+          {player.birth?.date && (
+            <InfoItem
+              label={t("Date de naissance")}
+              value={`${fmtDate(player.birth.date)}${player.birth.place ? ` — ${player.birth.place}` : ""}`}
+              icon={RiCakeLine}
+            />
+          )}
+          {player.nationality && (
+            <InfoItem
+              label={t("Nationalité")}
+              value={player.nationality}
+              icon={RiMapPinLine}
+            />
+          )}
+          {player.height && <InfoItem label={t("Taille")} value={player.height} />}
+          {player.weight && <InfoItem label={t("Poids")} value={player.weight} />}
+          {player.team?.name && (
+            <InfoItem
+              label={t("Club")}
+              value={player.team.name}
+              icon={RiTeamLine}
+            />
+          )}
+          {(player.position ?? current.position) && (
+            <InfoItem
+              label={t("Poste")}
+              value={player.position ?? current.position}
+              icon={RiShieldUserLine}
+            />
+          )}
+          {player.injured && (
+            <InfoItem label={t("Blessé")} value={t("Oui")} />
+          )}
         </div>
 
         {/* Season stats — current season, all competitions */}
@@ -264,45 +273,6 @@ const PlayerDetail = () => {
               <StatCell label={t("Duels gagnés")} value={agg.duelsWon} />
             </div>
           </>
-        )}
-
-        {/* Current season — per competition breakdown */}
-        {seasonStats.length > 1 && (
-          <section className="mb-10">
-            <SectionHeader
-              title={t("Par compétition")}
-              subtitle={t("Saison {{season}}", { season: currentSeason })}
-            />
-            <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden">
-              {seasonStats.map((s, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 px-4 py-3 border-b border-emerald-900/40 last:border-0 text-sm"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-gray-100 font-semibold truncate">
-                      {s.league?.name}
-                    </p>
-                    <p className="text-[0.65rem] text-gray-500">
-                      {s.team?.name}
-                      {s.league?.country?.name ?? s.league?.country
-                        ? ` · ${s.league?.country?.name ?? s.league?.country}`
-                        : ""}
-                    </p>
-                  </div>
-                  <span className="text-emerald-400 font-bold tabular-nums">
-                    {num(s.goals?.total)} {t("buts")}
-                  </span>
-                  <span className="text-gray-400 tabular-nums">
-                    {num(s.goals?.assists)} {t("passes")}
-                  </span>
-                  <span className="text-gray-400 tabular-nums">
-                    {num(s.games?.appearences)} {t("matchs")}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
         )}
 
         {/* Other seasons */}
