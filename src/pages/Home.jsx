@@ -10,7 +10,7 @@ import {
   useTopScorers,
 } from "../hooks/football";
 import { FEATURED_LEAGUES } from "../services/football/leagues";
-import { todayParam } from "../services/football/endpoints";
+import { todayParam, shiftDays } from "../services/football/endpoints";
 import { formatMatchDay, formatDate } from "../utils/helpers";
 import SectionHeader from "../components/football/SectionHeader";
 import MatchList from "../components/football/MatchList";
@@ -124,6 +124,58 @@ const BreakingBar = ({ posts }) => {
   );
 };
 
+const WeekendResultsBar = () => {
+  const { t } = useTranslation();
+  const today = todayParam();
+  // Weekend results of the top competitions — shown on Mondays
+  const isMonday = new Date().getDay() === 1;
+  const d1 = useFixturesByDate(shiftDays(today, -1), isMonday);
+  const d2 = useFixturesByDate(shiftDays(today, -2), isMonday);
+  const d3 = useFixturesByDate(shiftDays(today, -3), isMonday);
+
+  const featuredIds = new Set(FEATURED_LEAGUES.map(l => l.id));
+  const results = [d1.data, d2.data, d3.data]
+    .flat()
+    .filter(f => f?.status?.isFinished && featuredIds.has(f.league?.id))
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (!isMonday || !results.length) return null;
+
+  return (
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60">
+      <Container>
+        <div className="flex items-center gap-3 py-2 overflow-hidden">
+          <span className="shrink-0 flex items-center gap-1.5 text-emerald-600 text-xs font-black uppercase tracking-widest">
+            <HiBolt className="text-emerald-500" /> {t("Résultats du week-end")}
+          </span>
+          <div className="overflow-hidden flex-1">
+            <div className="marquee-track flex gap-2.5">
+              {[...results, ...results].map((f, i) => (
+                <Link
+                  key={`${f.id}-${i}`}
+                  to={`/match/${f.id}`}
+                  className="shrink-0 flex items-center gap-2 bg-emerald-900/40 hover:bg-emerald-900/70 rounded-full pl-2 pr-3 py-1.5 transition-colors"
+                >
+                  <TeamLogo logo={f.league.logo} name={f.league.name} size="w-4 h-4" />
+                  <TeamLogo logo={f.homeTeam.logo} name={f.homeTeam.name} size="w-4 h-4" />
+                  <span className="text-xs text-gray-300 whitespace-nowrap">
+                    {f.homeTeam.name}{" "}
+                    <span className="font-bold text-gray-100 tabular-nums">
+                      {f.goals.home ?? 0} - {f.goals.away ?? 0}
+                    </span>{" "}
+                    {f.awayTeam.name}
+                  </span>
+                  <TeamLogo logo={f.awayTeam.logo} name={f.awayTeam.name} size="w-4 h-4" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Container>
+    </div>
+  );
+};
+
 const Home = () => {
   const { t } = useTranslation();
   const scorerCardRefs = React.useRef({});
@@ -161,6 +213,7 @@ const Home = () => {
   return (
     <div className="pb-16">
       <BreakingBar posts={breaking.length ? breaking : published.slice(0, 5)} />
+      <WeekendResultsBar />
 
       <Container>
         {/* Hero news */}

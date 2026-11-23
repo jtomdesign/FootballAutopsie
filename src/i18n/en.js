@@ -104,6 +104,7 @@ export default {
   "Les derniers articles publiés": "Latest published articles",
   "À lire aussi": "Read also",
   "Flash": "Breaking",
+  "Résultats du week-end": "Weekend results",
   "Matchs en cours": "Matches in progress",
   "Aucun match en direct": "No live matches",
   "Revenez plus tard pour suivre les matchs en direct.": "Come back later to follow live matches.",

@@ -50,14 +50,14 @@ export const useLeague = id =>
     retry: 1,
   });
 
-export const useFixturesByDate = date =>
+export const useFixturesByDate = (date, enabled = true) =>
   useQuery({
     queryKey: ["football", "fixtures", "date", date],
     queryFn: () => getFixturesByDate(date),
     staleTime: STALE,
     refetchInterval: query =>
       query.state.data?.some(f => f.status?.isLive) ? LIVE_REFETCH : false,
-    enabled: Boolean(date),
+    enabled: Boolean(date) && enabled,
     retry: 1,
   });
 
