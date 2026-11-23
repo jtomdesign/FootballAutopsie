@@ -112,6 +112,13 @@ export const CreateEditPost = async function (newPost, id) {
   // databases where the migration hasn't been run.
   if (!payload.imageCredit) delete payload.imageCredit;
 
+  // Same guard for the optional EN translation columns — only send the
+  // ones that have content so saves keep working before the
+  // post_translations migration is applied.
+  for (const k of ["title_en", "excerpt_en", "content_en"]) {
+    if (!payload[k]) delete payload[k];
+  }
+
   let query = supabase.from("Posts");
   if (!id) {
     query = query.insert([payload]);

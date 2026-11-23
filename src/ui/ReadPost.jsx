@@ -10,7 +10,7 @@ import {
   RiTimeLine,
   RiArrowLeftLine,
 } from "react-icons/ri";
-import { formatDateTime } from "../utils/helpers";
+import { formatDateTime, localizePost } from "../utils/helpers";
 import { Container } from "./Container";
 import SaveArticleButton, { ShareButtons } from "../components/user/SaveArticleButton";
 import CommentsSection from "../components/user/CommentsSection";
@@ -19,7 +19,9 @@ import { useSEO, metaDescription, SITE_NAME, SITE_URL } from "../utils/seo";
 
 const isHtml = str => typeof str === "string" && /<\w+[^>]*>/.test(str);
 
-const RelatedCard = ({ post }) => (
+const RelatedCard = ({ post }) => {
+  const lp = localizePost(post);
+  return (
   <Link
     to={`/news/${post.slug}`}
     className="block bg-emerald-950/60 border border-emerald-900/60 rounded-xl overflow-hidden hover:border-emerald-500/50 transition-colors"
@@ -34,43 +36,46 @@ const RelatedCard = ({ post }) => (
     />
     <div className="p-3">
       <h4 className="font-serif text-gray-100 text-sm leading-snug line-clamp-2">
-        {post.title}
+        {lp.title}
       </h4>
       <p className="text-gray-500 text-[0.65rem] mt-1.5 uppercase tracking-wider">
         {formatDateTime(post.created_at)}
       </p>
     </div>
   </Link>
-);
+  );
+};
 
 const ReadPost = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug } = useParams();
   const { data: post, isLoading } = usePostReadData(slug);
   const { data: allPosts = [] } = usePostData();
 
+  const lang = i18n.language;
+  const lpost = localizePost(post, lang);
   const category =
     post?.Categories?.name ?? post?.Categories?.[0]?.name ?? null;
 
   useSEO({
-    title: post?.title,
-    description: metaDescription(post?.excerpt),
-    path: `/news/${post?.slug ?? slug}`,
-    image: post?.featuredImage || undefined,
+    title: lpost?.title,
+    description: metaDescription(lpost?.excerpt),
+    path: `/news/${lpost?.slug ?? slug}`,
+    image: lpost?.featuredImage || undefined,
     type: "article",
-    publishedTime: post?.created_at || undefined,
-    modifiedTime: post?.updated_at || undefined,
-    jsonLd: post
+    publishedTime: lpost?.created_at || undefined,
+    modifiedTime: lpost?.updated_at || undefined,
+    jsonLd: lpost
       ? [
           {
             "@context": "https://schema.org",
             "@type": "NewsArticle",
-            headline: post.title,
-            description: metaDescription(post.excerpt),
-            image: post.featuredImage ? [post.featuredImage] : undefined,
-            datePublished: post.created_at,
-            dateModified: post.updated_at ?? post.created_at,
-            inLanguage: "fr",
+            headline: lpost.title,
+            description: metaDescription(lpost.excerpt),
+            image: lpost.featuredImage ? [lpost.featuredImage] : undefined,
+            datePublished: lpost.created_at,
+            dateModified: lpost.updated_at ?? lpost.created_at,
+            inLanguage: lang?.startsWith("en") ? "en" : "fr",
             articleSection: category ?? undefined,
             keywords: category ?? undefined,
             author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
@@ -82,7 +87,7 @@ const ReadPost = () => {
             },
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `${SITE_URL}/news/${post.slug}`,
+              "@id": `${SITE_URL}/news/${lpost.slug}`,
             },
           },
           {
@@ -104,8 +109,8 @@ const ReadPost = () => {
               {
                 "@type": "ListItem",
                 position: 3,
-                name: post.title,
-                item: `${SITE_URL}/news/${post.slug}`,
+                name: lpost.title,
+                item: `${SITE_URL}/news/${lpost.slug}`,
               },
             ],
           },
@@ -146,29 +151,29 @@ const ReadPost = () => {
           </Link>
 
           <h1 className="font-serif text-gray-50 text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
-            {post.title}
+            {lpost.title}
           </h1>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-gray-400 text-xs italic mb-6">
             <span className="flex items-center gap-1.5 not-italic font-semibold text-gray-300">
-              <RiUser3Line /> {post.authorId ?? t("Rédaction Football Autopsie")}
+              <RiUser3Line /> {lpost.authorId ?? t("Rédaction Football Autopsie")}
             </span>
             <span className="flex items-center gap-1.5">
-              <RiTimeLine /> {post.readingTime ?? "—"} {t("min de lecture")}
+              <RiTimeLine /> {lpost.readingTime ?? "—"} {t("min de lecture")}
             </span>
             <span>{formatDateTime(post.created_at)}</span>
           </div>
 
           <div className="flex items-center gap-2 mb-6">
             <SaveArticleButton postId={post.id} />
-            <ShareButtons title={post.title} />
+            <ShareButtons title={lpost.title} />
           </div>
 
           <AdBanner variant="leaderboard" className="mb-6" />
 
-          {post.excerpt && (
+          {lpost.excerpt && (
             <p className="font-serif text-xl text-gray-300 leading-relaxed border-l-4 border-emerald-500 pl-5 mb-6">
-              {post.excerpt}
+              {lpost.excerpt}
             </p>
           )}
 
@@ -176,28 +181,28 @@ const ReadPost = () => {
             <figure className="mb-6">
               <img
                 className="w-full rounded-2xl"
-                src={post.featuredImage}
-                alt={post.title}
+                src={lpost.featuredImage}
+                alt={lpost.title}
               />
               <figcaption className="text-gray-500 text-xs py-2 italic">
-                {post.imageCredit
-                  ? `${t("Crédit photo")} : ${post.imageCredit}`
+                {lpost.imageCredit
+                  ? `${t("Crédit photo")} : ${lpost.imageCredit}`
                   : t("Image : Football Autopsie")}
               </figcaption>
             </figure>
           )}
 
           <div className="article-content">
-            {isHtml(post.content) ? (
-              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            {isHtml(lpost.content) ? (
+              <div dangerouslySetInnerHTML={{ __html: lpost.content }} />
             ) : (
-              <p className="whitespace-pre-line">{post.content}</p>
+              <p className="whitespace-pre-line">{lpost.content}</p>
             )}
           </div>
 
           <AdBanner variant="leaderboard" className="mb-8" />
 
-          <CommentsSection postId={post.id} />
+          <CommentsSection postId={lpost.id} />
         </article>
 
         <aside className="lg:sticky lg:top-24 self-start">

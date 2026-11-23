@@ -19,7 +19,7 @@ import EmptyState from "../components/football/EmptyState";
 import MatchList from "../components/football/MatchList";
 import TeamLogo from "../components/football/TeamLogo";
 import { CardGridSkeleton, MatchListSkeleton } from "../components/football/Skeleton";
-import { formatDate } from "../utils/helpers";
+import { formatDate, localizePost } from "../utils/helpers";
 import {
   RiUserFollowLine,
   RiDeleteBinLine,
@@ -214,7 +214,7 @@ const SavedNews = () => {
                 to={`/news/${post.slug}`}
                 className="flex-1 min-w-0 text-sm font-medium text-gray-100 hover:text-emerald-400 truncate"
               >
-                {post.title}
+                {localizePost(post).title}
               </Link>
               <button
                 onClick={() => unsave.mutate(save.id)}

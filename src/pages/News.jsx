@@ -9,7 +9,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import SectionHeader from "../components/football/SectionHeader";
 import EmptyState from "../components/football/EmptyState";
 import Spinner from "../ui/Spinner";
-import { formatDate } from "../utils/helpers";
+import { formatDate, localizePost } from "../utils/helpers";
 import {
   RiSearchLine,
   RiArrowUpDownLine,
@@ -18,6 +18,7 @@ import {
 } from "react-icons/ri";
 import AdBanner from "../components/AdBanner";
 import { useSEO } from "../utils/seo";
+import i18n from "../i18n";
 
 const categoryName = post =>
   post?.Categories?.name ?? post?.Categories?.[0]?.name ?? null;
@@ -32,7 +33,9 @@ const POST_META = post => (
   </div>
 );
 
-const ArticleRow = ({ post }) => (
+const ArticleRow = ({ post }) => {
+  const lp = localizePost(post);
+  return (
   <Link
     to={`/news/${post.slug}`}
     className="flex gap-4 bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors group"
@@ -48,18 +51,21 @@ const ArticleRow = ({ post }) => (
     <div className="py-4 pr-4 flex flex-col justify-center min-w-0">
       <div className="mb-1.5">{POST_META(post)}</div>
       <h3 className="font-serif text-gray-50 text-lg sm:text-xl leading-snug group-hover:text-emerald-300 transition-colors line-clamp-2">
-        {post.title}
+        {lp.title}
       </h3>
-      {post.excerpt && (
+      {lp.excerpt && (
         <p className="text-gray-400 text-sm mt-1.5 line-clamp-2 hidden sm:block">
-          {post.excerpt}
+          {lp.excerpt}
         </p>
       )}
     </div>
   </Link>
-);
+  );
+};
 
-const NewsCard = ({ post }) => (
+const NewsCard = ({ post }) => {
+  const lp = localizePost(post);
+  return (
   <Link
     to={`/news/${post.slug}`}
     className="flex flex-col bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors group"
@@ -75,19 +81,20 @@ const NewsCard = ({ post }) => (
     <div className="p-4 flex flex-col gap-2 flex-1">
       <div>{POST_META(post)}</div>
       <h3 className="font-serif text-gray-50 text-lg leading-snug group-hover:text-emerald-300 transition-colors line-clamp-2">
-        {post.title}
+        {lp.title}
       </h3>
-      {post.excerpt && (
-        <p className="text-gray-400 text-sm line-clamp-2">{post.excerpt}</p>
+      {lp.excerpt && (
+        <p className="text-gray-400 text-sm line-clamp-2">{lp.excerpt}</p>
       )}
     </div>
   </Link>
-);
+  );
+};
 
 const SORTS = {
   recent: (a, b) => new Date(b.created_at) - new Date(a.created_at),
   oldest: (a, b) => new Date(a.created_at) - new Date(b.created_at),
-  az: (a, b) => (a.title ?? "").localeCompare(b.title ?? "", "fr"),
+  az: (a, b) => (localizePost(a).title ?? "").localeCompare(localizePost(b).title ?? "", i18n.language?.startsWith("en") ? "en" : "fr"),
 };
 
 const selectCls =
@@ -116,7 +123,8 @@ const News = () => {
     .map(f => f.entity_name?.toLowerCase())
     .filter(Boolean);
   const matchesFav = p => {
-    const text = `${p.title ?? ""} ${p.excerpt ?? ""}`.toLowerCase();
+    const lp = localizePost(p);
+    const text = `${lp.title ?? ""} ${lp.excerpt ?? ""}`.toLowerCase();
     return favNames.some(n => text.includes(n));
   };
 
@@ -128,7 +136,7 @@ const News = () => {
     if (feed === "foryou") list = list.filter(matchesFav);
     if (q)
       list = list.filter(p =>
-        `${p.title ?? ""} ${p.excerpt ?? ""}`.toLowerCase().includes(q),
+        `${localizePost(p).title ?? ""} ${localizePost(p).excerpt ?? ""}`.toLowerCase().includes(q),
       );
     return [...list].sort(SORTS[sort] ?? SORTS.recent);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -11,7 +11,7 @@ import {
 } from "../hooks/football";
 import { FEATURED_LEAGUES } from "../services/football/leagues";
 import { todayParam, shiftDays } from "../services/football/endpoints";
-import { formatMatchDay, formatDate } from "../utils/helpers";
+import { formatMatchDay, formatDate, localizePost } from "../utils/helpers";
 import SectionHeader from "../components/football/SectionHeader";
 import MatchList from "../components/football/MatchList";
 import { MatchListSkeleton } from "../components/football/Skeleton";
@@ -29,6 +29,7 @@ const categoryName = post => post?.Categories?.name ?? post?.Categories?.[0]?.na
 
 const NewsCard = ({ post, large = false }) => {
   const { t } = useTranslation();
+  const lp = localizePost(post);
   return (
   <Link
     to={`/news/${post.slug}`}
@@ -62,10 +63,10 @@ const NewsCard = ({ post, large = false }) => {
           large ? "text-2xl md:text-3xl" : "text-lg"
         }`}
       >
-        {post.title}
+        {lp.title}
       </h3>
-      {!large && post.excerpt && (
-        <p className="text-gray-400 text-sm mt-2 line-clamp-2">{post.excerpt}</p>
+      {!large && lp.excerpt && (
+        <p className="text-gray-400 text-sm mt-2 line-clamp-2">{lp.excerpt}</p>
       )}
     </div>
   </Link>
@@ -86,7 +87,7 @@ const BreakingBar = ({ posts }) => {
   }, [items.length]);
 
   if (!items.length) return null;
-  const current = items[index % items.length];
+  const current = localizePost(items[index % items.length]);
 
   return (
     <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-20 z-40 backdrop-blur-sm">

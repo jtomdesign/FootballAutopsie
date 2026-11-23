@@ -41,6 +41,8 @@ const ArticleEditor = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [content, setContent] = useState("");
+  const [contentEn, setContentEn] = useState("");
+  const [showEn, setShowEn] = useState(false);
   const [slugTouched, setSlugTouched] = useState(false);
   const [preview, setPreview] = useState(false);
   const [featuredPreview, setFeaturedPreview] = useState(null);
@@ -63,8 +65,10 @@ const ArticleEditor = () => {
   } = useForm({
     defaultValues: {
       title: "",
+      title_en: "",
       slug: "",
       excerpt: "",
+      excerpt_en: "",
       status: "draft",
       isBreaking: false,
       categoryId: "",
@@ -80,8 +84,10 @@ const ArticleEditor = () => {
     if (!post) return;
     reset({
       title: post.title ?? "",
+      title_en: post.title_en ?? "",
       slug: post.slug ?? "",
       excerpt: post.excerpt ?? "",
+      excerpt_en: post.excerpt_en ?? "",
       status: post.status ?? "draft",
       isBreaking: !!post.isBreaking,
       categoryId: post.categoryId ?? "",
@@ -90,6 +96,8 @@ const ArticleEditor = () => {
       imageCredit: post.imageCredit ?? "",
     });
     setContent(post.content ?? "");
+    setContentEn(post.content_en ?? "");
+    setShowEn(!!(post.title_en || post.excerpt_en || post.content_en));
     setFeaturedPreview(post.featuredImage ?? null);
     setImageUrl(post.featuredImage ?? null);
     setSlugTouched(true);
@@ -129,9 +137,12 @@ const ArticleEditor = () => {
 
     const payload = {
       title: data.title.trim(),
+      title_en: data.title_en?.trim() || null,
       slug: slugify(data.slug || data.title),
       excerpt: data.excerpt?.trim() || null,
+      excerpt_en: data.excerpt_en?.trim() || null,
       content,
+      content_en: contentEn || null,
       featuredImage,
       categoryId: data.categoryId === "" ? null : Number(data.categoryId),
       authorId: data.authorId === "" ? null : Number(data.authorId),
@@ -297,6 +308,43 @@ const ArticleEditor = () => {
               Contenu
             </label>
             <RichTextEditor content={content} onChange={setContent} />
+          </div>
+
+          <div className="border border-emerald-900/40 rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowEn(o => !o)}
+              className="w-full flex items-center justify-between px-5 py-3 text-sm font-bold text-gray-300 hover:text-white transition-colors cursor-pointer"
+            >
+              <span>Traduction anglaise (optionnel)</span>
+              <span className="text-emerald-500">{showEn ? "−" : "+"}</span>
+            </button>
+            {showEn && (
+              <div className="flex flex-col gap-5 px-5 pb-5 pt-1 border-t border-emerald-900/40">
+                <FormRow label="Titre (EN)">
+                  <input
+                    className={inputCls}
+                    type="text"
+                    placeholder="English title"
+                    {...register("title_en")}
+                  />
+                </FormRow>
+                <FormRow label="Chapô / Extrait (EN)">
+                  <textarea
+                    rows={2}
+                    className={inputCls}
+                    placeholder="Short English summary"
+                    {...register("excerpt_en")}
+                  />
+                </FormRow>
+                <div>
+                  <label className="font-bold text-sm text-gray-300 block mb-2">
+                    Contenu (EN)
+                  </label>
+                  <RichTextEditor content={contentEn} onChange={setContentEn} />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

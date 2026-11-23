@@ -138,3 +138,16 @@ export function slugify(text) {
     .replace(/\s+/g, "-") // Spaces → hyphens
     .replace(/-+/g, "-"); // Remove duplicate hyphens
 }
+
+//Post translations — returns the post with EN fields applied when the
+//UI language is English. Falls back to the French original per-field.
+
+export function localizePost(post, lang = i18n.language) {
+  if (!post || !lang?.startsWith("en")) return post;
+  return {
+    ...post,
+    title: post.title_en || post.title,
+    excerpt: post.excerpt_en || post.excerpt,
+    content: post.content_en || post.content,
+  };
+}

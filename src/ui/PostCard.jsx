@@ -1,13 +1,15 @@
 import React from "react";
 import { HiArrowRight } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import { localizePost } from "../utils/helpers";
 
 const PostCard = ({ post, id }) => {
+  const lp = localizePost(post);
   return (
     <div
       className={`${id === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
       style={{
-        background: `linear-gradient( 180deg, rgba(1, 22, 30, 0.2) 30%, rgba(1, 22, 30, 1) 100% ), url(${post.featuredImage}) center center / cover no-repeat  `,
+        background: `linear-gradient( 180deg, rgba(1, 22, 30, 0.2) 30%, rgba(1, 22, 30, 1) 100% ), url(${lp.featuredImage ?? post.featuredImage}) center center / cover no-repeat  `,
         height: "50vh",
         borderRadius: "10px",
         position: "relative",
@@ -20,7 +22,7 @@ const PostCard = ({ post, id }) => {
           </span>
         )}
         <h3 className="text-[2rem] text-gray-50 leading-10 font-serif hover:underline hover:cursor-pointer">
-          {post.title}
+          {lp.title}
         </h3>
         <Link
           to={`/news/${post.slug}`}

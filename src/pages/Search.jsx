@@ -19,7 +19,7 @@ import { useSEO } from "../utils/seo";
 import MatchList from "../components/football/MatchList";
 import TeamLogo from "../components/football/TeamLogo";
 import EmptyState from "../components/football/EmptyState";
-import { formatDate } from "../utils/helpers";
+import { formatDate, localizePost } from "../utils/helpers";
 import { RiSearchLine } from "react-icons/ri";
 
 const useDebounced = (value, delay = 400) => {
@@ -187,7 +187,7 @@ const Search = () => {
                           {a.Categories?.name ?? "News"}
                         </p>
                         <p className="text-gray-100 font-semibold text-sm truncate">
-                          {a.title}
+                          {localizePost(a).title}
                         </p>
                         <p className="text-gray-500 text-xs mt-0.5">
                           {formatDate(a.created_at)}
