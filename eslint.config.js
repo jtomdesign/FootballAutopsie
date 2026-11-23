@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    files: ["api/**/*.js"],
+    files: ["api/**/*.js", "middleware.js"],
     languageOptions: { globals: globals.node },
   },
 ]);
