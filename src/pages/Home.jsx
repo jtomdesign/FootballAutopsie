@@ -146,8 +146,15 @@ const WeekendResultsBar = () => {
 
   if (!isMatchday || !results.length) return null;
 
+  // The -50% marquee loop needs the track wider than the viewport.
+  // Repeat the set enough times (then duplicate for the seamless loop)
+  // so it never collapses on small screens with few results.
+  const reps = Math.max(2, Math.ceil(24 / results.length));
+  const loop = Array.from({ length: reps }, () => results).flat();
+  const marqueeItems = [...loop, ...loop];
+
   return (
-    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-[7.75rem] z-40 backdrop-blur-sm">
+    <div className="bg-emerald-950 border-b border-emerald-900/60 sticky top-[7.75rem] z-40">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
           <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
@@ -160,7 +167,7 @@ const WeekendResultsBar = () => {
               onTouchEnd={e => (e.currentTarget.style.animationPlayState = "")}
               onTouchCancel={e => (e.currentTarget.style.animationPlayState = "")}
             >
-              {[...results, ...results].map((f, i) => (
+              {marqueeItems.map((f, i) => (
                 <Link
                   key={`${f.id}-${i}`}
                   to={`/match/${f.id}`}
