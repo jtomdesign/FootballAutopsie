@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { login, setHydrated } from "../features/authentication/authSlice";
 import { useNavigate } from "react-router-dom";
-import { signIn, signUp, signInWithGoogle, notifyLoginAlert } from "../services/auth";
+import { signIn, signUp, signInWithGoogle } from "../services/auth";
 import i18n from "../i18n";
 
 /** Restore the Supabase session on app load. Call once in App. */
@@ -15,10 +15,7 @@ export const useSessionRestore = function () {
     import("../services/auth").then(({ restoreSession }) =>
       restoreSession()
         .then(user => {
-          if (user && !cancelled) {
-            dispatch(login(user));
-            notifyLoginAlert(user);
-          }
+          if (user && !cancelled) dispatch(login(user));
         })
         .finally(() => {
           if (!cancelled) dispatch(setHydrated());
@@ -36,7 +33,6 @@ export const useAuth = function (mode = "login") {
 
   const onSuccess = user => {
     dispatch(login(user));
-    notifyLoginAlert(user);
     toast.success(i18n.t("Bienvenue {{name}}", { name: user.name }));
     navigate(user.role === "admin" ? "/dashboard" : "/");
   };

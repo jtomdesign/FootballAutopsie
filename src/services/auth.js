@@ -67,22 +67,3 @@ export async function restoreSession() {
 export async function signOut() {
   await supabase.auth.signOut();
 }
-
-/**
- * Fire-and-forget login alert to the admin (Supabase Edge Function).
- * Runs at most once per browser session per user — safe to call on every
- * login/session restore. Fails silently if the function isn't deployed.
- */
-export function notifyLoginAlert(user) {
-  if (!user?.id) return;
-  try {
-    const key = `fa-login-alert-${user.id}`;
-    if (sessionStorage.getItem(key)) return;
-    sessionStorage.setItem(key, "1");
-    supabase.functions
-      .invoke("login-alert")
-      .catch(() => sessionStorage.removeItem(key));
-  } catch {
-    /* sessionStorage unavailable — skip */
-  }
-}
