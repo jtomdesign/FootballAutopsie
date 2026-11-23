@@ -67,9 +67,11 @@ const PlayerDetail = () => {
   const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
 
-  // Current-season stats across all ongoing competitions
+  // Current-season stats for league competitions only (no cups)
   const currentSeason = getCurrentSeason();
-  const seasonStats = stats.filter(s => s.league?.season === currentSeason);
+  const seasonStats = stats.filter(
+    s => s.league?.season === currentSeason && s.league?.type === "League",
+  );
   const scope = seasonStats.length ? seasonStats : stats.slice(0, 1);
   const pastStats = stats.filter(s => s.league?.season !== currentSeason);
 
