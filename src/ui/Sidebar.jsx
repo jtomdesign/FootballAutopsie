@@ -8,6 +8,7 @@ import {
   RiHome6Fill,
   RiLogoutBoxFill,
   RiStackFill,
+  RiTeamLine,
   RiUserFill,
 } from "react-icons/ri";
 import { Link } from "react-router-dom";
@@ -57,6 +58,12 @@ const Sidebar = () => {
             <RiChat4Fill />
           </DashLink.Icon>
           <DashLink.Name>Commentaires</DashLink.Name>
+        </DashLink>
+        <DashLink to="users">
+          <DashLink.Icon>
+            <RiTeamLine />
+          </DashLink.Icon>
+          <DashLink.Name>Utilisateurs</DashLink.Name>
         </DashLink>
 
         <SectionLabel>Compte</SectionLabel>

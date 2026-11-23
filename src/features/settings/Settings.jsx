@@ -4,6 +4,7 @@ import {
   RiBookOpenFill,
   RiStackFill,
   RiChat4Fill,
+  RiTeamLine,
 } from "react-icons/ri";
 
 const ITEMS = [
@@ -24,6 +25,12 @@ const ITEMS = [
     icon: <RiChat4Fill />,
     title: "Commentaires",
     desc: "Modération des commentaires des lecteurs.",
+  },
+  {
+    to: "/dashboard/users",
+    icon: <RiTeamLine />,
+    title: "Utilisateurs",
+    desc: "Liste des comptes enregistrés (admin).",
   },
 ];
 

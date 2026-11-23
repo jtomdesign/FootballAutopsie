@@ -71,7 +71,6 @@ const ReadPost = () => {
     );
   }
 
-  const category = post?.Categories ?? null;
   const related = (allPosts ?? [])
     .filter(p => p.id !== post.id)
     .slice(0, 3);
@@ -87,18 +86,6 @@ const ReadPost = () => {
           >
             <RiArrowLeftLine /> {t("Toutes les actualités")}
           </Link>
-
-          {category && (
-            <span
-              className="inline-block px-3 py-1 rounded-full text-[0.65rem] font-black uppercase tracking-widest"
-              style={{
-                backgroundColor: category.color || "#10b455",
-                color: "#052e16",
-              }}
-            >
-              {category.name}
-            </span>
-          )}
 
           <h1 className="font-serif text-gray-50 text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
             {post.title}

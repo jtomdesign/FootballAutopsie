@@ -32,6 +32,7 @@ import Categories from "./features/categories/Categories";
 import Comments from "./features/comments/Comments";
 import Profil from "./features/profile/Profil";
 import Settings from "./features/settings/Settings";
+import Users from "./features/users/Users";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import UserRoute from "./ui/UserRoute";
@@ -100,6 +101,7 @@ const App = () => {
               />
               <Route path="categories" element={<Categories />} />
               <Route path="comments" element={<Comments />} />
+              <Route path="users" element={<Users />} />
               <Route path="profil" element={<Profil />} />
               <Route path="settings" element={<Settings />} />
             </Route>

@@ -333,3 +333,11 @@ export const notify = async ({ userId, type, title, message, targetUrl }) => {
     target_url: targetUrl ?? null,
   });
 };
+
+// ---------- Admin: user directory ----------
+
+export const adminListUsers = async () => {
+  const { data, error } = await supabase.rpc("admin_list_users");
+  if (error) throw error;
+  return data ?? [];
+};
