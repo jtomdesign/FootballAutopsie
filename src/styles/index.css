@@ -428,3 +428,7 @@ html.light .fa-input {
 .fa-menu-drop {
   animation: fa-menu-drop 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* Full-screen loader — solid black in dark mode, solid white in light */
+.fa-spinner-bg { background-color: #000000; }
+html.light .fa-spinner-bg { background-color: #ffffff; }
