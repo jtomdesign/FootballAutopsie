@@ -20,6 +20,7 @@ import TeamLogo from "../components/football/TeamLogo";
 import ScorerRow from "../components/football/ScorerRow";
 import ImageDownloadButton from "../components/football/ImageDownloadButton";
 import { HiArrowRight, HiBolt } from "react-icons/hi2";
+import { RiTrophyFill } from "react-icons/ri";
 import Spinner from "../ui/Spinner";
 import AdBanner from "../components/AdBanner";
 
@@ -145,8 +146,8 @@ const WeekendResultsBar = () => {
     <div className="bg-emerald-950/60 border-b border-emerald-900/60">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
-          <span className="shrink-0 flex items-center gap-1.5 text-emerald-600 text-xs font-black uppercase tracking-widest">
-            <HiBolt className="text-emerald-500" /> {t("Résultats du week-end")}
+          <span className="shrink-0 flex items-center text-emerald-500" title={t("Résultats du week-end")}>
+            <RiTrophyFill className="text-base" />
           </span>
           <div className="overflow-hidden flex-1">
             <div className="marquee-track flex gap-2.5">
