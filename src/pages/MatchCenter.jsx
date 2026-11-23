@@ -564,21 +564,23 @@ const MatchCenter = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-7">
-            {match.venue && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-gray-500">
-                <RiMapPinLine className="text-emerald-500" />
-                {match.venue}
-                {match.city ? `, ${match.city}` : ""}
-              </span>
-            )}
-            {match.referee && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-gray-500">
-                <RiUserLine className="text-emerald-500" />
-                {t("Arbitre")} : {match.referee}
-              </span>
-            )}
-          </div>
+          {(match.venue || match.referee) && (
+            <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.7rem] text-gray-500">
+              {match.venue && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
+                  <RiMapPinLine className="text-emerald-500 text-xs" />
+                  {match.venue}
+                  {match.city ? `, ${match.city}` : ""}
+                </span>
+              )}
+              {match.referee && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
+                  <RiUserLine className="text-emerald-500 text-xs" />
+                  {match.referee}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Tabs */}
