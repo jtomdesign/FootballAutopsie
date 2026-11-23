@@ -88,8 +88,17 @@ const LeagueDetail = () => {
             <h1 className="text-3xl font-black text-gray-50 font-menu tracking-wide uppercase">
               {league.name}
             </h1>
-            <p className="text-gray-400 text-sm mt-1">
-              {league.country} · {league.type}
+            <p className="text-gray-400 text-sm mt-1 flex items-center gap-2">
+              {league.flag && (
+                <img
+                  src={league.flag}
+                  alt={league.country ?? ""}
+                  className="w-6 h-4 rounded-sm object-cover"
+                />
+              )}
+              {league.country}
+              {league.country && league.type ? " · " : ""}
+              {league.type}
             </p>
           </div>
           <div className="flex flex-col items-start gap-3">

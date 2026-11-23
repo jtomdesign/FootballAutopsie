@@ -22,7 +22,14 @@ const LeagueCard = ({ league }) => {
       <h3 className="font-bold text-gray-100 group-hover:text-emerald-300 transition-colors truncate">
         {league.name}
       </h3>
-      <p className="text-gray-500 text-xs mt-0.5">
+      <p className="text-gray-500 text-xs mt-0.5 flex items-center gap-1.5">
+        {league.flag && (
+          <img
+            src={league.flag}
+            alt=""
+            className="w-4 h-3 rounded-sm object-cover"
+          />
+        )}
         {league.country ?? league.type}
         {league.currentSeason
           ? ` · ${t("Saison {{year}}", { year: league.currentSeason })}`
