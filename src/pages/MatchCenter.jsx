@@ -565,17 +565,17 @@ const MatchCenter = () => {
           </div>
 
           {(match.venue || match.referee) && (
-            <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.7rem] text-gray-500">
+            <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.7rem] text-gray-400">
               {match.venue && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
-                  <RiMapPinLine className="text-emerald-500 text-xs" />
+                  <RiMapPinLine className="text-emerald-400 text-xs" />
                   {match.venue}
                   {match.city ? `, ${match.city}` : ""}
                 </span>
               )}
               {match.referee && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
-                  <RiUserLine className="text-emerald-500 text-xs" />
+                  <RiUserLine className="text-emerald-400 text-xs" />
                   {match.referee}
                 </span>
               )}
