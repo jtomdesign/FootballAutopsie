@@ -55,7 +55,7 @@ const NewsCard = ({ post, large = false }) => {
             <HiBolt /> {t("À la une")}
           </span>
         )}
-        <span>{formatDate(post.created_at)}</span>
+        <span className="normal-case">{formatDate(post.created_at)}</span>
         <span>{post.readingTime ?? "—"} min</span>
       </div>
       <h3

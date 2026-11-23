@@ -38,7 +38,7 @@ const RelatedCard = ({ post }) => {
       <h4 className="font-serif text-gray-100 text-sm leading-snug line-clamp-2">
         {lp.title}
       </h4>
-      <p className="text-gray-500 text-[0.65rem] mt-1.5 uppercase tracking-wider">
+      <p className="text-gray-500 text-[0.65rem] mt-1.5 normal-case tracking-wide">
         {formatDateTime(post.created_at)}
       </p>
     </div>
