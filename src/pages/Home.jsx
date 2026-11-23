@@ -153,21 +153,26 @@ const WeekendResultsBar = () => {
             <RiTrophyFill className="text-base" />
           </span>
           <div className="overflow-hidden flex-1">
-            <div className="marquee-track marquee-slow flex gap-2.5">
+            <div
+              className="marquee-track marquee-slow flex gap-2"
+              onTouchStart={e => (e.currentTarget.style.animationPlayState = "paused")}
+              onTouchEnd={e => (e.currentTarget.style.animationPlayState = "")}
+              onTouchCancel={e => (e.currentTarget.style.animationPlayState = "")}
+            >
               {[...results, ...results].map((f, i) => (
                 <Link
                   key={`${f.id}-${i}`}
                   to={`/match/${f.id}`}
-                  className="shrink-0 flex items-center gap-2 bg-emerald-900/40 hover:bg-emerald-900/70 rounded-full pl-2 pr-3 py-1.5 transition-colors"
+                  className="shrink-0 flex items-center gap-1.5 sm:gap-2 bg-emerald-900/40 hover:bg-emerald-900/70 rounded-full pl-1.5 sm:pl-2 pr-2.5 sm:pr-3 py-1.5 transition-colors"
                 >
                   <TeamLogo logo={f.league.logo} name={f.league.name} size="w-4 h-4" />
                   <TeamLogo logo={f.homeTeam.logo} name={f.homeTeam.name} size="w-4 h-4" />
-                  <span className="text-xs text-gray-300 whitespace-nowrap">
-                    {f.homeTeam.name}{" "}
-                    <span className="font-bold text-gray-100 tabular-nums">
+                  <span className="text-xs text-gray-300 whitespace-nowrap flex items-center">
+                    <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.homeTeam.name}</span>
+                    <span className="font-bold text-gray-100 tabular-nums mx-1">
                       {f.goals.home ?? 0} - {f.goals.away ?? 0}
-                    </span>{" "}
-                    {f.awayTeam.name}
+                    </span>
+                    <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.awayTeam.name}</span>
                   </span>
                   <TeamLogo logo={f.awayTeam.logo} name={f.awayTeam.name} size="w-4 h-4" />
                 </Link>
