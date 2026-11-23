@@ -38,7 +38,7 @@ const NewsCard = ({ post, large = false }) => {
     }`}
   >
     <div
-      className={`w-full ${large ? "h-72 md:h-96" : "h-40"} bg-emerald-900/40 bg-cover bg-center`}
+      className={`w-full ${large ? "aspect-[16/9] md:aspect-[2/1]" : "aspect-[16/9]"} bg-emerald-900/40 bg-cover bg-center`}
       style={{
         backgroundImage: post.featuredImage
           ? `url(${post.featuredImage})`
