@@ -175,7 +175,7 @@ const Search = () => {
                       className="flex gap-4 bg-emerald-950/60 border border-emerald-900/60 rounded-xl p-3 hover:border-emerald-500/50 transition-colors"
                     >
                       <div
-                        className="w-20 h-16 rounded-lg bg-emerald-900/40 bg-cover bg-center shrink-0"
+                        className="w-20 aspect-[16/9] rounded-lg bg-emerald-900/40 bg-cover bg-center shrink-0"
                         style={{
                           backgroundImage: a.featuredImage
                             ? `url(${a.featuredImage})`

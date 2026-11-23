@@ -27,7 +27,7 @@ const RelatedCard = ({ post }) => {
     className="block bg-emerald-950/60 border border-emerald-900/60 rounded-xl overflow-hidden hover:border-emerald-500/50 transition-colors"
   >
     <div
-      className="h-28 bg-emerald-900/40 bg-cover bg-center"
+      className="aspect-[16/9] bg-emerald-900/40 bg-cover bg-center"
       style={{
         backgroundImage: post.featuredImage
           ? `url(${post.featuredImage})`
