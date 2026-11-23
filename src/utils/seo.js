@@ -67,6 +67,13 @@ export const useSEO = ({
 
     const url = `${SITE_URL}${path}`;
     const desc = description || DEFAULT_DESCRIPTION;
+    // og:image must be absolute — featured images are often stored as
+    // site-relative paths (/wp-content/...) which scrapers can't fetch
+    const absImage = image
+      ? image.startsWith("http")
+        ? image
+        : `${SITE_URL}${image.startsWith("/") ? "" : "/"}${image}`
+      : undefined;
 
     upsertMeta("name", "description", desc);
     upsertMeta("name", "robots", noindex ? "noindex, nofollow" : "index, follow");
@@ -80,7 +87,12 @@ export const useSEO = ({
     upsertMeta("property", "og:title", fullTitle);
     upsertMeta("property", "og:description", desc);
     upsertMeta("property", "og:url", url);
-    if (image) upsertMeta("property", "og:image", image);
+    if (absImage) {
+      upsertMeta("property", "og:image", absImage);
+      upsertMeta("property", "og:image:width", "1200");
+      upsertMeta("property", "og:image:height", "630");
+      upsertMeta("property", "og:image:alt", fullTitle);
+    }
     if (publishedTime)
       upsertMeta("property", "article:published_time", publishedTime);
     if (modifiedTime)
@@ -88,10 +100,10 @@ export const useSEO = ({
     if (author) upsertMeta("property", "article:author", author);
 
     // Twitter / X card
-    upsertMeta("name", "twitter:card", image ? "summary_large_image" : "summary");
+    upsertMeta("name", "twitter:card", absImage ? "summary_large_image" : "summary");
     upsertMeta("name", "twitter:title", fullTitle);
     upsertMeta("name", "twitter:description", desc);
-    if (image) upsertMeta("name", "twitter:image", image);
+    if (absImage) upsertMeta("name", "twitter:image", absImage);
 
     // JSON-LD structured data
     document.getElementById(JSONLD_ID)?.remove();
