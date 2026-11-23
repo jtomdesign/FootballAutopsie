@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import { Container } from "../ui/Container";
-import { usePlayer, usePlayerCareerStatistics } from "../hooks/football";
+import { usePlayer } from "../hooks/football";
 import { getCurrentSeason } from "../services/football/leagues";
 import { useEntityFollowers } from "../hooks/user";
 import SectionHeader from "../components/football/SectionHeader";
@@ -53,7 +53,6 @@ const PlayerDetail = () => {
   const { id } = useParams();
   const { data: player, isLoading } = usePlayer(id);
   const { data: followers } = useEntityFollowers("player", player?.id);
-  const careerQueries = usePlayerCareerStatistics(player?.id, player?.age);
 
   if (isLoading) return <Spinner />;
   if (!player)
@@ -65,29 +64,14 @@ const PlayerDetail = () => {
       </Container>
     );
 
-  // Merge current-season profile stats with the last 8 seasons fetched
-  // in parallel — /players only returns one season per call.
-  const seen = new Set();
-  const stats = [];
-  const pushStat = s => {
-    const key = `${s.league?.id}:${s.league?.season}:${s.team?.id ?? ""}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      stats.push(s);
-    }
-  };
-  (player.statistics ?? []).forEach(pushStat);
-  careerQueries.forEach(q => (q.data ?? []).forEach(pushStat));
-  const careerLoading = careerQueries.some(q => q.isLoading);
-
+  const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
 
-  // Career stats aggregated across ALL seasons and competitions
+  // Current-season stats across all ongoing competitions
   const currentSeason = getCurrentSeason();
-  const careerStats = stats;
   const seasonStats = stats.filter(s => s.league?.season === currentSeason);
+  const scope = seasonStats.length ? seasonStats : stats.slice(0, 1);
   const pastStats = stats.filter(s => s.league?.season !== currentSeason);
-  const scope = careerStats.length ? careerStats : stats.slice(0, 1);
 
   const num = v => (typeof v === "number" ? v : 0);
   const agg = scope.reduce(
@@ -237,14 +221,14 @@ const PlayerDetail = () => {
           />
         </div>
 
-        {/* Career stats — all seasons & competitions */}
-        {!careerLoading && scope.length > 0 && (
+        {/* Season stats — current season, all competitions */}
+        {scope.length > 0 && (
           <>
             <SectionHeader
               title={t("Statistiques")}
               subtitle={
-                careerStats.length > 1
-                  ? `${t("Carrière")} — ${t("Toutes compétitions, toutes saisons")}`
+                seasonStats.length > 1
+                  ? `${t("Toutes compétitions")} — ${t("Saison {{season}}", { season: currentSeason })}`
                   : `${scope[0].league?.name ?? ""}${
                       scope[0].league?.country?.name ?? scope[0].league?.country
                         ? ` · ${scope[0].league?.country?.name ?? scope[0].league?.country}`
