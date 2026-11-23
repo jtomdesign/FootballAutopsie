@@ -390,3 +390,33 @@ html:not(.light) .fa-toast [data-close-button] { color: #6b7280 !important; }
   .fa-fade-up, .fa-fade-up-1, .fa-fade-up-2, .fa-fade-up-3,
   .fa-stagger > * { animation: none; }
 }
+
+/* Theme-aware form controls — dark surfaces by default, light in html.light */
+:root {
+  --fa-input-bg: #262626;
+  --fa-input-border: #3a3a3a;
+  --fa-input-text: #f3f4f6;
+  --fa-input-placeholder: #9ca3af;
+}
+html.light {
+  --fa-input-bg: #ffffff;
+  --fa-input-border: #e5e5e5;
+  --fa-input-text: #1f2937;
+  --fa-input-placeholder: #9ca3af;
+}
+.fa-input {
+  background-color: var(--fa-input-bg);
+  border: 1px solid var(--fa-input-border);
+  color: var(--fa-input-text);
+  color-scheme: dark;
+}
+html.light .fa-input {
+  color-scheme: light;
+}
+.fa-input::placeholder {
+  color: var(--fa-input-placeholder);
+}
+.fa-input option {
+  background-color: var(--fa-input-bg);
+  color: var(--fa-input-text);
+}

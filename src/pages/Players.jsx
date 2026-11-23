@@ -105,14 +105,14 @@ const Players = () => {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t("Rechercher un joueur…")}
-              className="w-full pl-11 pr-4 py-2.5 rounded-full bg-[#f5f5f5] border border-[#e5e5e5] text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-11 pr-4 py-2.5 rounded-full fa-input text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
           {!trimmed && (
             <select
               value={leagueId}
               onChange={e => setLeagueId(Number(e.target.value))}
-              className="px-4 py-2.5 rounded-full bg-[#f5f5f5] border border-[#e5e5e5] text-sm text-gray-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
+              className="px-4 py-2.5 rounded-full fa-input text-sm text-gray-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
             >
               {FEATURED_LEAGUES.map(l => (
                 <option key={l.id} value={l.id}>

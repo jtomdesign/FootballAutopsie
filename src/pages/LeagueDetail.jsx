@@ -103,7 +103,7 @@ const LeagueDetail = () => {
               <select
                 value={activeSeason}
                 onChange={e => setSeason(Number(e.target.value))}
-                className="px-4 py-2.5 rounded-full bg-[#f5f5f5] border border-[#e5e5e5] text-sm text-gray-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                className="px-4 py-2.5 rounded-full fa-input text-sm text-gray-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
               >
                 {seasons.map(y => (
                   <option key={y} value={y}>

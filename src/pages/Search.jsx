@@ -137,7 +137,7 @@ const Search = () => {
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder={t("Rechercher…")}
-            className="w-full pl-12 pr-4 py-3.5 rounded-full bg-[#f5f5f5] border border-[#e5e5e5] text-gray-100 placeholder:text-gray-500 focus:outline-none focus:border-emerald-500 text-lg"
+            className="w-full pl-12 pr-4 py-3.5 rounded-full fa-input text-gray-100 placeholder:text-gray-500 focus:outline-none focus:border-emerald-500 text-lg"
           />
         </div>
 
