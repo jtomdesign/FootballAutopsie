@@ -67,11 +67,12 @@ const PlayerDetail = () => {
   const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
 
-  // Current-season stats aggregated across ALL competitions
+  // Career stats aggregated across ALL seasons and competitions
   const currentSeason = getCurrentSeason();
+  const careerStats = stats;
   const seasonStats = stats.filter(s => s.league?.season === currentSeason);
-  const scope = seasonStats.length ? seasonStats : stats.slice(0, 1);
-  const others = stats.filter(s => !scope.includes(s));
+  const pastStats = stats.filter(s => s.league?.season !== currentSeason);
+  const scope = careerStats.length ? careerStats : stats.slice(0, 1);
 
   const num = v => (typeof v === "number" ? v : 0);
   const agg = scope.reduce(
@@ -227,8 +228,8 @@ const PlayerDetail = () => {
             <SectionHeader
               title={t("Statistiques")}
               subtitle={
-                seasonStats.length > 1
-                  ? `${t("Toutes compétitions")} — ${t("Saison {{season}}", { season: currentSeason })}`
+                careerStats.length > 1
+                  ? `${t("Carrière")} — ${t("Toutes compétitions, toutes saisons")}`
                   : `${scope[0].league?.name ?? ""}${
                       scope[0].league?.country?.name ?? scope[0].league?.country
                         ? ` · ${scope[0].league?.country?.name ?? scope[0].league?.country}`
@@ -298,11 +299,11 @@ const PlayerDetail = () => {
         )}
 
         {/* Other seasons */}
-        {others.length > 0 && (
+        {pastStats.length > 0 && (
           <section>
             <SectionHeader title={t("Autres saisons / compétitions")} />
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden">
-              {others.slice(0, 8).map((s, i) => (
+              {pastStats.slice(0, 8).map((s, i) => (
                 <div
                   key={i}
                   className="flex items-center gap-4 px-4 py-3 border-b border-emerald-900/40 last:border-0 text-sm"
