@@ -8,7 +8,7 @@ const SectionHeader = ({ title, subtitle, action, level = 2 }) => {
         <Heading className="text-2xl font-bold text-gray-50 font-menu tracking-wide uppercase">
           {title}
         </Heading>
-        {subtitle && <p className="text-gray-400 text-sm mt-1">{subtitle}</p>}
+        {/* subtitle intentionally not rendered */}
       </div>
       {action}
     </div>
