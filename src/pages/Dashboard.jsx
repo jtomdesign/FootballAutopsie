@@ -45,7 +45,7 @@ const Dashboard = () => {
       <Sidebar />
 
       <div className="flex flex-col min-w-0">
-        <header className="fa-dark-surface bg-emerald-950 m-3 mb-0 rounded-2xl">
+        <header className="fa-dark-surface bg-emerald-950 m-3 mb-0 rounded-2xl sticky top-3 z-40">
           <div className="min-h-20 px-5 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
               <button
@@ -94,21 +94,52 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {menuOpen && (
-            <nav className="lg:hidden px-5 pb-4 flex gap-2 flex-wrap fa-menu-drop">
-              {MOBILE_LINKS.map(l => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  onClick={() => setMenuOpen(false)}
-                  className="px-4 py-2 rounded-full bg-white/10 text-emerald-50 text-sm font-semibold hover:bg-white/20 transition-colors"
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </nav>
-          )}
         </header>
+
+        {menuOpen && (
+          <div className="lg:hidden fixed inset-0 z-50">
+            <div
+              className="absolute inset-0 bg-black/60 fa-menu-drop"
+              onClick={() => setMenuOpen(false)}
+            />
+            <nav className="fa-dark-surface absolute inset-y-0 left-0 w-72 max-w-[85vw] bg-emerald-950 shadow-2xl flex flex-col fa-drawer-in">
+              <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-white/10">
+                <span className="text-emerald-50 font-bold text-sm uppercase tracking-wide">
+                  Navigation
+                </span>
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="p-1.5 text-emerald-100/70 hover:text-white cursor-pointer"
+                  aria-label="Fermer"
+                >
+                  <HamburgerIcon open className="text-emerald-100/70" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-3 py-3 flex flex-col gap-1">
+                {MOBILE_LINKS.map(l => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    onClick={() => setMenuOpen(false)}
+                    className="px-4 py-3 rounded-xl text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+              <div className="px-5 py-4 border-t border-white/10">
+                <a
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
+                >
+                  <RiEyeFill /> Voir le site
+                </a>
+              </div>
+            </nav>
+          </div>
+        )}
 
         <main className="flex-1 p-3 lg:p-6">
           <div className="max-w-6xl mx-auto">
