@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import { Container } from "../ui/Container";
 import { usePlayer } from "../hooks/football";
+import { getCurrentSeason } from "../services/football/leagues";
 import { useEntityFollowers } from "../hooks/user";
 import SectionHeader from "../components/football/SectionHeader";
 import TeamLogo from "../components/football/TeamLogo";
@@ -65,13 +66,40 @@ const PlayerDetail = () => {
 
   const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
-  const games = current.games ?? {};
-  const goals = current.goals ?? {};
-  const cards = current.cards ?? {};
-  const shots = current.shots ?? {};
-  const passes = current.passes ?? {};
-  const tackles = current.tackles ?? {};
-  const duels = current.duels ?? {};
+
+  // Current-season stats aggregated across ALL competitions
+  const currentSeason = getCurrentSeason();
+  const seasonStats = stats.filter(s => s.league?.season === currentSeason);
+  const scope = seasonStats.length ? seasonStats : stats.slice(0, 1);
+  const others = stats.filter(s => !scope.includes(s));
+
+  const num = v => (typeof v === "number" ? v : 0);
+  const agg = scope.reduce(
+    (a, s) => ({
+      apps: a.apps + num(s.games?.appearences),
+      minutes: a.minutes + num(s.games?.minutes),
+      goals: a.goals + num(s.goals?.total),
+      assists: a.assists + num(s.goals?.assists),
+      shots: a.shots + num(s.shots?.total),
+      shotsOn: a.shotsOn + num(s.shots?.on),
+      passesTotal: a.passesTotal + num(s.passes?.total),
+      accWeight:
+        a.accWeight + num(s.passes?.accuracy) * num(s.passes?.total),
+      tackles: a.tackles + num(s.tackles?.total),
+      interceptions: a.interceptions + num(s.tackles?.interceptions),
+      duelsWon: a.duelsWon + num(s.duels?.won),
+      yellow: a.yellow + num(s.cards?.yellow),
+      red: a.red + num(s.cards?.red),
+    }),
+    {
+      apps: 0, minutes: 0, goals: 0, assists: 0, shots: 0, shotsOn: 0,
+      passesTotal: 0, accWeight: 0, tackles: 0, interceptions: 0,
+      duelsWon: 0, yellow: 0, red: 0,
+    },
+  );
+  const passAccuracy = agg.passesTotal
+    ? Math.round(agg.accWeight / agg.passesTotal)
+    : null;
 
   const fmtDate = iso =>
     iso
@@ -139,10 +167,10 @@ const PlayerDetail = () => {
               </div>
             </div>
             <div className="flex flex-col items-center gap-3 shrink-0">
-              {typeof games.number === "number" && games.number != null && (
+              {typeof current.games?.number === "number" && (
                 <div className="w-16 h-16 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
                   <span className="text-2xl font-bold text-emerald-400">
-                    {games.number}
+                    {current.games.number}
                   </span>
                 </div>
               )}
@@ -193,42 +221,88 @@ const PlayerDetail = () => {
           />
         </div>
 
-        {/* Season stats */}
-        {current.league && (
+        {/* Season stats — all competitions, current season */}
+        {scope.length > 0 && (
           <>
             <SectionHeader
               title={t("Statistiques")}
-              subtitle={`${current.league.name}${
-                current.league.country?.name ?? current.league.country
-                  ? ` · ${current.league.country?.name ?? current.league.country}`
-                  : ""
-              } — ${t("Saison {{season}}", { season: current.league.season ?? "" })}`}
+              subtitle={
+                seasonStats.length > 1
+                  ? `${t("Toutes compétitions")} — ${t("Saison {{season}}", { season: currentSeason })}`
+                  : `${scope[0].league?.name ?? ""}${
+                      scope[0].league?.country?.name ?? scope[0].league?.country
+                        ? ` · ${scope[0].league?.country?.name ?? scope[0].league?.country}`
+                        : ""
+                    } — ${t("Saison {{season}}", { season: scope[0].league?.season ?? "" })}`
+              }
             />
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-4 mb-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
-              <StatCell label={t("Matchs")} value={games.appearences} />
-              <StatCell label={t("Minutes")} value={games.minutes} />
-              <StatCell label={t("Buts")} value={goals.total} />
-              <StatCell label={t("Passes")} value={goals.assists} />
-              <StatCell label={t("Cartons jaune")} value={cards.yellow} />
-              <StatCell label={t("Cartons rouge")} value={cards.red} />
+              <StatCell label={t("Matchs")} value={agg.apps} />
+              <StatCell label={t("Minutes")} value={agg.minutes} />
+              <StatCell label={t("Buts")} value={agg.goals} />
+              <StatCell label={t("Passes")} value={agg.assists} />
+              <StatCell label={t("Cartons jaune")} value={agg.yellow} />
+              <StatCell label={t("Cartons rouge")} value={agg.red} />
             </div>
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-4 mb-10 grid grid-cols-3 sm:grid-cols-6 gap-2">
-              <StatCell label={t("Tirs")} value={shots.total} />
-              <StatCell label={t("Tirs cadrés")} value={shots.on} />
-              <StatCell label={t("Passes réussies")} value={passes.accuracy ? `${passes.accuracy}%` : null} />
-              <StatCell label={t("Tacles")} value={tackles.total} />
-              <StatCell label={t("Interceptions")} value={tackles.interceptions} />
-              <StatCell label={t("Duels gagnés")} value={duels.won} />
+              <StatCell label={t("Tirs")} value={agg.shots} />
+              <StatCell label={t("Tirs cadrés")} value={agg.shotsOn} />
+              <StatCell
+                label={t("Passes réussies")}
+                value={passAccuracy != null ? `${passAccuracy}%` : null}
+              />
+              <StatCell label={t("Tacles")} value={agg.tackles} />
+              <StatCell label={t("Interceptions")} value={agg.interceptions} />
+              <StatCell label={t("Duels gagnés")} value={agg.duelsWon} />
             </div>
           </>
         )}
 
+        {/* Current season — per competition breakdown */}
+        {seasonStats.length > 1 && (
+          <section className="mb-10">
+            <SectionHeader
+              title={t("Par compétition")}
+              subtitle={t("Saison {{season}}", { season: currentSeason })}
+            />
+            <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden">
+              {seasonStats.map((s, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 px-4 py-3 border-b border-emerald-900/40 last:border-0 text-sm"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-100 font-semibold truncate">
+                      {s.league?.name}
+                    </p>
+                    <p className="text-[0.65rem] text-gray-500">
+                      {s.team?.name}
+                      {s.league?.country?.name ?? s.league?.country
+                        ? ` · ${s.league?.country?.name ?? s.league?.country}`
+                        : ""}
+                    </p>
+                  </div>
+                  <span className="text-emerald-400 font-bold tabular-nums">
+                    {num(s.goals?.total)} {t("buts")}
+                  </span>
+                  <span className="text-gray-400 tabular-nums">
+                    {num(s.goals?.assists)} {t("passes")}
+                  </span>
+                  <span className="text-gray-400 tabular-nums">
+                    {num(s.games?.appearences)} {t("matchs")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Other seasons */}
-        {stats.length > 1 && (
+        {others.length > 0 && (
           <section>
             <SectionHeader title={t("Autres saisons / compétitions")} />
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden">
-              {stats.slice(1, 8).map((s, i) => (
+              {others.slice(0, 8).map((s, i) => (
                 <div
                   key={i}
                   className="flex items-center gap-4 px-4 py-3 border-b border-emerald-900/40 last:border-0 text-sm"
