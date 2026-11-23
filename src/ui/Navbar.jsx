@@ -205,19 +205,6 @@ const Navbar = () => {
                   {t("Déconnexion")}
                 </button>
               )}
-              <button
-                onClick={toggleTheme}
-                className="py-3 px-2 text-left text-emerald-950 uppercase font-bold font-menu text-lg border-t border-gray-100 cursor-pointer flex items-center gap-2"
-              >
-                {isLight ? <RiMoonLine className="text-xl" /> : <RiSunLine className="text-xl" />}
-                {isLight ? t("Mode sombre") : t("Mode clair")}
-              </button>
-              <button
-                onClick={toggleLang}
-                className="py-3 px-2 text-left text-emerald-950 uppercase font-bold font-menu text-lg border-t border-gray-100 cursor-pointer"
-              >
-                {i18n.language?.startsWith("en") ? "Français" : "English"}
-              </button>
             </nav>
           </Container>
         </div>
