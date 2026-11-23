@@ -64,22 +64,20 @@ const NewsCard = ({ post }) => (
     className="flex flex-col bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors group"
   >
     <div
-      className="aspect-[4/3] sm:aspect-[16/9] bg-emerald-900/40 bg-cover bg-center"
+      className="aspect-[16/9] bg-emerald-900/40 bg-cover bg-center"
       style={{
         backgroundImage: post.featuredImage
           ? `url(${post.featuredImage})`
           : undefined,
       }}
     />
-    <div className="p-3 sm:p-4 flex flex-col gap-1.5 sm:gap-2 flex-1">
+    <div className="p-4 flex flex-col gap-2 flex-1">
       <div>{POST_META(post)}</div>
-      <h3 className="font-serif text-gray-50 text-sm sm:text-lg leading-snug group-hover:text-emerald-300 transition-colors line-clamp-2">
+      <h3 className="font-serif text-gray-50 text-lg leading-snug group-hover:text-emerald-300 transition-colors line-clamp-2">
         {post.title}
       </h3>
       {post.excerpt && (
-        <p className="text-gray-400 text-xs sm:text-sm line-clamp-2 hidden sm:block">
-          {post.excerpt}
-        </p>
+        <p className="text-gray-400 text-sm line-clamp-2">{post.excerpt}</p>
       )}
     </div>
   </Link>
@@ -140,7 +138,7 @@ const News = () => {
 
   return (
     <Container>
-      <div className="py-8">
+      <div className="py-8 max-w-7xl mx-auto">
         <SectionHeader title={t("News")} subtitle={t("Toute l'actualité Football Autopsie")} />
 
         <AdBanner variant="leaderboard" className="mb-6" />
@@ -229,7 +227,7 @@ const News = () => {
 
         {filtered.length ? (
           layout === "grid" ? (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 fa-stagger">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fa-stagger">
               {filtered.map(post => (
                 <NewsCard key={post.id} post={post} />
               ))}
