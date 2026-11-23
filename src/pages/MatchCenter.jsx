@@ -501,32 +501,36 @@ const MatchCenter = () => {
             <div className="flex flex-col items-center px-4">
               {status.isLive || status.isFinished ? (
                 <>
+                  <div className="px-6 py-3 rounded-2xl bg-black/20 border border-white/10">
+                    <span
+                      className={`text-3xl sm:text-4xl font-semibold tabular-nums ${
+                        status.isLive ? "text-red-400" : "text-gray-50"
+                      }`}
+                    >
+                      {goals.home ?? 0} - {goals.away ?? 0}
+                    </span>
+                  </div>
                   <span
-                    className={`text-2xl sm:text-3xl font-bold tabular-nums ${
-                      status.isLive ? "text-red-500" : "text-gray-50"
-                    }`}
-                  >
-                    {goals.home ?? 0} - {goals.away ?? 0}
-                  </span>
-                  <span
-                    className={`mt-2 text-[0.65rem] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full text-white ${
-                      status.isLive ? "bg-red-500" : "bg-emerald-500"
+                    className={`mt-3 text-[0.65rem] font-medium uppercase tracking-wider px-3 py-1 rounded-full ${
+                      status.isLive
+                        ? "bg-red-500/15 text-red-400 border border-red-500/30"
+                        : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                     }`}
                   >
                     {t(status.label)}
                   </span>
                   {goals.halftime.home != null && (
-                    <span className="text-gray-500 text-xs mt-2 tabular-nums">
+                    <span className="text-gray-500 text-xs mt-2.5 tabular-nums">
                       {t("Mi-temps :")} {goals.halftime.home} - {goals.halftime.away}
                     </span>
                   )}
                 </>
               ) : (
                 <>
-                  <span className="text-xl sm:text-2xl font-bold text-gray-100">
+                  <span className="text-2xl sm:text-3xl font-semibold text-gray-100 tabular-nums">
                     {formatMatchTime(match.date)}
                   </span>
-                  <span className="mt-2 text-xs font-black uppercase tracking-widest text-gray-400">
+                  <span className="mt-2 text-xs font-medium uppercase tracking-widest text-gray-500">
                     {formatMatchDay(match.date)}
                   </span>
                 </>
@@ -558,16 +562,18 @@ const MatchCenter = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-5 mt-6 text-xs text-gray-500">
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-7">
             {match.venue && (
-              <span className="flex items-center gap-1">
-                <RiMapPinLine /> {match.venue}
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400">
+                <RiMapPinLine className="text-emerald-500" />
+                {match.venue}
                 {match.city ? `, ${match.city}` : ""}
               </span>
             )}
             {match.referee && (
-              <span className="flex items-center gap-1">
-                <RiUserLine /> {match.referee}
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400">
+                <RiUserLine className="text-emerald-500" />
+                {t("Arbitre")} : {match.referee}
               </span>
             )}
           </div>
