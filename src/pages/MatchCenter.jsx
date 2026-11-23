@@ -10,6 +10,7 @@ import FollowButton from "../components/user/FollowButton";
 import ImageDownloadButton from "../components/football/ImageDownloadButton";
 import { formatMatchDay, formatMatchTime, countryFlag } from "../utils/helpers";
 import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
+import CommentsSection from "../components/user/CommentsSection";
 import {
   RiErrorWarningLine,
   RiArrowLeftLine,
@@ -836,6 +837,8 @@ const MatchCenter = () => {
             </div>
           )}
         </section>
+
+        <CommentsSection matchId={match.id} />
 
       </div>
     </Container>

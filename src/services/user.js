@@ -153,17 +153,79 @@ export const unsaveArticle = async saveId => {
   if (error) throw error;
 };
 
-// ---------- Comments ----------
+// ---------- Comments (articles + matches) ----------
 
-export const getComments = async postId => {
+const COMMENT_TABLES = { post: "comments", match: "match_comments" };
+const entityColumn = entityType =>
+  entityType === "match" ? "match_id" : "post_id";
+
+export const getEntityComments = async (entityType, entityId) => {
   const { data, error } = await supabase
-    .from("comments")
-    .select("id, post_id, user_id, parent_id, content, status, created_at, updated_at")
-    .eq("post_id", postId)
+    .from(COMMENT_TABLES[entityType] ?? "comments")
+    .select("id, post_id, match_id, user_id, parent_id, content, status, created_at, updated_at")
+    .eq(entityColumn(entityType), entityId)
     .eq("status", "published")
     .order("created_at", { ascending: true });
   if (error) throw error;
   return data ?? [];
+};
+
+export const getComments = postId => getEntityComments("post", postId);
+
+export const addEntityComment = async ({
+  entityType = "post",
+  entityId,
+  content,
+  parentId = null,
+}) => {
+  const id = await uid();
+  if (!id) throw new Error("Connexion requise");
+  const row = {
+    user_id: id,
+    parent_id: parentId,
+    content: content.trim(),
+  };
+  row[entityColumn(entityType)] = entityId;
+  const { data, error } = await supabase
+    .from(COMMENT_TABLES[entityType] ?? "comments")
+    .insert(row)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+export const addComment = ({ postId, ...vars }) =>
+  addEntityComment({ ...vars, entityType: "post", entityId: postId });
+
+export const updateEntityComment = async (entityType, commentId, content) => {
+  const { error } = await supabase
+    .from(COMMENT_TABLES[entityType] ?? "comments")
+    .update({ content: content.trim(), updated_at: new Date().toISOString() })
+    .eq("id", commentId);
+  if (error) throw error;
+};
+
+export const updateComment = (commentId, content) =>
+  updateEntityComment("post", commentId, content);
+
+export const deleteEntityComment = async (entityType, commentId) => {
+  const { error } = await supabase
+    .from(COMMENT_TABLES[entityType] ?? "comments")
+    .delete()
+    .eq("id", commentId);
+  if (error) throw error;
+};
+
+export const deleteComment = (commentId, entityType = "post") =>
+  deleteEntityComment(entityType, commentId);
+
+export const moderateComment = async (commentId, status, entityType = "post") => {
+  const { error } = await supabase
+    .from(COMMENT_TABLES[entityType] ?? "comments")
+    .update({ status })
+    .eq("id", commentId);
+  if (error) throw error;
 };
 
 export const getCommentAuthors = async userIds => {
@@ -179,52 +241,30 @@ export const getCommentAuthors = async userIds => {
   return map;
 };
 
-export const addComment = async ({ postId, content, parentId = null }) => {
-  const id = await uid();
-  if (!id) throw new Error("Connexion requise");
-  const { data, error } = await supabase
-    .from("comments")
-    .insert({
-      post_id: postId,
-      user_id: id,
-      parent_id: parentId,
-      content: content.trim(),
-    })
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
-};
-
-export const updateComment = async (commentId, content) => {
-  const { error } = await supabase
-    .from("comments")
-    .update({ content: content.trim(), updated_at: new Date().toISOString() })
-    .eq("id", commentId);
-  if (error) throw error;
-};
-
-export const deleteComment = async commentId => {
-  const { error } = await supabase.from("comments").delete().eq("id", commentId);
-  if (error) throw error;
-};
-
-export const moderateComment = async (commentId, status) => {
-  const { error } = await supabase
-    .from("comments")
-    .update({ status })
-    .eq("id", commentId);
-  if (error) throw error;
-};
-
 export const getAllCommentsForAdmin = async () => {
-  const { data, error } = await supabase
-    .from("comments")
-    .select("*, post:Posts(title)")
-    .order("created_at", { ascending: false })
-    .limit(200);
-  if (error) throw error;
-  return data ?? [];
+  const [postsRes, matchesRes] = await Promise.all([
+    supabase
+      .from("comments")
+      .select("*, post:Posts(title)")
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("match_comments")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(200),
+  ]);
+  if (postsRes.error) throw postsRes.error;
+  // match_comments may not exist yet on databases where the migration
+  // hasn't been applied — tolerate that specific failure.
+  const matchRows = matchesRes.error ? [] : (matchesRes.data ?? []);
+  const merged = [
+    ...(postsRes.data ?? []).map(c => ({ ...c, _entity: "post" })),
+    ...matchRows.map(c => ({ ...c, _entity: "match" })),
+  ];
+  return merged.sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+  );
 };
 
 // ---------- Comment likes ----------

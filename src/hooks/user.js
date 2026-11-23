@@ -17,9 +17,13 @@ import {
   toggleSavedArticle,
   unsaveArticle,
   getComments,
+  getEntityComments,
   addComment,
+  addEntityComment,
   updateComment,
+  updateEntityComment,
   deleteComment,
+  deleteEntityComment,
   moderateComment,
   getAllCommentsForAdmin,
   toggleCommentLike,
@@ -159,21 +163,48 @@ export const useUnsaveArticle = () => {
 
 // ---------- Comments ----------
 
-export const useComments = postId =>
+export const useEntityComments = (entityType, entityId) =>
   useQuery({
-    queryKey: ["comments", postId],
-    queryFn: () => getComments(postId),
-    enabled: Boolean(postId),
+    queryKey: ["comments", entityType, entityId],
+    queryFn: () => getEntityComments(entityType, entityId),
+    enabled: Boolean(entityId),
     staleTime: 30 * 1000,
   });
+
+export const useComments = postId => useEntityComments("post", postId);
+
+export const useAddEntityComment = (entityType, entityId) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: vars =>
+      addEntityComment({ entityType, entityId, ...vars }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["comments", entityType, entityId] });
+      toast.success(i18n.t("Commentaire publié"));
+    },
+    onError: e => toast.error(e.message),
+  });
+};
 
 export const useAddComment = postId => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: vars => addComment({ postId, ...vars }),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["comments", postId] });
+      qc.invalidateQueries({ queryKey: ["comments", "post", postId] });
       toast.success(i18n.t("Commentaire publié"));
+    },
+    onError: e => toast.error(e.message),
+  });
+};
+
+export const useUpdateEntityComment = (entityType, entityId) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, content }) => updateEntityComment(entityType, id, content),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["comments", entityType, entityId] });
+      toast.success(i18n.t("Commentaire modifié"));
     },
     onError: e => toast.error(e.message),
   });
@@ -184,8 +215,20 @@ export const useUpdateComment = postId => {
   return useMutation({
     mutationFn: ({ id, content }) => updateComment(id, content),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["comments", postId] });
+      qc.invalidateQueries({ queryKey: ["comments", "post", postId] });
       toast.success(i18n.t("Commentaire modifié"));
+    },
+    onError: e => toast.error(e.message),
+  });
+};
+
+export const useDeleteEntityComment = (entityType, entityId) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: id => deleteEntityComment(entityType, id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["comments", entityType, entityId] });
+      toast.success(i18n.t("Commentaire supprimé"));
     },
     onError: e => toast.error(e.message),
   });
@@ -196,7 +239,7 @@ export const useDeleteComment = postId => {
   return useMutation({
     mutationFn: deleteComment,
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["comments", postId] });
+      qc.invalidateQueries({ queryKey: ["comments", "post", postId] });
       toast.success(i18n.t("Commentaire supprimé"));
     },
     onError: e => toast.error(e.message),
@@ -206,7 +249,8 @@ export const useDeleteComment = postId => {
 export const useModerateComment = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status }) => moderateComment(id, status),
+    mutationFn: ({ id, status, entityType }) =>
+      moderateComment(id, status, entityType),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "comments"] });
       toast.success(i18n.t("Commentaire modéré"));
@@ -229,7 +273,7 @@ export const useToggleCommentLike = postId => {
   return useMutation({
     mutationFn: toggleCommentLike,
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["comments", postId] });
+      qc.invalidateQueries({ queryKey: ["comments"] });
       qc.invalidateQueries({ queryKey: ["comment-likes"] });
     },
     onError: e => {

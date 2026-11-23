@@ -45,9 +45,9 @@ const Comments = () => {
   const filtered =
     filter === "all" ? comments : comments.filter(c => c.status === filter);
 
-  const remove = async id => {
+  const remove = async (id, entityType = "post") => {
     try {
-      await deleteComment(id);
+      await deleteComment(id, entityType);
       qc.invalidateQueries({ queryKey: ["admin", "comments"] });
       toast.success("Commentaire supprimé");
     } catch (e) {
@@ -114,13 +114,16 @@ const Comments = () => {
                 </div>
                 <p className="text-sm text-gray-300 mt-1 line-clamp-2">{c.content}</p>
                 <p className="text-xs text-gray-400 mt-1 truncate">
-                  Sur : {c.post?.title ?? c.post_id}
+                  Sur :{" "}
+                  {c._entity === "match"
+                    ? `Match #${c.match_id}`
+                    : (c.post?.title ?? c.post_id)}
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 {c.status !== "published" && (
                   <button
-                    onClick={() => moderate.mutate({ id: c.id, status: "published" })}
+                    onClick={() => moderate.mutate({ id: c.id, status: "published", entityType: c._entity ?? "post" })}
                     className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 cursor-pointer"
                     title="Publier"
                   >
@@ -129,7 +132,7 @@ const Comments = () => {
                 )}
                 {c.status !== "hidden" && c.status !== "deleted" && (
                   <button
-                    onClick={() => moderate.mutate({ id: c.id, status: "hidden" })}
+                    onClick={() => moderate.mutate({ id: c.id, status: "hidden", entityType: c._entity ?? "post" })}
                     className="p-2 rounded-lg bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 cursor-pointer"
                     title="Masquer"
                   >
@@ -137,7 +140,7 @@ const Comments = () => {
                   </button>
                 )}
                 <button
-                  onClick={() => remove(c.id)}
+                  onClick={() => remove(c.id, c._entity ?? "post")}
                   className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 cursor-pointer"
                   title="Supprimer"
                 >

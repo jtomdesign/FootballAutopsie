@@ -14,10 +14,10 @@ import {
   RiEmotionLine,
 } from "react-icons/ri";
 import {
-  useComments,
-  useAddComment,
-  useUpdateComment,
-  useDeleteComment,
+  useEntityComments,
+  useAddEntityComment,
+  useUpdateEntityComment,
+  useDeleteEntityComment,
   useToggleCommentLike,
   useReportComment,
 } from "../../hooks/user";
@@ -79,7 +79,8 @@ const CommentItem = ({
   likes,
   liked,
   depth,
-  postId,
+  entityType,
+  entityId,
   currentUserId,
   onReply,
   replies,
@@ -92,9 +93,10 @@ const CommentItem = ({
   const [showEmoji, setShowEmoji] = useState(false);
   const editRef = React.useRef(null);
   const editCursor = React.useRef(null);
-  const update = useUpdateComment(postId);
-  const del = useDeleteComment(postId);
-  const like = useToggleCommentLike(postId);
+  const isPost = entityType === "post";
+  const update = useUpdateEntityComment(entityType, entityId);
+  const del = useDeleteEntityComment(entityType, entityId);
+  const like = useToggleCommentLike(entityId);
   const report = useReportComment();
 
   const author = authors[comment.user_id];
@@ -179,6 +181,7 @@ const CommentItem = ({
           )}
 
           <div className="flex items-center gap-4 mt-1.5">
+            {isPost && (
             <button
               onClick={() => like.mutate(comment.id)}
               className={`flex items-center gap-1 text-xs font-semibold cursor-pointer transition-colors ${
@@ -188,6 +191,7 @@ const CommentItem = ({
               {liked ? <RiHeartFill /> : <RiHeartLine />}
               {likes[comment.id] ?? 0}
             </button>
+            )}
             {depth < MAX_DEPTH && (
               <button
                 onClick={() => onReply(comment)}
@@ -215,7 +219,7 @@ const CommentItem = ({
                 </button>
               </>
             )}
-            {!isOwn && (
+            {isPost && !isOwn && (
               <button
                 onClick={() => setReporting(r => !r)}
                 className="flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-red-500 cursor-pointer"
@@ -257,10 +261,12 @@ const CommentItem = ({
   );
 };
 
-const CommentsSection = ({ postId }) => {
+const CommentsSection = ({ postId, matchId }) => {
   const { t } = useTranslation();
   const { isAuthenticated, user } = useSelector(s => s.user);
   const navigate = useNavigate();
+  const entityType = matchId != null ? "match" : "post";
+  const entityId = matchId ?? postId;
   const [sort, setSort] = useState("recent"); // recent | oldest | liked
   const [replyTo, setReplyTo] = useState(null);
   const [text, setText] = useState("");
@@ -268,8 +274,8 @@ const CommentsSection = ({ postId }) => {
   const composerRef = React.useRef(null);
   const composerCursor = React.useRef(null);
 
-  const { data: comments = [], isLoading } = useComments(postId);
-  const add = useAddComment(postId);
+  const { data: comments = [], isLoading } = useEntityComments(entityType, entityId);
+  const add = useAddEntityComment(entityType, entityId);
 
   const authorIds = useMemo(
     () => [...new Set(comments.map(c => c.user_id))],
@@ -286,7 +292,7 @@ const CommentsSection = ({ postId }) => {
   const { data: likeData } = useQuery({
     queryKey: ["comment-likes", commentIds.join(",")],
     queryFn: () => getCommentLikes(commentIds),
-    enabled: commentIds.length > 0,
+    enabled: entityType === "post" && commentIds.length > 0,
     staleTime: 30 * 1000,
   });
   const likes = useMemo(() => likeData?.counts ?? {}, [likeData]);
@@ -317,7 +323,8 @@ const CommentsSection = ({ postId }) => {
             likes={likes}
             liked={liked}
             depth={depth}
-            postId={postId}
+            entityType={entityType}
+            entityId={entityId}
             currentUserId={user?.id}
             onReply={setReplyTo}
             replies={renderReplies(c.id, depth + 1)}
@@ -331,13 +338,14 @@ const CommentsSection = ({ postId }) => {
         likes={likes}
         liked={liked}
         depth={0}
-        postId={postId}
+        entityType={entityType}
+        entityId={entityId}
         currentUserId={user?.id}
         onReply={setReplyTo}
         replies={renderReplies(c.id, 1)}
       />
     ));
-  }, [comments, authors, likes, liked, sort, postId, user?.id]);
+  }, [comments, authors, likes, liked, sort, entityType, entityId, user?.id]);
 
   const submit = () => {
     if (!text.trim()) return;
@@ -371,7 +379,9 @@ const CommentsSection = ({ postId }) => {
         >
           <option value="recent">{t("Plus récents")}</option>
           <option value="oldest">{t("Plus anciens")}</option>
-          <option value="liked">{t("Plus aimés")}</option>
+          {entityType === "post" && (
+            <option value="liked">{t("Plus aimés")}</option>
+          )}
         </select>
       </div>
 
@@ -440,7 +450,9 @@ const CommentsSection = ({ postId }) => {
         <div className="flex flex-col gap-5">{threads}</div>
       ) : (
         <p className="text-sm text-gray-400 py-4 text-center">
-          {t("Soyez le premier à commenter cet article.")}
+          {entityType === "match"
+            ? t("Soyez le premier à commenter ce match.")
+            : t("Soyez le premier à commenter cet article.")}
         </p>
       )}
     </section>
