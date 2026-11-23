@@ -129,8 +129,9 @@ const WeekendResultsBar = () => {
   const { t } = useTranslation();
   const today = todayParam();
   // Big-matchday results strip: Mondays (after the weekend) and
-  // Thursdays (after Champions League Tue/Wed fixtures)
-  const day = new Date().getDay();
+  // Thursdays (after Champions League Tue/Wed fixtures).
+  // UTC day — fixture dates are UTC, so this matches the data window.
+  const day = new Date().getUTCDay();
   const isMatchday = day === 1 || day === 4;
   const d1 = useFixturesByDate(shiftDays(today, -1), isMatchday);
   const d2 = useFixturesByDate(shiftDays(today, -2), isMatchday);
