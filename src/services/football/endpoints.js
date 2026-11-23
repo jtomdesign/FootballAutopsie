@@ -120,10 +120,11 @@ export const getStandings = async ({ league, season }) => {
 // ---------- Teams ----------
 
 export const searchTeams = async ({ search, league, season, page = 1 }) => {
+  // api-sports.io rejects `season` combined with `search`
   const res = await footballApi("/teams", {
     search,
     league,
-    season: season ?? getCurrentSeason(),
+    season: search ? undefined : season ?? getCurrentSeason(),
     page,
   });
   return res.map(r => normalizeTeam(r.team));
