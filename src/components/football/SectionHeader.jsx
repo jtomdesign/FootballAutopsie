@@ -1,6 +1,6 @@
 import React from "react";
 
-const SectionHeader = ({ title, subtitle, action, level = 2 }) => {
+const SectionHeader = ({ title, action, level = 2 }) => {
   const Heading = `h${level}`;
   return (
     <div className="flex items-center justify-between gap-4 mb-4">

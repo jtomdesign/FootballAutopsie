@@ -16,7 +16,6 @@ import {
   getSavedArticles,
   toggleSavedArticle,
   unsaveArticle,
-  getComments,
   getEntityComments,
   addComment,
   addEntityComment,
@@ -267,7 +266,7 @@ export const useAdminComments = enabled =>
     staleTime: 30 * 1000,
   });
 
-export const useToggleCommentLike = postId => {
+export const useToggleCommentLike = () => {
   const qc = useQueryClient();
   const navigate = useNavigate();
   return useMutation({

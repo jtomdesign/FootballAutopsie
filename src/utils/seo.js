@@ -17,10 +17,6 @@ const upsertMeta = (attr, key, content) => {
   el.setAttribute("content", content);
 };
 
-const removeMeta = selector => {
-  document.head.querySelectorAll(selector).forEach(el => el.remove());
-};
-
 const upsertLink = (rel, href) => {
   if (!href) return;
   let el = document.head.querySelector(`link[rel="${rel}"]`);

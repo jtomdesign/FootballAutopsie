@@ -144,10 +144,12 @@ const News = () => {
 
   // Pagination — show 10 at a time, auto-load more on scroll
   const [visible, setVisible] = useState(10);
-
-  useEffect(() => {
+  const filterKey = `${activeCategory}|${feed}|${query}|${sort}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
     setVisible(10);
-  }, [activeCategory, feed, query, sort]);
+  }
 
   const shown = filtered.slice(0, visible);
   const hasMore = visible < filtered.length;

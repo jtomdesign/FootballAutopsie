@@ -18,14 +18,14 @@ const Account = () => {
   const { submit, isPending, googleLogin } = useAuth(mode);
   const { isAuthenticated, hydrated } = useSelector(s => s.user);
 
-  // Already signed in — /compte is the login page, send them to their space
-  if (hydrated && isAuthenticated) return <Navigate to="/mon-espace" replace />;
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  // Already signed in — /compte is the login page, send them to their space
+  if (hydrated && isAuthenticated) return <Navigate to="/mon-espace" replace />;
 
   const onSubmit = data => submit(data);
 
