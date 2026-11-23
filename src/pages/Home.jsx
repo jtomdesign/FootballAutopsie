@@ -36,7 +36,7 @@ const NewsCard = ({ post, large = false }) => {
     }`}
   >
     <div
-      className={`w-full ${large ? "h-72 md:h-96" : "w-28 sm:w-36 shrink-0 self-stretch"} bg-emerald-900/40 bg-cover bg-center`}
+      className={`w-full ${large ? "h-72 md:h-96" : "w-24 h-24 sm:w-32 sm:h-32 shrink-0 self-center rounded-xl bg-emerald-900/40 bg-cover bg-center"}`}
       style={{
         backgroundImage: post.featuredImage
           ? `url(${post.featuredImage})`
