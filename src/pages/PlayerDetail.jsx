@@ -53,7 +53,7 @@ const PlayerDetail = () => {
   const { id } = useParams();
   const { data: player, isLoading } = usePlayer(id);
   const { data: followers } = useEntityFollowers("player", player?.id);
-  const careerQueries = usePlayerCareerStatistics(player?.id);
+  const careerQueries = usePlayerCareerStatistics(player?.id, player?.age);
 
   if (isLoading) return <Spinner />;
   if (!player)

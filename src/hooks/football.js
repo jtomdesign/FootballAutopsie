@@ -175,17 +175,19 @@ export const usePlayer = id =>
 
 /**
  * Career statistics — the /players endpoint only returns one season per
- * call, so fetch the last 8 seasons in parallel and let the caller merge.
+ * call, so fetch seasons in parallel. The window is sized by the player's
+ * age (a career can't exceed ~age-15 seasons), capped at 24.
  */
-export const usePlayerCareerStatistics = id => {
+export const usePlayerCareerStatistics = (id, age) => {
   const currentSeason = getCurrentSeason();
-  const seasons = Array.from({ length: 8 }, (_, i) => currentSeason - i);
+  const span = Math.min(24, Math.max(4, (age ?? 23) - 15));
+  const seasons = Array.from({ length: span }, (_, i) => currentSeason - i);
   return useQueries({
     queries: seasons.map(season => ({
       queryKey: ["football", "player", id, "season-stats", season],
       queryFn: () => getPlayerSeasonStatistics(id, season),
       staleTime: 5 * 60 * 1000,
-      enabled: Boolean(id),
+      enabled: Boolean(id && age != null),
       retry: 1,
     })),
   });
