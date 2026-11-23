@@ -74,6 +74,8 @@ const PlayerDetail = () => {
   const scope = leagueId
     ? stats.filter(s => s.league?.id === leagueId)
     : stats.slice(0, 1);
+  const seasonStats = stats.filter(s => s.league?.season === currentSeason);
+  const otherComps = seasonStats.filter(s => s.league?.id !== leagueId);
   const pastStats = stats.filter(s => s.league?.season !== currentSeason);
 
   const num = v => (typeof v === "number" ? v : 0);
@@ -268,6 +270,45 @@ const PlayerDetail = () => {
               <StatCell label={t("Duels gagnés")} value={agg.duelsWon} />
             </div>
           </>
+        )}
+
+        {/* Other competitions — current season */}
+        {otherComps.length > 0 && (
+          <section className="mb-10">
+            <SectionHeader
+              title={t("Autres compétitions")}
+              subtitle={t("Saison {{season}}", { season: currentSeason })}
+            />
+            <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden">
+              {otherComps.map((s, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 px-4 py-3 border-b border-emerald-900/40 last:border-0 text-sm"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-gray-100 font-semibold truncate">
+                      {s.league?.name}
+                    </p>
+                    <p className="text-[0.65rem] text-gray-500">
+                      {s.team?.name}
+                      {s.league?.country?.name ?? s.league?.country
+                        ? ` · ${s.league?.country?.name ?? s.league?.country}`
+                        : ""}
+                    </p>
+                  </div>
+                  <span className="text-emerald-400 font-bold tabular-nums">
+                    {num(s.goals?.total)} {t("buts")}
+                  </span>
+                  <span className="text-gray-400 tabular-nums">
+                    {num(s.goals?.assists)} {t("passes")}
+                  </span>
+                  <span className="text-gray-400 tabular-nums">
+                    {num(s.games?.appearences)} {t("matchs")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* Other seasons */}
