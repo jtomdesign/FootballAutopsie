@@ -128,11 +128,13 @@ const BreakingBar = ({ posts }) => {
 const WeekendResultsBar = () => {
   const { t } = useTranslation();
   const today = todayParam();
-  // Weekend results of the top competitions — shown on Mondays
-  const isMonday = new Date().getDay() === 1;
-  const d1 = useFixturesByDate(shiftDays(today, -1), isMonday);
-  const d2 = useFixturesByDate(shiftDays(today, -2), isMonday);
-  const d3 = useFixturesByDate(shiftDays(today, -3), isMonday);
+  // Big-matchday results strip: Mondays (after the weekend) and
+  // Thursdays (after Champions League Tue/Wed fixtures)
+  const day = new Date().getDay();
+  const isMatchday = day === 1 || day === 4;
+  const d1 = useFixturesByDate(shiftDays(today, -1), isMatchday);
+  const d2 = useFixturesByDate(shiftDays(today, -2), isMatchday);
+  const d3 = useFixturesByDate(shiftDays(today, -3), isMatchday);
 
   const featuredIds = new Set(FEATURED_LEAGUES.map(l => l.id));
   const results = [d1.data, d2.data, d3.data]
@@ -140,13 +142,13 @@ const WeekendResultsBar = () => {
     .filter(f => f?.status?.isFinished && featuredIds.has(f.league?.id))
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  if (!isMonday || !results.length) return null;
+  if (!isMatchday || !results.length) return null;
 
   return (
     <div className="bg-emerald-950/60 border-b border-emerald-900/60">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
-          <span className="shrink-0 flex items-center text-emerald-500" title={t("Résultats du week-end")}>
+          <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
             <RiTrophyFill className="text-base" />
           </span>
           <div className="overflow-hidden flex-1">

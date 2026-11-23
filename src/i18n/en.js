@@ -117,6 +117,7 @@ export default {
   "Classements": "Standings",
   "Premier League & Ligue des Champions": "Premier League & Champions League",
   "Résultats": "Results",
+  "Grands résultats": "Top results",
   "Aucun résultat": "No results",
   "Les résultats d'hier apparaîtront ici.": "Yesterday's results will appear here.",
   "Aucun article publié": "No published articles",
