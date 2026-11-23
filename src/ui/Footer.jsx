@@ -113,7 +113,7 @@ const Footer = () => {
             {t("© {{year}} Football Autopsie. Tous droits réservés.", { year: YEAR })}
           </p>
           <p className={`flex items-center gap-1.5 ${text} text-xs`}>
-            contact@footballautopsie.com
+            contact@footautopsie.com
           </p>
         </div>
       </Container>

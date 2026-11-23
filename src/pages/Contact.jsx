@@ -76,10 +76,10 @@ const Contact = () => {
           <div className="lg:col-span-2 flex flex-col gap-3">
             <InfoCard icon={RiMailLine} title={t("Email")}>
               <a
-                href="mailto:contact@footballautopsie.com"
+                href="mailto:contact@footautopsie.com"
                 className="text-emerald-400 hover:underline"
               >
-                contact@footballautopsie.com
+                contact@footautopsie.com
               </a>
             </InfoCard>
             <InfoCard icon={RiTimeLine} title={t("Délai de réponse")}>
