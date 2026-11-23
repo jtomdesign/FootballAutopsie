@@ -146,7 +146,7 @@ const WeekendResultsBar = () => {
   if (!isMatchday || !results.length) return null;
 
   return (
-    <div className="bg-emerald-950/60 border-b border-emerald-900/60">
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-[7.75rem] z-40 backdrop-blur-sm">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
           <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
