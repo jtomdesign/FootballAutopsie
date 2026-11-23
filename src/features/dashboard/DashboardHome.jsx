@@ -104,7 +104,7 @@ const DashboardHome = () => {
               {published.map(p => (
                 <div
                   key={p.id}
-                  className="flex items-center gap-3 py-3 border-b border-emerald-900/60 last:border-0"
+                  className="flex items-center gap-3 py-3 border-b border-emerald-900/40 last:border-0"
                 >
                   <img
                     src={p.featuredImage}

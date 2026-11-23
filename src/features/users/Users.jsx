@@ -2,21 +2,16 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { adminListUsers } from "../../services/user";
+import { useSetUserRole } from "../../hooks/user";
 import { formatDate, formatDateTime } from "../../utils/helpers";
 import { CardGridSkeleton } from "../../components/football/Skeleton";
 import EmptyState from "../../components/football/EmptyState";
 import { RiTeamLine, RiMailLine, RiCalendarLine, RiLoginCircleLine } from "react-icons/ri";
 
-const ROLE_STYLES = {
-  admin: "bg-emerald-500/15 text-emerald-600",
-  editor: "bg-blue-500/15 text-blue-600",
-  user: "bg-gray-500/15 text-gray-500",
-};
-const ROLE_LABELS = { admin: "Admin", editor: "Éditeur", user: "Utilisateur" };
-
 const Users = () => {
   const { user } = useSelector(s => s.user);
   const isAdmin = user?.role === "admin";
+  const setRole = useSetUserRole();
   const { data: users = [], isLoading, isError, error } = useQuery({
     queryKey: ["admin", "users"],
     queryFn: adminListUsers,
@@ -54,10 +49,11 @@ const Users = () => {
         <div className="bg-emerald-950/60 rounded-2xl overflow-x-auto">
           <table className="w-full min-w-[42rem] text-sm">
             <thead>
-              <tr className="text-left text-[0.7rem] font-bold uppercase tracking-wider text-gray-400 border-b border-emerald-900/60">
+              <tr className="text-left text-[0.7rem] font-bold uppercase tracking-wider text-gray-400 border-b border-emerald-900/40">
                 <th className="px-5 py-3">Utilisateur</th>
                 <th className="px-5 py-3">Email</th>
                 <th className="px-5 py-3">Rôle</th>
+                <th className="px-5 py-3">Actions</th>
                 <th className="px-5 py-3">Inscrit le</th>
                 <th className="px-5 py-3">Dernière connexion</th>
               </tr>
@@ -74,7 +70,7 @@ const Users = () => {
                 return (
                   <tr
                     key={u.id}
-                    className="border-b border-emerald-900/60 last:border-0 hover:bg-emerald-900/30 transition-colors"
+                    className="border-b border-emerald-900/40 last:border-0 hover:bg-emerald-900/30 transition-colors"
                   >
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
@@ -104,9 +100,24 @@ const Users = () => {
                       </span>
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`inline-block px-2.5 py-1 rounded-full text-[0.65rem] font-bold uppercase ${ROLE_STYLES[u.role] ?? ROLE_STYLES.user}`}>
-                        {ROLE_LABELS[u.role] ?? u.role}
-                      </span>
+                      <select
+                        value={u.role ?? "user"}
+                        disabled={u.id === user?.id || setRole.isPending}
+                        onChange={e =>
+                          setRole.mutate({ userId: u.id, role: e.target.value })
+                        }
+                        className="bg-emerald-900/40 border border-emerald-900/40 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-100 focus:outline-none focus:ring-1 focus:ring-emerald-400 disabled:opacity-50 cursor-pointer"
+                        title={u.id === user?.id ? "Vous ne pouvez pas modifier votre propre rôle" : "Changer le rôle"}
+                      >
+                        <option value="admin">Admin</option>
+                        <option value="editor">Éditeur</option>
+                        <option value="user">Utilisateur</option>
+                      </select>
+                    </td>
+                    <td className="px-5 py-3">
+                      {u.id === user?.id && (
+                        <span className="text-[0.65rem] text-gray-500">vous</span>
+                      )}
                     </td>
                     <td className="px-5 py-3">
                       <span className="flex items-center gap-1.5 text-gray-400 text-xs whitespace-nowrap">

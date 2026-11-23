@@ -19,7 +19,7 @@ const PRESET_COLORS = [
 ];
 
 const inputCls =
-  "w-full border border-emerald-900/60 focus:ring-emerald-400 focus:ring-1 focus:outline-none py-2.5 px-4 rounded-xl text-sm text-gray-100 bg-emerald-900/40 placeholder:text-gray-500";
+  "w-full border border-emerald-900/40 focus:ring-emerald-400 focus:ring-1 focus:outline-none py-2.5 px-4 rounded-xl text-sm text-gray-100 bg-emerald-900/40 placeholder:text-gray-500";
 
 const CategoryForm = ({ category = null, onCloseModal }) => {
   const { mutate: createCategory } = useCreateCategory();
@@ -88,7 +88,7 @@ const CategoryForm = ({ category = null, onCloseModal }) => {
             type="color"
             value={color}
             onChange={e => setColor(e.target.value)}
-            className="w-8 h-8 rounded cursor-pointer border border-emerald-900/60 bg-transparent"
+            className="w-8 h-8 rounded cursor-pointer border border-emerald-900/40 bg-transparent"
           />
         </div>
       </FormRow>

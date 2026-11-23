@@ -19,7 +19,7 @@ const STATUS_STYLES = {
 const PostRow = ({ post, gridClass }) => {
   const { deletePost, isDeleting } = useDeletePost();
   return (
-    <div className={`${gridClass} py-3 border-b border-emerald-900/60 last:border-0 text-sm`}>
+    <div className={`${gridClass} py-3 border-b border-emerald-900/40 last:border-0 text-sm`}>
       <div className="h-14">
         <img
           className="h-full w-full rounded-lg object-cover bg-emerald-900/60"

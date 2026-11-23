@@ -5,6 +5,7 @@ import {
   RiBookOpenFill,
   RiChat4Fill,
   RiEqualizerFill,
+  RiInboxLine,
   RiHome6Fill,
   RiLogoutBoxFill,
   RiStackFill,
@@ -58,6 +59,12 @@ const Sidebar = () => {
             <RiChat4Fill />
           </DashLink.Icon>
           <DashLink.Name>Commentaires</DashLink.Name>
+        </DashLink>
+        <DashLink to="messages">
+          <DashLink.Icon>
+            <RiInboxLine />
+          </DashLink.Icon>
+          <DashLink.Name>Messages</DashLink.Name>
         </DashLink>
         <DashLink to="users">
           <DashLink.Icon>

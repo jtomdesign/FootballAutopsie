@@ -8,7 +8,7 @@ import { formatDate } from "../../utils/helpers";
 const ROLE_LABELS = { admin: "Administrateur", editor: "Éditeur", user: "Utilisateur" };
 
 const InfoRow = ({ label, value }) => (
-  <div className="flex items-center justify-between py-2.5 border-b border-emerald-900/60 last:border-0">
+  <div className="flex items-center justify-between py-2.5 border-b border-emerald-900/40 last:border-0">
     <span className="text-sm text-gray-400">{label}</span>
     <span className="text-sm font-semibold text-gray-100 truncate ml-4">{value ?? "—"}</span>
   </div>

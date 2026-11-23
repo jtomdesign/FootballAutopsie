@@ -355,3 +355,28 @@ export const adminListUsers = async () => {
   if (error) throw error;
   return data ?? [];
 };
+
+export const adminSetUserRole = async (userId, role) => {
+  const { error } = await supabase.rpc("admin_set_user_role", {
+    p_user_id: userId,
+    p_role: role,
+  });
+  if (error) throw error;
+};
+
+// ---------- Admin: contact messages ----------
+
+export const getContactMessages = async () => {
+  const { data, error } = await supabase
+    .from("contact_messages")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(200);
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const deleteContactMessage = async id => {
+  const { error } = await supabase.from("contact_messages").delete().eq("id", id);
+  if (error) throw error;
+};

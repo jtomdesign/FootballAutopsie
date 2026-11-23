@@ -26,7 +26,7 @@ const toLocalInput = iso => {
 };
 
 const inputCls =
-  "w-full border border-emerald-900/60 focus:ring-emerald-400 focus:ring-1 focus:outline-none py-3 px-4 rounded-xl text-sm text-gray-100 bg-emerald-900/40";
+  "w-full border border-emerald-900/40 focus:ring-emerald-400 focus:ring-1 focus:outline-none py-3 px-4 rounded-xl text-sm text-gray-100 bg-emerald-900/40";
 
 const STATUS_LABELS = {
   draft: "Brouillon",
@@ -341,7 +341,7 @@ const ArticleEditor = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-emerald-900/60">
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-emerald-900/40">
             <Button
               type="secondary"
               role="button"

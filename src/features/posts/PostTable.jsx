@@ -27,7 +27,7 @@ const PostTable = () => {
 
   return (
     <div className="bg-emerald-950/60 rounded-2xl p-4 lg:p-5 overflow-x-auto">
-      <div className={`${GRID} min-w-[40rem] pb-3 border-b border-emerald-900/60`}>
+      <div className={`${GRID} min-w-[40rem] pb-3 border-b border-emerald-900/40`}>
         <div className="text-[0.7rem] font-bold uppercase tracking-wider text-gray-400 text-center">Image</div>
         <div className="text-[0.7rem] font-bold uppercase tracking-wider text-gray-400">Titre</div>
         <div className="text-[0.7rem] font-bold uppercase tracking-wider text-gray-400 text-center">Date</div>

@@ -30,6 +30,9 @@ import {
   markAllNotificationsRead,
   deleteNotification,
   notify,
+  adminSetUserRole,
+  getContactMessages,
+  deleteContactMessage,
 } from "../services/user";
 
 const USER_KEY = ["user-data"];
@@ -351,4 +354,40 @@ export const useSyncNotifications = () => {
       }
     })();
   }, [authed, favorites, live]);
+};
+
+// ---------- Admin: role management ----------
+
+export const useSetUserRole = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, role }) => adminSetUserRole(userId, role),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "users"] });
+      toast.success(i18n.t("Rôle mis à jour"));
+    },
+    onError: e => toast.error(e.message),
+  });
+};
+
+// ---------- Admin: contact messages ----------
+
+export const useContactMessages = enabled =>
+  useQuery({
+    queryKey: ["admin", "contact-messages"],
+    queryFn: getContactMessages,
+    enabled,
+    staleTime: 30 * 1000,
+  });
+
+export const useDeleteContactMessage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteContactMessage,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "contact-messages"] });
+      toast.success(i18n.t("Message supprimé"));
+    },
+    onError: e => toast.error(e.message),
+  });
 };

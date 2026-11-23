@@ -34,7 +34,7 @@ function Window({ children, name }) {
     <div className="fixed top-0 left-0 w-full h-dvh z-1000 backdrop-blur-xs bg-gray-900/60">
       <div
         ref={ref}
-        className="fa-modal fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gray-100 rounded-2xl shadow-2xl transition-all duration-300 py-6 px-8 "
+        className="fa-modal fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gray-100 rounded-2xl shadow-lg transition-all duration-300 py-6 px-8 "
       >
         <button
           onClick={close}
