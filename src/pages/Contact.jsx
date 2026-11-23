@@ -10,7 +10,7 @@ import {
   RiTimeLine,
   RiSendPlaneLine,
   RiArticleLine,
-  RiHandshakeLine,
+  RiQuillPenLine,
 } from "react-icons/ri";
 
 const inputCls =
@@ -82,7 +82,7 @@ const Contact = () => {
             <InfoCard icon={RiArticleLine} title={t("Presse & partenariats")}>
               {t("Décrivez votre demande dans le formulaire, nous vous orienterons.")}
             </InfoCard>
-            <InfoCard icon={RiHandshakeLine} title={t("Contributions")}>
+            <InfoCard icon={RiQuillPenLine} title={t("Contributions")}>
               {t("Analyses, interviews, contenu exclusif : vos articles peuvent être publiés sur Football Autopsie.")}
             </InfoCard>
           </div>
