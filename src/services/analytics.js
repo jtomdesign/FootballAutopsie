@@ -21,6 +21,19 @@ const getSessionId = () => {
  * Log a page view. Fire-and-forget — silently ignores failures
  * (e.g. before the analytics migration is applied).
  */
+// Only count real visits on the production domain — localhost, preview
+// deploys and automation must not pollute the stats.
+const isProdHost = () => {
+  const host = window.location.hostname;
+  return host === "footautopsie.com" || host === "www.footautopsie.com";
+};
+
+const isBot = () =>
+  navigator.webdriver ||
+  /bot|crawl|spider|slurp|headless|pingdom|uptime|lighthouse/i.test(
+    navigator.userAgent || "",
+  );
+
 const referrerHost = () => {
   try {
     if (!document.referrer) return null;
@@ -35,6 +48,7 @@ const referrerHost = () => {
 
 export const trackPageView = path => {
   if (!path || SKIP.test(path)) return;
+  if (!isProdHost() || isBot()) return;
   try {
     // Dedupe rapid repeats (React StrictMode, back/forward within seconds)
     const key = `fa-pv-${path}`;
