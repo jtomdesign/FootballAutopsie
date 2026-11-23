@@ -219,11 +219,11 @@ html:not(.light) .fa-toast [data-close-button] { color: #6b7280 !important; }
   width: max-content;
 }
 .marquee-track.marquee-slow {
-  animation-duration: 130s;
+  animation-duration: 200s;
 }
 @media (max-width: 640px) {
   .marquee-track.marquee-slow {
-    animation-duration: 160s;
+    animation-duration: 240s;
   }
 }
 .marquee-track:hover {
