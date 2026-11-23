@@ -47,20 +47,6 @@ const StatCell = ({ label, value }) => {
   );
 };
 
-const StatGrid = ({ title, children }) => {
-  const { t } = useTranslation();
-  return (
-    <div className="mb-6">
-      <h3 className="text-xs font-black uppercase tracking-widest text-emerald-400 mb-2">
-        {t(title)}
-      </h3>
-      <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl px-4 grid grid-cols-3 sm:grid-cols-6">
-        {children}
-      </div>
-    </div>
-  );
-};
-
 const PlayerDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -86,13 +72,6 @@ const PlayerDetail = () => {
   const passes = current.passes ?? {};
   const tackles = current.tackles ?? {};
   const duels = current.duels ?? {};
-  const dribbles = current.dribbles ?? {};
-  const fouls = current.fouls ?? {};
-  const penalty = current.penalty ?? {};
-  const offsides = current.offsides ?? {};
-
-  const hasGoalkeeping =
-    goals.concedes != null || goals.saves != null || penalty.saved != null;
 
   const fmtDate = iso =>
     iso
@@ -225,47 +204,21 @@ const PlayerDetail = () => {
                   : ""
               } — ${t("Saison {{season}}", { season: current.league.season ?? "" })}`}
             />
-            <div className="mb-8">
-              <StatGrid title="Matchs & phase offensive">
-                <StatCell label={t("Matchs")} value={games.appearences} />
-                <StatCell label={t("Titulaire")} value={games.lineups} />
-                <StatCell label={t("Remplaçant")} value={games.substitutes} />
-                <StatCell label={t("Minutes")} value={games.minutes} />
-                <StatCell label={t("Buts")} value={goals.total} />
-                <StatCell label={t("Passes décisives")} value={goals.assists} />
-              </StatGrid>
-
-              <StatGrid title={t("Tirs & passes")}>
-                <StatCell label={t("Tirs")} value={shots.total} />
-                <StatCell label={t("Tirs cadrés")} value={shots.on} />
-                <StatCell label={t("Passes")} value={passes.total} />
-                <StatCell label={t("Passes clés")} value={passes.key} />
-                <StatCell
-                  label={t("Précision passes")}
-                  value={passes.accuracy != null ? `${passes.accuracy}%` : null}
-                />
-                <StatCell label={t("Dribbles réussis")} value={dribbles.success} />
-              </StatGrid>
-
-              <StatGrid title={t("Défense & discipline")}>
-                <StatCell label={t("Tacles")} value={tackles.total} />
-                <StatCell label={t("Interceptions")} value={tackles.interceptions} />
-                <StatCell label={t("Duels gagnés")} value={duels.won} />
-                <StatCell label={t("Fautes commises")} value={fouls.committed} />
-                <StatCell label={t("Cartons jaune")} value={cards.yellow} />
-                <StatCell label={t("Cartons rouge")} value={cards.red} />
-              </StatGrid>
-
-              {(hasGoalkeeping || penalty.won != null || penalty.scored != null || penalty.missed != null || offsides != null) && (
-                <StatGrid title={t("Gardien & pénalités")}>
-                  <StatCell label={t("Buts encaissés")} value={goals.concedes} />
-                  <StatCell label={t("Arrêts")} value={goals.saves} />
-                  <StatCell label={t("Pén. marqués")} value={penalty.scored} />
-                  <StatCell label={t("Pén. ratés")} value={penalty.missed} />
-                  <StatCell label={t("Pén. obtenus")} value={penalty.won} />
-                  <StatCell label={t("Hors-jeu")} value={offsides} />
-                </StatGrid>
-              )}
+            <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-4 mb-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
+              <StatCell label={t("Matchs")} value={games.appearences} />
+              <StatCell label={t("Minutes")} value={games.minutes} />
+              <StatCell label={t("Buts")} value={goals.total} />
+              <StatCell label={t("Passes")} value={goals.assists} />
+              <StatCell label={t("Cartons jaune")} value={cards.yellow} />
+              <StatCell label={t("Cartons rouge")} value={cards.red} />
+            </div>
+            <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-4 mb-10 grid grid-cols-3 sm:grid-cols-6 gap-2">
+              <StatCell label={t("Tirs")} value={shots.total} />
+              <StatCell label={t("Tirs cadrés")} value={shots.on} />
+              <StatCell label={t("Passes réussies")} value={passes.accuracy ? `${passes.accuracy}%` : null} />
+              <StatCell label={t("Tacles")} value={tackles.total} />
+              <StatCell label={t("Interceptions")} value={tackles.interceptions} />
+              <StatCell label={t("Duels gagnés")} value={duels.won} />
             </div>
           </>
         )}
