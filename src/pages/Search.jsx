@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
 import { supabase } from "../services/supabase";
@@ -8,9 +8,12 @@ import {
   useTeamSearch,
   usePlayerProfileSearch,
   useLeagueSearch,
-  useFixturesByDate,
 } from "../hooks/football";
-import { todayParam, shiftDays } from "../services/football/endpoints";
+import {
+  getFixturesByDate,
+  todayParam,
+  shiftDays,
+} from "../services/football/endpoints";
 import SectionHeader from "../components/football/SectionHeader";
 import MatchList from "../components/football/MatchList";
 import TeamLogo from "../components/football/TeamLogo";
@@ -76,21 +79,51 @@ const Search = () => {
   const { data: players = [] } = usePlayerProfileSearch({ search: enabled ? query : undefined });
   const { data: leagues = [] } = useLeagueSearch({ search: enabled ? query : undefined });
 
+  // Match search: scan a 10-day window (3 days back, 7 ahead) so recent
+  // results, live games and upcoming fixtures all appear. Queries only run
+  // while a search is active.
   const today = todayParam();
-  const { data: todayFx = [] } = useFixturesByDate(today);
-  const { data: ydayFx = [] } = useFixturesByDate(shiftDays(today, -1));
+  const searchDates = React.useMemo(() => {
+    const dates = [];
+    for (let i = -3; i <= 7; i++) dates.push(shiftDays(today, i));
+    return dates;
+  }, [today]);
+
+  const fixtureQueries = useQueries({
+    queries: searchDates.map(date => ({
+      queryKey: ["football", "fixtures", "date", date],
+      queryFn: () => getFixturesByDate(date),
+      staleTime: 5 * 60 * 1000,
+      enabled,
+      retry: 1,
+    })),
+  });
+  const fixturesLoading = enabled && fixtureQueries.some(x => x.isLoading);
+
   const q = query.toLowerCase();
+  const teamIds = new Set(teams.map(t => t.id));
+  const leagueIds = new Set(leagues.map(l => l.id));
   const matchFixtures = enabled
-    ? [...todayFx, ...ydayFx].filter(
-        f =>
-          f.homeTeam.name.toLowerCase().includes(q) ||
-          f.awayTeam.name.toLowerCase().includes(q) ||
-          f.league.name.toLowerCase().includes(q),
-      )
+    ? fixtureQueries
+        .flatMap(x => x.data ?? [])
+        .filter(
+          f =>
+            teamIds.has(f.homeTeam?.id) ||
+            teamIds.has(f.awayTeam?.id) ||
+            leagueIds.has(f.league?.id) ||
+            f.homeTeam?.name?.toLowerCase().includes(q) ||
+            f.awayTeam?.name?.toLowerCase().includes(q) ||
+            f.league?.name?.toLowerCase().includes(q),
+        )
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
     : [];
 
   const hasAny =
-    articles.length || teams.length || players.length || leagues.length || matchFixtures.length;
+    articles.length ||
+    teams.length ||
+    players.length ||
+    leagues.length ||
+    matchFixtures.length;
 
   return (
     <Container>
@@ -115,7 +148,7 @@ const Search = () => {
           />
         )}
 
-        {enabled && !hasAny && !articlesLoading && (
+        {enabled && !hasAny && !articlesLoading && !fixturesLoading && (
           <EmptyState
             title={t("Aucun résultat")}
             message={t("Aucun résultat pour « {{q}} ».", { q: query })}
@@ -161,7 +194,9 @@ const Search = () => {
             </ResultGroup>
 
             <ResultGroup title={t("Matchs")}>
-              {matchFixtures.length ? (
+              {fixturesLoading ? (
+                <p className="text-gray-500 text-sm">{t("Recherche…")}</p>
+              ) : matchFixtures.length ? (
                 <MatchList fixtures={matchFixtures.slice(0, 10)} showLeague />
               ) : null}
             </ResultGroup>

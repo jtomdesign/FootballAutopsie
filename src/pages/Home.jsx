@@ -32,19 +32,19 @@ const NewsCard = ({ post, large = false }) => {
   <Link
     to={`/news/${post.slug}`}
     className={`group block bg-emerald-950/70 border border-emerald-900/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors ${
-      large ? "md:col-span-2 md:row-span-2" : "flex"
+      large ? "md:col-span-2 md:row-span-2" : ""
     }`}
   >
     <div
-      className={`w-full ${large ? "h-72 md:h-96" : "w-24 h-24 sm:w-32 sm:h-32 shrink-0 self-center rounded-xl bg-emerald-900/40 bg-cover bg-center"}`}
+      className={`w-full ${large ? "h-72 md:h-96" : "h-40"} bg-emerald-900/40 bg-cover bg-center`}
       style={{
         backgroundImage: post.featuredImage
           ? `url(${post.featuredImage})`
           : undefined,
       }}
     />
-    <div className={large ? "p-4" : "p-3 flex-1 min-w-0 flex flex-col justify-center"}>
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-wider text-gray-500 mb-2">
+    <div className="p-4">
+      <div className="flex items-center gap-3 text-[0.65rem] uppercase tracking-wider text-gray-500 mb-2">
         {categoryName(post) && (
           <span className="text-emerald-400 font-bold">{categoryName(post)}</span>
         )}
@@ -58,7 +58,7 @@ const NewsCard = ({ post, large = false }) => {
       </div>
       <h3
         className={`font-serif text-gray-50 group-hover:text-emerald-400 transition-colors leading-snug ${
-          large ? "text-2xl md:text-3xl" : "text-base sm:text-lg"
+          large ? "text-2xl md:text-3xl" : "text-lg"
         }`}
       >
         {post.title}
