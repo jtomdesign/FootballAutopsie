@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -81,7 +81,19 @@ const RichTextEditor = ({
     content,
     immediatelyRender: false,
     onUpdate: ({ editor }) => onChange?.(editor.getHTML()),
-  });
+  }, []);
+
+  // Sync externally-loaded content (e.g. post fetched after mount) into
+  // the editor — but never overwrite what the user is typing, since our
+  // own onChange echoes back the same HTML.
+  const prevContent = useRef(content);
+  useEffect(() => {
+    if (!editor || content === prevContent.current) return;
+    prevContent.current = content;
+    if (content !== editor.getHTML()) {
+      editor.commands.setContent(content, { emitUpdate: false });
+    }
+  }, [content, editor]);
 
   const setLink = useCallback(() => {
     if (!editor) return;
