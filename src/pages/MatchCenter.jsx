@@ -464,8 +464,8 @@ const MatchCenter = () => {
         </div>
 
         {/* Header */}
-        <div className="bg-emerald-950/70 border border-emerald-900/60 rounded-3xl p-6 sm:p-10 text-center mb-8 fa-fade-up">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-400 uppercase tracking-widest mb-8">
+        <div className="bg-emerald-950/70 border border-emerald-900/60 rounded-3xl p-5 sm:p-10 text-center mb-8 fa-fade-up">
+          <div className="flex items-center justify-center gap-2 text-xs text-gray-400 uppercase tracking-widest mb-6">
             {league.logo && <TeamLogo logo={league.logo} name={league.name} size="w-4 h-4" />}
             <Link to={`/ligues/${league.id}`} className="hover:text-emerald-300">
               {league.name}
@@ -473,10 +473,10 @@ const MatchCenter = () => {
             {league.round && <span>· {league.round}</span>}
           </div>
 
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
             <div className="flex flex-col items-center gap-1.5">
               <Link to={`/equipes/${homeTeam.id}`} className="flex flex-col items-center gap-3 group">
-                <TeamLogo logo={homeTeam.logo} name={homeTeam.name} size="w-16 h-16 sm:w-24 sm:h-24" />
+                <TeamLogo logo={homeTeam.logo} name={homeTeam.name} size="w-14 h-14 sm:w-24 sm:h-24" />
                 <span className="font-semibold text-gray-100 group-hover:text-emerald-300 transition-colors text-xs sm:text-sm">
                   {homeTeam.name}
                 </span>
@@ -498,23 +498,21 @@ const MatchCenter = () => {
               )}
             </div>
 
-            <div className="flex flex-col items-center px-4">
+            <div className="flex flex-col items-center px-1 sm:px-4">
               {status.isLive || status.isFinished ? (
                 <>
-                  <div className="px-6 py-3 rounded-2xl bg-black/20 border border-white/10">
-                    <span
-                      className={`text-3xl sm:text-4xl font-semibold tabular-nums ${
-                        status.isLive ? "text-red-400" : "text-gray-50"
-                      }`}
-                    >
-                      {goals.home ?? 0} - {goals.away ?? 0}
-                    </span>
-                  </div>
+                  <span
+                    className={`text-2xl sm:text-4xl font-semibold tabular-nums ${
+                      status.isLive ? "text-red-500" : "text-gray-50"
+                    }`}
+                  >
+                    {goals.home ?? 0} - {goals.away ?? 0}
+                  </span>
                   <span
                     className={`mt-3 text-[0.65rem] font-medium uppercase tracking-wider px-3 py-1 rounded-full ${
                       status.isLive
-                        ? "bg-red-500/15 text-red-400 border border-red-500/30"
-                        : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                        ? "bg-red-500/15 text-red-500"
+                        : "bg-emerald-500/15 text-emerald-500"
                     }`}
                   >
                     {t(status.label)}
@@ -539,7 +537,7 @@ const MatchCenter = () => {
 
             <div className="flex flex-col items-center gap-1.5">
               <Link to={`/equipes/${awayTeam.id}`} className="flex flex-col items-center gap-3 group">
-                <TeamLogo logo={awayTeam.logo} name={awayTeam.name} size="w-16 h-16 sm:w-24 sm:h-24" />
+                <TeamLogo logo={awayTeam.logo} name={awayTeam.name} size="w-14 h-14 sm:w-24 sm:h-24" />
                 <span className="font-semibold text-gray-100 group-hover:text-emerald-300 transition-colors text-xs sm:text-sm">
                   {awayTeam.name}
                 </span>
@@ -564,14 +562,14 @@ const MatchCenter = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-2 mt-7">
             {match.venue && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-gray-500">
                 <RiMapPinLine className="text-emerald-500" />
                 {match.venue}
                 {match.city ? `, ${match.city}` : ""}
               </span>
             )}
             {match.referee && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-400">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-gray-500">
                 <RiUserLine className="text-emerald-500" />
                 {t("Arbitre")} : {match.referee}
               </span>
