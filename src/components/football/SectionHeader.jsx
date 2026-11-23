@@ -5,7 +5,7 @@ const SectionHeader = ({ title, subtitle, action, level = 2 }) => {
   return (
     <div className="flex items-center justify-between gap-4 mb-4">
       <div>
-        <Heading className="text-2xl font-bold text-gray-50 font-menu tracking-wide uppercase">
+        <Heading className="text-xl font-bold text-gray-50 font-menu tracking-wide uppercase">
           {title}
         </Heading>
         {/* subtitle intentionally not rendered */}
