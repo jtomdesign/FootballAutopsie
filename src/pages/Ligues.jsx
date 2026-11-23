@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
-import { useLeagues } from "../hooks/football";
+import { useLeagues, useLeagueSearch } from "../hooks/football";
 import { FEATURED_LEAGUES } from "../services/football/leagues";
 import SectionHeader from "../components/football/SectionHeader";
 import EmptyState from "../components/football/EmptyState";
@@ -42,14 +42,10 @@ const Ligues = () => {
   const [showAll, setShowAll] = useState(false);
 
   const showSearch = search.trim().length >= 2;
-  const term = search.trim().toLowerCase();
-  const searchResults = showSearch
-    ? leagues.filter(
-        l =>
-          l.name?.toLowerCase().includes(term) ||
-          l.country?.toLowerCase().includes(term),
-      )
-    : [];
+  const { data: apiSearch = [], isFetching: searching } = useLeagueSearch({
+    search: showSearch ? search.trim() : undefined,
+  });
+  const searchResults = showSearch ? apiSearch.slice(0, 48) : [];
 
   const featuredIds = new Set(FEATURED_LEAGUES.map(l => l.id));
   const featured = leagues.filter(l => featuredIds.has(l.id));
@@ -75,7 +71,9 @@ const Ligues = () => {
         </div>
 
         {showSearch ? (
-          searchResults.length ? (
+          searching ? (
+            <CardGridSkeleton count={6} />
+          ) : searchResults.length ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fa-stagger">
               {searchResults.map(l => (
                 <LeagueCard key={l.id} league={l} />
