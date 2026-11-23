@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
 import { usePostData } from "../hooks/usePostData";
+import { useCategories } from "../hooks/useCategories";
 import {
   useLiveFixtures,
   useFixturesByDate,
@@ -231,6 +232,12 @@ const Home = () => {
   const [featured] = published;
   const breaking = published.filter(p => p.isBreaking);
   const latest = published.slice(1, 3);
+  const { data: categories = [] } = useCategories();
+  const [activeCategory, setActiveCategory] = React.useState("all");
+  const categoryPosts =
+    activeCategory === "all"
+      ? published
+      : published.filter(p => String(p.categoryId) === String(activeCategory));
 
   if (postsLoading) return <Spinner />;
 
@@ -425,6 +432,58 @@ const Home = () => {
               );
             })}
           </div>
+        </section>
+
+        {/* News by category */}
+        <section className="mt-12">
+          <SectionHeader
+            title={t("News")}
+            subtitle={t("Les derniers articles")}
+            action={
+              <Link
+                to="/news"
+                className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
+              >
+                {t("Tout voir")} <HiArrowRight />
+              </Link>
+            }
+          />
+          {categories.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 mb-4">
+              <button
+                onClick={() => setActiveCategory("all")}
+                className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === "all"
+                    ? "bg-emerald-600 text-white"
+                    : "fa-input hover:bg-emerald-500/10"
+                }`}
+              >
+                {t("Toutes")}
+              </button>
+              {categories.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => setActiveCategory(c.id)}
+                  className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
+                    String(activeCategory) === String(c.id)
+                      ? "bg-emerald-600 text-white"
+                      : "fa-input hover:bg-emerald-500/10"
+                  }`}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </div>
+          )}
+          {categoryPosts.length ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fa-stagger">
+              {categoryPosts.slice(0, 8).map(p => (
+                <NewsCard key={p.id} post={p} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState title={t("Aucun article dans cette catégorie")} />
+          )}
         </section>
 
       </Container>
