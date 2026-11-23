@@ -80,9 +80,10 @@ const Dashboard = () => {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
               >
-                <RiEyeFill /> Voir le site
+                <RiEyeFill className="sm:hidden" />
+                <span className="hidden sm:inline">Voir le site</span>
               </a>
               <button
                 onClick={handleLogout}
