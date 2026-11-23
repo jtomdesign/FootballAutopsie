@@ -108,6 +108,9 @@ export const CreateEditPost = async function (newPost, id) {
   // Normalize empty strings to null for optional fields
   if (payload.categoryId === "") payload.categoryId = null;
   if (payload.authorId === "") payload.authorId = null;
+  // Only send imageCredit when set — the column may not exist yet on
+  // databases where the migration hasn't been run.
+  if (!payload.imageCredit) delete payload.imageCredit;
 
   let query = supabase.from("Posts");
   if (!id) {

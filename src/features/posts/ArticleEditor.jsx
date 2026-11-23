@@ -87,6 +87,7 @@ const ArticleEditor = () => {
       categoryId: post.categoryId ?? "",
       authorId: post.authorId ?? "",
       publishAt: toLocalInput(post.publishAt),
+      imageCredit: post.imageCredit ?? "",
     });
     setContent(post.content ?? "");
     setFeaturedPreview(post.featuredImage ?? null);
@@ -136,6 +137,7 @@ const ArticleEditor = () => {
       authorId: data.authorId === "" ? null : Number(data.authorId),
       readingTime: String(readingTime),
       isBreaking: !!data.isBreaking,
+      imageCredit: data.imageCredit?.trim() || null,
       status: overrideStatus ?? data.status,
       publishAt:
         (overrideStatus ?? data.status) === "scheduled" && data.publishAt
@@ -281,6 +283,12 @@ const ArticleEditor = () => {
                   className="h-16 w-24 object-cover rounded-lg border border-emerald-300"
                 />
               )}
+              <input
+                type="text"
+                className={`${inputCls} flex-1 min-w-48`}
+                placeholder="Crédit photo / source (ex : Getty Images, Icon Sport)"
+                {...register("imageCredit")}
+              />
             </div>
           </FormRow>
 

@@ -88,6 +88,20 @@ export const removeFavorite = async favId => {
   if (error) throw error;
 };
 
+/**
+ * Public follower count for an entity (team/player/competition/match).
+ * Returns null when the count_entity_followers RPC isn't available yet.
+ */
+export const getEntityFollowerCount = async ({ entityType, entityId }) => {
+  if (!entityType || entityId == null) return null;
+  const { data, error } = await supabase.rpc("count_entity_followers", {
+    p_type: entityType,
+    p_id: String(entityId),
+  });
+  if (error) return null;
+  return Number(data ?? 0);
+};
+
 // ---------- Saved articles ----------
 
 export const getSavedArticles = async () => {

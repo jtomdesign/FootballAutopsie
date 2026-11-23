@@ -18,6 +18,7 @@ import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
 import Spinner from "../ui/Spinner";
 import FollowButton from "../components/user/FollowButton";
+import { useEntityFollowers } from "../hooks/user";
 import { RiArrowLeftLine, RiMapPinLine } from "react-icons/ri";
 
 const StatCard = ({ label, value }) => {
@@ -36,6 +37,7 @@ const TeamDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { data: team, isLoading } = useTeam(id);
+  const { data: followers } = useEntityFollowers("team", team?.id);
   const { data: leagues = [] } = useTeamLeagues(id);
   const [season, setSeason] = useState(null);
   const activeSeason = season ?? getCurrentSeason();
@@ -114,6 +116,11 @@ const TeamDetail = () => {
                 entityName={team.name}
                 entityLogo={team.logo}
               />
+              {followers != null && (
+                <p className="text-xs text-gray-500 -mt-1">
+                  {t("{{count}} abonné(s)", { count: followers })}
+                </p>
+              )}
               <select
                 value={activeSeason}
                 onChange={e => setSeason(Number(e.target.value))}

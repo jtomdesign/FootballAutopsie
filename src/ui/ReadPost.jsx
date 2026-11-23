@@ -122,7 +122,9 @@ const ReadPost = () => {
                 alt={post.title}
               />
               <figcaption className="text-gray-500 text-xs py-2 italic">
-                {t("Image : Football Autopsie")}
+                {post.imageCredit
+                  ? `${t("Crédit photo")} : ${post.imageCredit}`
+                  : t("Image : Football Autopsie")}
               </figcaption>
             </figure>
           )}

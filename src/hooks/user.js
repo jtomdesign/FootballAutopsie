@@ -10,6 +10,7 @@ import {
   getProfile,
   updateProfile,
   getFavorites,
+  getEntityFollowerCount,
   toggleFavorite,
   removeFavorite,
   getSavedArticles,
@@ -70,6 +71,16 @@ export const useFavorites = type => {
   });
 };
 
+// ---------- Entity followers ----------
+
+export const useEntityFollowers = (entityType, entityId) =>
+  useQuery({
+    queryKey: [...USER_KEY, "followers", entityType, entityId],
+    queryFn: () => getEntityFollowerCount({ entityType, entityId }),
+    enabled: Boolean(entityType && entityId != null),
+    staleTime: 60 * 1000,
+  });
+
 export const useToggleFavorite = () => {
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -77,6 +88,7 @@ export const useToggleFavorite = () => {
     mutationFn: toggleFavorite,
     onSuccess: added => {
       qc.invalidateQueries({ queryKey: [...USER_KEY, "favorites"] });
+      qc.invalidateQueries({ queryKey: [...USER_KEY, "followers"] });
       toast.success(i18n.t(added ? "Ajouté à vos favoris" : "Retiré des favoris"));
     },
     onError: e => {
