@@ -35,7 +35,7 @@ const NotificationBell = () => {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(o => !o)}
-        className="relative p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
+        className="relative p-2 sm:p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
         aria-label={t("Notifications")}
       >
         <RiNotification3Line className="text-xl" />
@@ -47,7 +47,7 @@ const NotificationBell = () => {
       </button>
 
       {open && (
-        <div className={`absolute right-0 top-full mt-2 w-80 rounded-2xl shadow-xl overflow-hidden z-50 ${
+        <div className={`absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-2rem)] rounded-2xl shadow-xl overflow-hidden z-50 ${
           isLight ? "bg-white border border-gray-100" : "bg-[#1f1f1f] border border-[#333]"
         }`}>
           <div className={`px-4 py-3 flex items-center justify-between ${

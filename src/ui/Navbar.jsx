@@ -47,7 +47,7 @@ const Navbar = () => {
       <Container>
         <div className="flex h-20 justify-between items-center">
           <div className="flex items-center gap-8">
-            <Link to="/" className="w-40 sm:w-45 shrink-0">
+            <Link to="/" className="w-32 sm:w-45 shrink-0">
               <Logo surface="light" className="w-full p-2" />
             </Link>
             <nav className="hidden xl:flex text-emerald-950 uppercase font-bold font-menu gap-6 text-[1.05rem]">
@@ -63,10 +63,10 @@ const Navbar = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
+              className="p-2 sm:p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
               aria-label={isLight ? t("Mode sombre") : t("Mode clair")}
               title={isLight ? t("Mode sombre") : t("Mode clair")}
             >
@@ -75,7 +75,7 @@ const Navbar = () => {
 
             <button
               onClick={toggleLang}
-              className="px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider text-emerald-950 border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 transition-colors cursor-pointer"
+              className="px-2 py-1 sm:px-2.5 sm:py-1 rounded-full text-xs font-black uppercase tracking-wider text-emerald-950 border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 transition-colors cursor-pointer"
               aria-label="Language"
               title={i18n.language?.startsWith("en") ? "Français" : "English"}
             >
@@ -84,7 +84,7 @@ const Navbar = () => {
 
             <button
               onClick={() => navigate("/recherche")}
-              className="p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
+              className="p-2 sm:p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
               aria-label={t("Rechercher")}
             >
               <RiSearchLine className="text-xl" />
@@ -131,7 +131,7 @@ const Navbar = () => {
             )}
 
             <button
-              className="xl:hidden p-2 text-emerald-950 cursor-pointer"
+              className="xl:hidden p-1.5 sm:p-2 text-emerald-950 cursor-pointer"
               onClick={() => setMenuOpen(o => !o)}
               aria-label={t("Menu")}
             >
