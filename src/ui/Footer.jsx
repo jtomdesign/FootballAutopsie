@@ -7,7 +7,7 @@ import { useTheme } from "../theme/context";
 import {
   RiFacebookCircleFill,
   RiTwitterXFill,
-  RiInstagramLine,
+  RiInstagramFill,
   RiYoutubeFill,
 } from "react-icons/ri";
 
@@ -68,17 +68,34 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-3 mt-5">
               {[
-                { icon: <RiFacebookCircleFill />, label: "Facebook" },
-                { icon: <RiTwitterXFill />, label: "X" },
-                { icon: <RiInstagramLine />, label: "Instagram" },
-                { icon: <RiYoutubeFill />, label: "YouTube" },
+                {
+                  icon: <RiFacebookCircleFill />,
+                  label: "Facebook",
+                  href: "https://www.facebook.com/autopsiefoot",
+                },
+                {
+                  icon: <RiTwitterXFill />,
+                  label: "X",
+                  href: "https://x.com/footautopsie",
+                },
+                {
+                  icon: <RiInstagramFill />,
+                  label: "Instagram",
+                  href: "https://www.instagram.com/football_autopsie/",
+                },
+                {
+                  icon: <RiYoutubeFill />,
+                  label: "YouTube",
+                  href: "https://www.youtube.com/@footbalautopsie",
+                },
               ].map(s => (
                 <a
                   key={s.label}
-                  href="#"
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={s.label}
-                  onClick={e => e.preventDefault()}
-                  className={`w-10 h-10 rounded-full ${socialBg} flex items-center justify-center ${muted} hover:bg-emerald-500 hover:text-white transition-colors text-lg`}
+                  className={`w-10 h-10 rounded-full ${socialBg} flex items-center justify-center ${muted} hover:bg-emerald-500 hover:text-white hover:-translate-y-0.5 transition-all duration-200 text-lg`}
                 >
                   {s.icon}
                 </a>
