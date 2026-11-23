@@ -39,7 +39,6 @@ const FOOTER_LINKS = [
       { to: "/equipes", labelKey: "Équipes" },
       { to: "/joueurs", labelKey: "Joueurs" },
       { to: "/recherche", labelKey: "Recherche" },
-      { to: "/compte", labelKey: "Mon compte" },
     ],
   },
 ];

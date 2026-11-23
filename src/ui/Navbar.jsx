@@ -184,15 +184,6 @@ const Navbar = () => {
                   </Link>
                 </>
               )}
-              {isAuthenticated && (
-                <Link
-                  to="/compte"
-                  onClick={() => setMenuOpen(false)}
-                  className="py-3 px-2 text-emerald-950 uppercase font-bold font-menu text-lg border-b border-gray-100 hover:text-emerald-500"
-                >
-                  {t("Mon compte")}
-                </Link>
-              )}
               {isAuthenticated && (user?.role === "admin" || user?.role === "editor") && (
                 <Link
                   to="/dashboard"
