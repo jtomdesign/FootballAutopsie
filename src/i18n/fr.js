@@ -43,4 +43,5 @@ export default {
   "Red Card": "Carton rouge",
   "Substitution": "Remplacement",
   "Goal cancelled": "But annulé",
+  "vues": "vues",
 };

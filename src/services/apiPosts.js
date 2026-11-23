@@ -131,6 +131,12 @@ export const CreateEditPost = async function (newPost, id) {
   return data;
 };
 
+/** Increment the public view counter for an article (fire-and-forget). */
+export const incrementPostView = async function (id) {
+  const { error } = await supabase.rpc("increment_post_view", { p_id: id });
+  if (error) throw error;
+};
+
 export const deletePost = async function (id) {
   const { error } = await supabase.from("Posts").delete().eq("id", id);
   if (error) throw new Error("Impossible de supprimer l'article");

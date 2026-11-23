@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { usePostReadData } from "../hooks/usePostReadData";
+import { incrementPostView } from "../services/apiPosts";
 import { usePostData } from "../hooks/usePostData";
 import Spinner from "./Spinner";
 import {
   RiChat4Line,
   RiUser3Line,
   RiTimeLine,
+  RiEyeLine,
   RiArrowLeftLine,
 } from "react-icons/ri";
 import { formatDateTime, localizePost } from "../utils/helpers";
@@ -51,6 +53,15 @@ const ReadPost = () => {
   const { slug } = useParams();
   const { data: post, isLoading } = usePostReadData(slug);
   const { data: allPosts = [] } = usePostData();
+
+  // Count one view per article per browser session
+  useEffect(() => {
+    if (!post?.id) return;
+    const key = `fa-viewed-${post.id}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    incrementPostView(post.id).catch(() => {});
+  }, [post?.id]);
 
   const lang = i18n.language;
   const lpost = localizePost(post, lang);
@@ -160,6 +171,9 @@ const ReadPost = () => {
             </span>
             <span className="flex items-center gap-1.5">
               <RiTimeLine /> {lpost.readingTime ?? "—"} {t("min de lecture")}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <RiEyeLine /> {(lpost.views ?? 0).toLocaleString()} {t("vues")}
             </span>
             <span>{formatDateTime(post.created_at)}</span>
           </div>

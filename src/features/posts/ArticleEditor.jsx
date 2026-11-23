@@ -74,6 +74,8 @@ const ArticleEditor = () => {
       categoryId: "",
       authorId: "",
       publishAt: "",
+      imageCredit: "",
+      featuredImage: null,
     },
   });
 

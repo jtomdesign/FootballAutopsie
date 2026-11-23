@@ -403,4 +403,5 @@ export default {
   "Mode sombre": "Dark mode",
   "Mode clair": "Light mode",
   "Toutes": "All",
+  "vues": "views",
 };
