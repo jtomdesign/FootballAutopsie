@@ -41,7 +41,7 @@ const ArticleRow = ({ post }) => {
     className="flex gap-4 bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors group"
   >
     <div
-      className="w-32 sm:w-44 shrink-0 bg-emerald-900/40 bg-cover bg-center"
+      className="w-32 sm:w-44 shrink-0 aspect-[16/9] bg-emerald-900/40 bg-cover bg-center"
       style={{
         backgroundImage: post.featuredImage
           ? `url(${post.featuredImage})`
