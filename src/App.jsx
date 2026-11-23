@@ -1,5 +1,5 @@
-import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { Suspense, lazy, useEffect } from "react";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import News from "./pages/News";
@@ -44,6 +44,18 @@ const AuthBootstrap = () => {
   return null;
 };
 
+const ScrollToTop = () => {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      document.getElementById(hash.slice(1))?.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+  return null;
+};
+
 const App = () => {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: 0 } },
@@ -54,6 +66,7 @@ const App = () => {
       <ThemeProvider>
       <AuthBootstrap />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />
