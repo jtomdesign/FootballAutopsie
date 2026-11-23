@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAllPosts } from "../../hooks/usePostData";
@@ -18,6 +18,9 @@ import {
 } from "react-icons/ri";
 import Spinner from "../../ui/Spinner";
 import EmptyState from "../../components/football/EmptyState";
+
+// recharts is heavy — keep it out of the main bundle
+const TrafficChart = lazy(() => import("./TrafficChart"));
 
 const StatCard = ({ icon, label, value, to }) => (
   <Link
@@ -129,6 +132,17 @@ const DashboardHome = () => {
                 </p>
               </div>
             ))}
+          </div>
+          <div className="bg-emerald-950/60 rounded-2xl p-5 mb-4">
+            <h3 className="font-bold text-gray-100 text-sm mb-1">
+              Trafic — 28 derniers jours
+            </h3>
+            <p className="text-xs text-gray-400 mb-4">
+              Vues et visiteurs uniques par jour
+            </p>
+            <Suspense fallback={<div className="h-56 animate-pulse bg-emerald-900/30 rounded-xl" />}>
+              <TrafficChart data={stats.daily ?? []} />
+            </Suspense>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="bg-emerald-950/60 rounded-2xl p-5">
