@@ -21,6 +21,18 @@ const getSessionId = () => {
  * Log a page view. Fire-and-forget — silently ignores failures
  * (e.g. before the analytics migration is applied).
  */
+const referrerHost = () => {
+  try {
+    if (!document.referrer) return null;
+    const host = new URL(document.referrer).hostname;
+    // Internal navigation shows up as our own domain — count as Direct
+    if (host === window.location.hostname) return null;
+    return host;
+  } catch {
+    return null;
+  }
+};
+
 export const trackPageView = path => {
   if (!path || SKIP.test(path)) return;
   try {
@@ -34,7 +46,7 @@ export const trackPageView = path => {
       .from("page_views")
       .insert({
         path,
-        referrer: document.referrer || null,
+        referrer: referrerHost(),
         session_id: getSessionId(),
         user_agent: navigator.userAgent?.slice(0, 300) ?? null,
       })
