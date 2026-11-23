@@ -74,24 +74,50 @@ const BreakingBar = ({ posts }) => {
   const { t } = useTranslation();
   // Show breaking news; fall back to the latest headlines so the bar
   // always has content.
-  const items = posts;
+  const items = posts.slice(0, 8);
+  const [index, setIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    if (items.length < 2) return;
+    const id = setInterval(() => setIndex(i => (i + 1) % items.length), 4500);
+    return () => clearInterval(id);
+  }, [items.length]);
+
   if (!items.length) return null;
+  const current = items[index % items.length];
+
   return (
-    <div className="bg-white border-b border-gray-100">
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-20 z-40 backdrop-blur-sm">
       <Container>
-        <div className="flex items-center gap-4 py-2.5 overflow-x-auto">
+        <div className="flex items-center gap-4 py-2.5 overflow-hidden">
           <span className="shrink-0 flex items-center gap-1.5 text-emerald-600 text-xs font-black uppercase tracking-widest">
             <HiBolt className="animate-pulse text-emerald-500" /> {t("Flash")}
           </span>
-          {items.slice(0, 5).map(p => (
+          <div className="relative flex-1 min-w-0 h-6">
             <Link
-              key={p.id}
-              to={`/news/${p.slug}`}
-              className="shrink-0 text-sm text-gray-600 hover:text-emerald-600 whitespace-nowrap"
+              key={current.id}
+              to={`/news/${current.slug}`}
+              className="fa-flash-item absolute inset-0 flex items-center text-sm text-gray-300 hover:text-emerald-400 transition-colors truncate"
             >
-              {p.title}
+              {current.title}
             </Link>
-          ))}
+          </div>
+          {items.length > 1 && (
+            <div className="shrink-0 flex items-center gap-1.5">
+              {items.map((p, i) => (
+                <button
+                  key={p.id}
+                  onClick={() => setIndex(i)}
+                  aria-label={`Flash ${i + 1}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    i === index % items.length
+                      ? "w-5 bg-emerald-500"
+                      : "w-1.5 bg-gray-300 hover:bg-gray-400"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </Container>
     </div>
