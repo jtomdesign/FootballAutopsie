@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
@@ -14,6 +16,10 @@ const Account = () => {
   useSEO({ title: "Mon compte", path: "/compte", noindex: true });
   const [mode, setMode] = useState("login"); // login | signup
   const { submit, isPending, googleLogin } = useAuth(mode);
+  const { isAuthenticated, hydrated } = useSelector(s => s.user);
+
+  // Already signed in — /compte is the login page, send them to their space
+  if (hydrated && isAuthenticated) return <Navigate to="/mon-espace" replace />;
 
   const {
     register,
