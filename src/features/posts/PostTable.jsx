@@ -15,13 +15,23 @@ const STATUS_FILTERS = {
 
 const GRID = "grid grid-cols-[4.5rem_minmax(0,1fr)_7rem_6.5rem_5rem] items-center gap-3";
 
+const SORTS = {
+  newest: (a, b) => new Date(b.created_at) - new Date(a.created_at),
+  oldest: (a, b) => new Date(a.created_at) - new Date(b.created_at),
+  title_asc: (a, b) => (a.title ?? "").localeCompare(b.title ?? "", "fr"),
+  title_desc: (a, b) => (b.title ?? "").localeCompare(a.title ?? "", "fr"),
+};
+
 const PostTable = () => {
   const { data: posts = [], isLoading } = useAllPosts();
   const [searchParams] = useSearchParams();
 
   const filterValue = searchParams.get("status") || "all";
   const predicate = STATUS_FILTERS[filterValue] ?? STATUS_FILTERS.all;
-  const filterPost = (posts ?? []).filter(predicate);
+  const sortFn = SORTS[searchParams.get("sort")] ?? SORTS.newest;
+  const filterPost = (posts ?? [])
+    .filter(predicate)
+    .sort(sortFn);
 
   if (isLoading) return <Spinner />;
 
