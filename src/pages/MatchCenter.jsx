@@ -69,6 +69,14 @@ const normName = s =>
     .replace(/\s+/g, " ")
     .trim();
 
+// Compact scorer label — "Erling Haaland" → "E. Haaland"
+const shortName = n => {
+  const parts = (n ?? "").trim().split(/\s+/);
+  return parts.length > 1
+    ? `${parts[0][0]}. ${parts.slice(1).join(" ")}`
+    : n;
+};
+
 const eventMinute = e => `${e.time ?? ""}${e.extra ? `+${e.extra}` : ""}'`;
 
 const Timeline = ({ events = [], playerIds = {} }) => {
@@ -484,13 +492,13 @@ const MatchCenter = () => {
               <div className="flex flex-col items-center gap-0.5 min-h-[3.4rem]">
                 {homeScorers.slice(0, 3).map((s, i) => {
                   const pid = playerIds[normName(s.name)];
-                  const cls = "text-[0.7rem] text-emerald-400 hover:underline whitespace-nowrap";
+                  const cls = "text-[0.65rem] text-emerald-400 hover:underline whitespace-nowrap";
                   return pid ? (
                     <Link key={`${s.name}-${s.minute}-${i}`} to={`/joueurs/${pid}`} className={cls}>
-                      ⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
+                      ⚽ {shortName(s.name)} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
                     </Link>
                   ) : (
-                    <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
+                    <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {shortName(s.name)} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
                   );
                 })}
                 {homeScorers.length > 3 && (
@@ -546,13 +554,13 @@ const MatchCenter = () => {
               <div className="flex flex-col items-center gap-0.5 min-h-[3.4rem]">
                 {awayScorers.slice(0, 3).map((s, i) => {
                   const pid = playerIds[normName(s.name)];
-                  const cls = "text-[0.7rem] text-emerald-400 hover:underline whitespace-nowrap";
+                  const cls = "text-[0.65rem] text-emerald-400 hover:underline whitespace-nowrap";
                   return pid ? (
                     <Link key={`${s.name}-${s.minute}-${i}`} to={`/joueurs/${pid}`} className={cls}>
-                      ⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
+                      ⚽ {shortName(s.name)} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span>
                     </Link>
                   ) : (
-                    <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {s.name} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
+                    <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {shortName(s.name)} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
                   );
                 })}
                 {awayScorers.length > 3 && (
