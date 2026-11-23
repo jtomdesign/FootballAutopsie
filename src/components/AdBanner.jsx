@@ -61,8 +61,7 @@ const AdBanner = ({ variant = "leaderboard", className = "" }) => {
         style={{ display: "block" }}
         data-ad-client={ADSENSE_CLIENT}
         data-ad-slot={slot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        data-ad-format="autorelaxed"
       />
     </div>
   );
