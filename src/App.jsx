@@ -42,6 +42,7 @@ import { useSessionRestore } from "./hooks/useAuth";
 import { ThemeProvider } from "./theme/ThemeContext";
 import { useSiteIntegrations } from "./utils/seo";
 import AnalyticsTracker from "./components/AnalyticsTracker";
+import BackToTop from "./components/BackToTop";
 
 const AuthBootstrap = () => {
   useSessionRestore();
@@ -73,6 +74,7 @@ const App = () => {
       <BrowserRouter>
         <ScrollToTop />
         <AnalyticsTracker />
+        <BackToTop />
         <Routes>
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />

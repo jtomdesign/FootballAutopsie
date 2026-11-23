@@ -429,6 +429,14 @@ html.light .fa-input {
   animation: fa-menu-drop 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@keyframes fa-back-to-top {
+  from { opacity: 0; transform: translateY(12px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fa-back-to-top {
+  animation: fa-back-to-top 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @keyframes fa-drawer-in {
   from { transform: translateX(-100%); }
   to { transform: translateX(0); }
