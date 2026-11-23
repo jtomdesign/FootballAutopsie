@@ -154,7 +154,7 @@ const Home = () => {
   const published = posts ?? [];
   const [featured] = published;
   const breaking = published.filter(p => p.isBreaking);
-  const latest = published.slice(1, 7);
+  const latest = published.slice(1, 3);
 
   if (postsLoading) return <Spinner />;
 
