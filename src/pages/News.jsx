@@ -118,30 +118,6 @@ const News = () => {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("recent");
   const [layout, setLayout] = useState("list"); // list | grid
-  const [visible, setVisible] = useState(10);
-  const sentinelRef = useRef(null);
-
-  // Reset pagination when filters change
-  useEffect(() => {
-    setVisible(10);
-  }, [activeCategory, feed, query, sort]);
-
-  const shown = filtered.slice(0, visible);
-  const hasMore = visible < filtered.length;
-
-  // Auto-load the next batch when the sentinel scrolls into view
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !hasMore) return;
-    const obs = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) setVisible(v => v + 10);
-      },
-      { rootMargin: "400px" },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [hasMore, visible]);
 
   const favNames = favorites
     .map(f => f.entity_name?.toLowerCase())
@@ -165,6 +141,30 @@ const News = () => {
     return [...list].sort(SORTS[sort] ?? SORTS.recent);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [posts, activeCategory, feed, query, sort, favorites]);
+
+  // Pagination — show 10 at a time, auto-load more on scroll
+  const [visible, setVisible] = useState(10);
+
+  useEffect(() => {
+    setVisible(10);
+  }, [activeCategory, feed, query, sort]);
+
+  const shown = filtered.slice(0, visible);
+  const hasMore = visible < filtered.length;
+
+  const sentinelRef = useRef(null);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+    const obs = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) setVisible(v => v + 10);
+      },
+      { rootMargin: "400px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [hasMore, visible]);
 
   const setCategory = slug => {
     const next = new URLSearchParams(searchParams);
