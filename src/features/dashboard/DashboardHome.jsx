@@ -22,6 +22,17 @@ import EmptyState from "../../components/football/EmptyState";
 // recharts is heavy — keep it out of the main bundle
 const TrafficChart = lazy(() => import("./TrafficChart"));
 
+// A failed lazy chunk (stale deploy, flaky network) must not crash the page
+class ChartBoundary extends React.Component {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
 const StatCard = ({ icon, label, value, to }) => (
   <Link
     to={to}
@@ -140,9 +151,11 @@ const DashboardHome = () => {
             <p className="text-xs text-gray-400 mb-4">
               Vues et visiteurs uniques par jour
             </p>
-            <Suspense fallback={<div className="h-56 animate-pulse bg-emerald-900/30 rounded-xl" />}>
-              <TrafficChart data={stats.daily ?? []} />
-            </Suspense>
+            <ChartBoundary>
+              <Suspense fallback={<div className="h-56 animate-pulse bg-emerald-900/30 rounded-xl" />}>
+                <TrafficChart data={stats.daily ?? []} />
+              </Suspense>
+            </ChartBoundary>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="bg-emerald-950/60 rounded-2xl p-5">
