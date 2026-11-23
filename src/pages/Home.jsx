@@ -154,7 +154,7 @@ const WeekendResultsBar = () => {
   const marqueeItems = [...loop, ...loop];
 
   return (
-    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-[7.75rem] z-40">
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
           <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
