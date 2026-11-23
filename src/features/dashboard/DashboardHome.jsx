@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useAllPosts } from "../../hooks/usePostData";
 import { useCategories } from "../../hooks/useCategories";
+import { getAnalyticsStats } from "../../services/analytics";
 import { formatDate } from "../../utils/helpers";
 import {
   RiBookOpenFill,
@@ -10,6 +12,9 @@ import {
   RiAlarmWarningFill,
   RiStackFill,
   RiArrowRightSLine,
+  RiEyeLine,
+  RiUserLine,
+  RiGlobalLine,
 } from "react-icons/ri";
 import Spinner from "../../ui/Spinner";
 import EmptyState from "../../components/football/EmptyState";
@@ -38,9 +43,22 @@ const STATUS_STYLES = {
   unpublished: "bg-red-500/15 text-red-500",
 };
 
+const PERIODS = [
+  { key: "today", label: "Aujourd'hui" },
+  { key: "week", label: "7 jours" },
+  { key: "month", label: "28 jours" },
+  { key: "year", label: "12 mois" },
+];
+
 const DashboardHome = () => {
   const { data: posts = [], isLoading } = useAllPosts();
   const { data: categories = [] } = useCategories();
+  const { data: stats } = useQuery({
+    queryKey: ["admin", "analytics"],
+    queryFn: getAnalyticsStats,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
 
   if (isLoading) return <Spinner />;
 
@@ -87,6 +105,92 @@ const DashboardHome = () => {
           to="/dashboard/posts"
         />
       </div>
+
+      {stats && (
+        <div className="mb-6">
+          <h2 className="font-bold text-gray-100 mb-3 flex items-center gap-2">
+            <RiGlobalLine className="text-emerald-400" /> Audience
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            {PERIODS.map(p => (
+              <div
+                key={p.key}
+                className="bg-emerald-950/60 rounded-2xl p-4"
+              >
+                <p className="text-[0.65rem] font-bold uppercase tracking-wider text-gray-400">
+                  {p.label}
+                </p>
+                <p className="text-2xl font-extrabold text-gray-100 tabular-nums mt-1 flex items-center gap-1.5">
+                  <RiUserLine className="text-emerald-400 text-lg" />
+                  {stats[p.key]?.visitors ?? 0}
+                </p>
+                <p className="text-[0.7rem] text-gray-400 mt-0.5 flex items-center gap-1">
+                  <RiEyeLine /> {stats[p.key]?.views ?? 0} vues
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="bg-emerald-950/60 rounded-2xl p-5">
+              <h3 className="font-bold text-gray-100 text-sm mb-3">
+                Pages les plus visitées
+              </h3>
+              {(stats.top_pages ?? []).length ? (
+                <div className="flex flex-col">
+                  {stats.top_pages.map((p, i) => (
+                    <div
+                      key={p.path}
+                      className="flex items-center gap-3 py-2 border-b border-emerald-900/40 last:border-0 text-sm"
+                    >
+                      <span className="text-[0.65rem] font-bold text-gray-500 w-4">
+                        {i + 1}
+                      </span>
+                      <span className="flex-1 min-w-0 truncate text-gray-200 font-medium">
+                        {p.path}
+                      </span>
+                      <span className="text-xs text-gray-400 tabular-nums shrink-0">
+                        {p.visitors} visitors · {p.views} vues
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">
+                  Aucune donnée pour le moment — les stats commencent à
+                  s'accumuler dès le prochain déploiement.
+                </p>
+              )}
+            </div>
+            <div className="bg-emerald-950/60 rounded-2xl p-5">
+              <h3 className="font-bold text-gray-100 text-sm mb-3">
+                Sources de trafic
+              </h3>
+              {(stats.top_referrers ?? []).length ? (
+                <div className="flex flex-col">
+                  {stats.top_referrers.map((r, i) => (
+                    <div
+                      key={r.referrer}
+                      className="flex items-center gap-3 py-2 border-b border-emerald-900/40 last:border-0 text-sm"
+                    >
+                      <span className="text-[0.65rem] font-bold text-gray-500 w-4">
+                        {i + 1}
+                      </span>
+                      <span className="flex-1 min-w-0 truncate text-gray-200 font-medium">
+                        {r.referrer}
+                      </span>
+                      <span className="text-xs text-gray-400 tabular-nums shrink-0">
+                        {r.views} vues
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">Aucune donnée.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-emerald-950/60 rounded-2xl p-5">
