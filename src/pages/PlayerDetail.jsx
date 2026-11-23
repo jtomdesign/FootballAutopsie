@@ -67,12 +67,18 @@ const PlayerDetail = () => {
   const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
 
-  // Current-season stats for league competitions only (no cups)
+  // Current-season stats for the player's domestic league only
+  // (e.g. Haaland → Premier League), falling back to all competitions.
   const currentSeason = getCurrentSeason();
-  const seasonStats = stats.filter(
+  const leagueStats = stats.filter(
     s => s.league?.season === currentSeason && s.league?.type === "League",
   );
-  const scope = seasonStats.length ? seasonStats : stats.slice(0, 1);
+  const seasonStats = stats.filter(s => s.league?.season === currentSeason);
+  const scope = leagueStats.length
+    ? leagueStats
+    : seasonStats.length
+      ? seasonStats
+      : stats.slice(0, 1);
   const pastStats = stats.filter(s => s.league?.season !== currentSeason);
 
   const num = v => (typeof v === "number" ? v : 0);
@@ -229,7 +235,7 @@ const PlayerDetail = () => {
             <SectionHeader
               title={t("Statistiques")}
               subtitle={
-                seasonStats.length > 1
+                scope.length > 1
                   ? `${t("Toutes compétitions")} — ${t("Saison {{season}}", { season: currentSeason })}`
                   : `${scope[0].league?.name ?? ""}${
                       scope[0].league?.country?.name ?? scope[0].league?.country
