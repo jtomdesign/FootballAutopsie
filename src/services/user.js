@@ -160,9 +160,15 @@ const entityColumn = entityType =>
   entityType === "match" ? "match_id" : "post_id";
 
 export const getEntityComments = async (entityType, entityId) => {
+  // Each table only has its own entity column — selecting both breaks
+  // the query (42703 column does not exist).
+  const cols =
+    entityType === "match"
+      ? "id, match_id, user_id, parent_id, content, status, created_at, updated_at"
+      : "id, post_id, user_id, parent_id, content, status, created_at, updated_at";
   const { data, error } = await supabase
     .from(COMMENT_TABLES[entityType] ?? "comments")
-    .select("id, post_id, match_id, user_id, parent_id, content, status, created_at, updated_at")
+    .select(cols)
     .eq(entityColumn(entityType), entityId)
     .eq("status", "published")
     .order("created_at", { ascending: true });
