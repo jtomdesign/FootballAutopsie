@@ -26,7 +26,7 @@ const InfoItem = ({ label, value, icon: Icon }) => {
   const { t } = useTranslation();
   return (
   <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-xl p-4">
-    <p className="flex items-center gap-1.5 text-[0.65rem] uppercase tracking-wider text-gray-500">
+    <p className="flex items-center gap-1.5 text-[0.65rem] tracking-wide text-gray-500">
       {Icon && <Icon className="text-emerald-500" />}
       {t(label)}
     </p>
@@ -39,8 +39,8 @@ const StatCell = ({ label, value }) => {
   const { t } = useTranslation();
   return (
   <div className="text-center py-3 border-b border-emerald-900/40 last:border-0">
-    <p className="text-xl font-black text-emerald-400 tabular-nums">{display(value)}</p>
-    <p className="text-[0.6rem] uppercase tracking-wider text-gray-500 mt-0.5">
+    <p className="text-xl font-bold text-emerald-400 tabular-nums">{display(value)}</p>
+    <p className="text-[0.6rem] tracking-wide text-gray-500 mt-0.5">
       {t(label)}
     </p>
   </div>
@@ -102,18 +102,18 @@ const PlayerDetail = () => {
                 />
               </div>
               {player.injured && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-red-500/90 text-white text-[0.6rem] font-bold uppercase tracking-wide whitespace-nowrap">
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-red-500/90 text-white text-[0.6rem] font-semibold tracking-wide whitespace-nowrap">
                   {t("Blessé")}
                 </span>
               )}
             </div>
             <div className="flex-1 text-center sm:text-left min-w-0">
-              <h1 className="text-3xl sm:text-4xl font-black text-gray-50 font-menu tracking-wide uppercase">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-50 font-menu tracking-wide">
                 {player.name}
               </h1>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
                 {player.position && (
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-semibold tracking-wide">
                     {player.position}
                   </span>
                 )}
@@ -141,7 +141,7 @@ const PlayerDetail = () => {
             <div className="flex flex-col items-center gap-3 shrink-0">
               {typeof games.number === "number" && games.number != null && (
                 <div className="w-16 h-16 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
-                  <span className="text-2xl font-black text-emerald-400">
+                  <span className="text-2xl font-bold text-emerald-400">
                     {games.number}
                   </span>
                 </div>
