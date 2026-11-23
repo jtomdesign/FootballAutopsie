@@ -33,6 +33,7 @@ import Comments from "./features/comments/Comments";
 import Profil from "./features/profile/Profil";
 import Settings from "./features/settings/Settings";
 import Users from "./features/users/Users";
+import NotFound from "./pages/NotFound";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import UserRoute from "./ui/UserRoute";
@@ -85,6 +86,7 @@ const App = () => {
             <Route path="/recherche" element={<Search />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/compte" element={<Account />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
           <Route element={<UserRoute />}>
             <Route element={<AppLayout />}>
