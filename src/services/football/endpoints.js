@@ -192,6 +192,12 @@ export const getPlayer = async id => {
   };
 };
 
+/** Statistics entries for a player in a single season (all competitions). */
+export const getPlayerSeasonStatistics = async (id, season) => {
+  const res = await footballApi("/players", { id, season });
+  return res?.[0]?.statistics ?? [];
+};
+
 export const searchPlayers = async ({ search, team, league, season }) => {
   const res = await footballApi("/players", {
     search,
