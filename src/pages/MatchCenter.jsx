@@ -490,7 +490,7 @@ const MatchCenter = () => {
                 </span>
               </Link>
               <div className="flex flex-col items-center gap-0.5 min-h-[3.4rem]">
-                {homeScorers.slice(0, 3).map((s, i) => {
+                {homeScorers.map((s, i) => {
                   const pid = playerIds[normName(s.name)];
                   const cls = "text-[0.65rem] text-emerald-400 hover:underline whitespace-nowrap";
                   return pid ? (
@@ -501,9 +501,6 @@ const MatchCenter = () => {
                     <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {shortName(s.name)} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
                   );
                 })}
-                {homeScorers.length > 3 && (
-                  <span className="text-[0.65rem] text-gray-500">+{homeScorers.length - 3}</span>
-                )}
               </div>
             </div>
 
@@ -552,7 +549,7 @@ const MatchCenter = () => {
                 </span>
               </Link>
               <div className="flex flex-col items-center gap-0.5 min-h-[3.4rem]">
-                {awayScorers.slice(0, 3).map((s, i) => {
+                {awayScorers.map((s, i) => {
                   const pid = playerIds[normName(s.name)];
                   const cls = "text-[0.65rem] text-emerald-400 hover:underline whitespace-nowrap";
                   return pid ? (
@@ -563,9 +560,6 @@ const MatchCenter = () => {
                     <span key={`${s.name}-${s.minute}-${i}`} className={cls}>⚽ {shortName(s.name)} <span className="text-gray-500">{s.minute}{s.own ? " (csc)" : ""}</span></span>
                   );
                 })}
-                {awayScorers.length > 3 && (
-                  <span className="text-[0.65rem] text-gray-500">+{awayScorers.length - 3}</span>
-                )}
               </div>
             </div>
           </div>
