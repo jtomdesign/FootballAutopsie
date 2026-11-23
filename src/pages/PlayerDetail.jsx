@@ -67,18 +67,13 @@ const PlayerDetail = () => {
   const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
 
-  // Current-season stats for the player's domestic league only
-  // (e.g. Haaland → Premier League), falling back to all competitions.
+  // Stats for the player's respective league (identified by the primary
+  // entry's league id — domestic leagues have the most appearances).
   const currentSeason = getCurrentSeason();
-  const leagueStats = stats.filter(
-    s => s.league?.season === currentSeason && s.league?.type === "League",
-  );
-  const seasonStats = stats.filter(s => s.league?.season === currentSeason);
-  const scope = leagueStats.length
-    ? leagueStats
-    : seasonStats.length
-      ? seasonStats
-      : stats.slice(0, 1);
+  const leagueId = player.primaryLeague?.id;
+  const scope = leagueId
+    ? stats.filter(s => s.league?.id === leagueId)
+    : stats.slice(0, 1);
   const pastStats = stats.filter(s => s.league?.season !== currentSeason);
 
   const num = v => (typeof v === "number" ? v : 0);

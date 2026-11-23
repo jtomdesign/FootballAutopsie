@@ -180,12 +180,21 @@ export const getPlayer = async id => {
   const p = res?.[0]?.player;
   if (!p) return null;
   const statistics = res[0].statistics ?? [];
-  // Prefer the player's domestic league stats, then cup/international.
+  // The league object in player statistics has no `type` field, so pick
+  // the domestic league entry by most appearances — it always has the
+  // highest app count (30+ vs cups/internationals).
+  const num = v => (typeof v === "number" ? v : 0);
   const primary =
-    statistics.find(s => s.league?.type === "League") ?? statistics[0] ?? null;
+    statistics.find(s => s.league?.type === "League") ??
+    statistics.reduce(
+      (best, s) =>
+        num(s.games?.appearences) > num(best?.games?.appearences) ? s : best,
+      null,
+    );
   return {
     ...normalizePlayer(p),
     team: primary?.team ? normalizeTeam(primary.team) : null,
+    primaryLeague: primary?.league ?? null,
     statistics: primary
       ? [primary, ...statistics.filter(s => s !== primary)]
       : statistics,
