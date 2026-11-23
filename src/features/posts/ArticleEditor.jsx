@@ -129,7 +129,10 @@ const ArticleEditor = () => {
   });
 
   const onSubmit = (data, overrideStatus) => {
-    const imageField = data.featuredImage;
+    // react-hook-form returns a FileList for file inputs — unwrap it
+    const rawImage = data.featuredImage;
+    const imageField =
+      rawImage instanceof FileList ? rawImage?.[0] : rawImage?.[0] ?? rawImage;
     const featuredImage =
       imageField instanceof File && imageField.size > 0
         ? imageField
