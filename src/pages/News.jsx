@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
@@ -10,11 +10,26 @@ import SectionHeader from "../components/football/SectionHeader";
 import EmptyState from "../components/football/EmptyState";
 import Spinner from "../ui/Spinner";
 import { formatDate } from "../utils/helpers";
-import { HiArrowRight } from "react-icons/hi2";
+import {
+  RiSearchLine,
+  RiArrowUpDownLine,
+  RiLayoutGridLine,
+  RiListCheck,
+} from "react-icons/ri";
 import AdBanner from "../components/AdBanner";
 
 const categoryName = post =>
   post?.Categories?.name ?? post?.Categories?.[0]?.name ?? null;
+
+const POST_META = post => (
+  <div className="flex items-center gap-3 text-[0.65rem] uppercase tracking-wider text-gray-500">
+    {categoryName(post) && (
+      <span className="text-emerald-400 font-bold">{categoryName(post)}</span>
+    )}
+    <span>{formatDate(post.created_at)}</span>
+    <span>{post.readingTime ?? "—"} min</span>
+  </div>
+);
 
 const ArticleRow = ({ post }) => (
   <Link
@@ -30,15 +45,7 @@ const ArticleRow = ({ post }) => (
       }}
     />
     <div className="py-4 pr-4 flex flex-col justify-center min-w-0">
-      <div className="flex items-center gap-3 text-[0.65rem] uppercase tracking-wider text-gray-500 mb-1.5">
-        {categoryName(post) && (
-          <span className="text-emerald-400 font-bold">
-            {categoryName(post)}
-          </span>
-        )}
-        <span>{formatDate(post.created_at)}</span>
-        <span>{post.readingTime ?? "—"} min</span>
-      </div>
+      <div className="mb-1.5">{POST_META(post)}</div>
       <h3 className="font-serif text-gray-50 text-lg sm:text-xl leading-snug group-hover:text-emerald-300 transition-colors line-clamp-2">
         {post.title}
       </h3>
@@ -51,6 +58,42 @@ const ArticleRow = ({ post }) => (
   </Link>
 );
 
+const NewsCard = ({ post }) => (
+  <Link
+    to={`/news/${post.slug}`}
+    className="flex flex-col bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors group"
+  >
+    <div
+      className="aspect-[4/3] sm:aspect-[16/9] bg-emerald-900/40 bg-cover bg-center"
+      style={{
+        backgroundImage: post.featuredImage
+          ? `url(${post.featuredImage})`
+          : undefined,
+      }}
+    />
+    <div className="p-3 sm:p-4 flex flex-col gap-1.5 sm:gap-2 flex-1">
+      <div>{POST_META(post)}</div>
+      <h3 className="font-serif text-gray-50 text-sm sm:text-lg leading-snug group-hover:text-emerald-300 transition-colors line-clamp-2">
+        {post.title}
+      </h3>
+      {post.excerpt && (
+        <p className="text-gray-400 text-xs sm:text-sm line-clamp-2 hidden sm:block">
+          {post.excerpt}
+        </p>
+      )}
+    </div>
+  </Link>
+);
+
+const SORTS = {
+  recent: (a, b) => new Date(b.created_at) - new Date(a.created_at),
+  oldest: (a, b) => new Date(a.created_at) - new Date(b.created_at),
+  az: (a, b) => (a.title ?? "").localeCompare(b.title ?? "", "fr"),
+};
+
+const selectCls =
+  "fa-input appearance-none pl-4 pr-9 py-2.5 text-sm font-semibold cursor-pointer";
+
 const News = () => {
   const { t } = useTranslation();
   const { data: posts = [], isLoading } = usePostData();
@@ -60,6 +103,9 @@ const News = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeCategory = searchParams.get("categorie") || "all";
   const [feed, setFeed] = useState("all"); // all | foryou
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("recent");
+  const [layout, setLayout] = useState("list"); // list | grid
 
   const favNames = favorites
     .map(f => f.entity_name?.toLowerCase())
@@ -69,11 +115,19 @@ const News = () => {
     return favNames.some(n => text.includes(n));
   };
 
-  const base =
-    activeCategory === "all"
-      ? posts
-      : posts.filter(p => String(p.categoryId) === activeCategory);
-  const filtered = feed === "foryou" ? base.filter(matchesFav) : base;
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = posts;
+    if (activeCategory !== "all")
+      list = list.filter(p => String(p.categoryId) === activeCategory);
+    if (feed === "foryou") list = list.filter(matchesFav);
+    if (q)
+      list = list.filter(p =>
+        `${p.title ?? ""} ${p.excerpt ?? ""}`.toLowerCase().includes(q),
+      );
+    return [...list].sort(SORTS[sort] ?? SORTS.recent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [posts, activeCategory, feed, query, sort, favorites]);
 
   const setCategory = slug => {
     const next = new URLSearchParams(searchParams);
@@ -91,53 +145,102 @@ const News = () => {
 
         <AdBanner variant="leaderboard" className="mb-6" />
 
-        <div className="flex gap-2 flex-wrap mb-6">
-          {isAuthenticated && favNames.length > 0 && (
-            <button
-              onClick={() => setFeed(feed === "foryou" ? "all" : "foryou")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
-                feed === "foryou"
-                  ? "bg-emerald-600 text-white"
-                  : "bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25"
-              }`}
-            >
-              {t("Pour vous")}
-            </button>
-          )}
-          <button
-            onClick={() => {
-              setFeed("all");
-              setCategory("all");
-            }}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
-              activeCategory === "all" && feed === "all"
-                ? "bg-emerald-500 text-white"
-                : "bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20"
-            }`}
-          >
-            {t("Tout")}
-          </button>
-            {categories.map(c => (
+        <div className="flex flex-col lg:flex-row gap-3 mb-6">
+          <div className="relative flex-1">
+            <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
+            <input
+              type="search"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder={t("Rechercher un article…")}
+              className="fa-input w-full pl-11 pr-4 py-2.5 text-sm"
+            />
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            {isAuthenticated && favNames.length > 0 && (
               <button
-                key={c.id}
-                onClick={() => setCategory(String(c.id))}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === String(c.id)
-                    ? "bg-emerald-500 text-white"
-                    : "bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20"
+                onClick={() => setFeed(feed === "foryou" ? "all" : "foryou")}
+                className={`px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-colors cursor-pointer ${
+                  feed === "foryou"
+                    ? "bg-emerald-600 text-white"
+                    : "fa-input hover:bg-emerald-500/10"
                 }`}
               >
-                {c.name}
+                {t("Pour vous")}
               </button>
-            ))}
+            )}
+            <div className="relative">
+              <select
+                value={activeCategory}
+                onChange={e => setCategory(e.target.value)}
+                className={selectCls}
+                aria-label={t("Catégorie")}
+              >
+                <option value="all">{t("Toutes catégories")}</option>
+                {categories.map(c => (
+                  <option key={c.id} value={String(c.id)}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <RiArrowUpDownLine className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none" />
+            </div>
+            <div className="relative">
+              <select
+                value={sort}
+                onChange={e => setSort(e.target.value)}
+                className={selectCls}
+                aria-label={t("Trier par")}
+              >
+                <option value="recent">{t("Plus récents")}</option>
+                <option value="oldest">{t("Plus anciens")}</option>
+                <option value="az">{t("Titre A → Z")}</option>
+              </select>
+              <RiArrowUpDownLine className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none" />
+            </div>
+            <div className="flex rounded-xl overflow-hidden fa-input !p-0">
+              <button
+                onClick={() => setLayout("list")}
+                className={`px-3.5 cursor-pointer transition-colors ${
+                  layout === "list"
+                    ? "bg-emerald-600 text-white"
+                    : "text-gray-400 hover:text-gray-100"
+                }`}
+                title={t("Vue liste")}
+                aria-label={t("Vue liste")}
+              >
+                <RiListCheck className="text-base" />
+              </button>
+              <button
+                onClick={() => setLayout("grid")}
+                className={`px-3.5 cursor-pointer transition-colors ${
+                  layout === "grid"
+                    ? "bg-emerald-600 text-white"
+                    : "text-gray-400 hover:text-gray-100"
+                }`}
+                title={t("Vue grille")}
+                aria-label={t("Vue grille")}
+              >
+                <RiLayoutGridLine className="text-base" />
+              </button>
+            </div>
+          </div>
         </div>
 
         {filtered.length ? (
-          <div className="flex flex-col gap-4 fa-stagger">
-            {filtered.map(post => (
-              <ArticleRow key={post.id} post={post} />
-            ))}
-          </div>
+          layout === "grid" ? (
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 fa-stagger">
+              {filtered.map(post => (
+                <NewsCard key={post.id} post={post} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4 fa-stagger">
+              {filtered.map(post => (
+                <ArticleRow key={post.id} post={post} />
+              ))}
+            </div>
+          )
         ) : (
           <EmptyState
             title={t("Aucun article")}
