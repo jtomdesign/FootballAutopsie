@@ -218,6 +218,9 @@ html:not(.light) .fa-toast [data-close-button] { color: #6b7280 !important; }
   animation: fa-marquee 40s linear infinite;
   width: max-content;
 }
+.marquee-track.marquee-slow {
+  animation-duration: 90s;
+}
 .marquee-track:hover {
   animation-play-state: paused;
 }

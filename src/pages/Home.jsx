@@ -150,7 +150,7 @@ const WeekendResultsBar = () => {
             <RiTrophyFill className="text-base" />
           </span>
           <div className="overflow-hidden flex-1">
-            <div className="marquee-track flex gap-2.5">
+            <div className="marquee-track marquee-slow flex gap-2.5">
               {[...results, ...results].map((f, i) => (
                 <Link
                   key={`${f.id}-${i}`}
