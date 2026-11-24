@@ -8,6 +8,11 @@ const API_HOST =
 const IS_API_SPORTS = API_HOST.includes("api-sports.io");
 const API_BASE = IS_API_SPORTS ? `https://${API_HOST}` : `https://${API_HOST}`;
 
+// In production, route through the Vercel serverless proxy (/api/football)
+// so the API key stays server-side and edge caching absorbs bursts.
+// In local dev there is no serverless function, so call the API directly.
+const USE_PROXY = import.meta.env.PROD;
+
 const RATE_LIMIT = {
   requests: 0,
   resetAt: 0,
@@ -38,19 +43,31 @@ async function waitForRateLimit() {
 export async function footballApi(endpoint, params = {}) {
   await waitForRateLimit();
 
-  const url = new URL(`${API_BASE}${endpoint}`);
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      url.searchParams.set(key, value);
-    }
-  });
-
-  const headers = IS_API_SPORTS
-    ? { "x-apisports-key": getApiKey() }
-    : {
-        "x-rapidapi-host": API_HOST,
-        "x-rapidapi-key": getApiKey(),
-      };
+  let url;
+  let headers;
+  if (USE_PROXY) {
+    url = new URL("/api/football", window.location.origin);
+    url.searchParams.set("path", endpoint);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        url.searchParams.set(key, value);
+      }
+    });
+    headers = {};
+  } else {
+    url = new URL(`${API_BASE}${endpoint}`);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        url.searchParams.set(key, value);
+      }
+    });
+    headers = IS_API_SPORTS
+      ? { "x-apisports-key": getApiKey() }
+      : {
+          "x-rapidapi-host": API_HOST,
+          "x-rapidapi-key": getApiKey(),
+        };
+  }
 
   const res = await fetch(url.toString(), { headers });
 

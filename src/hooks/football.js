@@ -22,7 +22,7 @@ import {
 } from "../services/football/endpoints";
 
 const STALE = 60 * 1000; // 1 min
-const LIVE_REFETCH = 30 * 1000; // 30 s for live data
+const LIVE_REFETCH = 60 * 1000; // 30 s for live data
 
 export const useLeagues = () =>
   useQuery({
