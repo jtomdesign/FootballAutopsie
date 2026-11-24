@@ -105,7 +105,7 @@ const AIAssistant = () => {
                   <button
                     key={s}
                     onClick={() => send(s)}
-                    className="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-600 text-xs font-medium hover:bg-emerald-500/20 transition-colors cursor-pointer"
                   >
                     {s}
                   </button>
@@ -170,7 +170,7 @@ const AIAssistant = () => {
             e.preventDefault();
             send();
           }}
-          className="flex gap-2 items-center rounded-2xl bg-emerald-950/50 px-2 py-2"
+          className="fa-input flex gap-2 items-center rounded-2xl px-2 py-2"
         >
           <input
             ref={inputRef}
