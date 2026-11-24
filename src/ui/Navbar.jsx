@@ -50,7 +50,7 @@ const Navbar = () => {
             <Link to="/" className="w-32 sm:w-45 shrink-0">
               <Logo surface="light" className="w-full p-2" />
             </Link>
-            <nav className="hidden xl:flex text-emerald-950 uppercase font-bold font-menu gap-9 text-base tracking-wide">
+            <nav className="hidden xl:flex text-emerald-950 uppercase font-bold font-menu gap-7 text-[1.05rem]">
               {NAV_LINKS.filter(l => l.to !== "/").map(link => (
                 <Link
                   key={link.to}
