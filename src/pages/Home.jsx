@@ -74,60 +74,6 @@ const NewsCard = ({ post, large = false }) => {
   );
 };
 
-const BreakingBar = ({ posts }) => {
-  const { t } = useTranslation();
-  // Show breaking news; fall back to the latest headlines so the bar
-  // always has content.
-  const items = posts.slice(0, 8);
-  const [index, setIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    if (items.length < 2) return;
-    const id = setInterval(() => setIndex(i => (i + 1) % items.length), 4500);
-    return () => clearInterval(id);
-  }, [items.length]);
-
-  if (!items.length) return null;
-  const current = localizePost(items[index % items.length]);
-
-  return (
-    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-20 z-40 backdrop-blur-sm">
-      <Container>
-        <div className="flex items-center gap-4 py-2.5 overflow-hidden">
-          <span className="shrink-0 flex items-center gap-1.5 text-emerald-600 text-xs font-bold uppercase tracking-widest">
-            <HiBolt className="animate-pulse text-emerald-500" /> {t("Flash")}
-          </span>
-          <div className="relative flex-1 min-w-0 h-6">
-            <Link
-              key={current.id}
-              to={`/news/${current.slug}`}
-              className="fa-flash-item absolute inset-0 flex items-center text-sm text-gray-300 hover:text-emerald-400 transition-colors truncate"
-            >
-              {current.title}
-            </Link>
-          </div>
-          {items.length > 1 && (
-            <div className="shrink-0 flex items-center gap-1.5">
-              {items.map((p, i) => (
-                <button
-                  key={p.id}
-                  onClick={() => setIndex(i)}
-                  aria-label={`Flash ${i + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    i === index % items.length
-                      ? "w-5 bg-emerald-500"
-                      : "w-1.5 bg-gray-300 hover:bg-gray-400"
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </Container>
-    </div>
-  );
-};
-
 const LiveBigGamesBar = () => {
   const { t } = useTranslation();
   // Big-matchday results strip: Mondays (after the weekend) and
@@ -153,7 +99,7 @@ const LiveBigGamesBar = () => {
   const marqueeItems = [...loop, ...loop];
 
   return (
-    <div className="bg-emerald-950/60 border-b border-emerald-900/60">
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-20 z-40 backdrop-blur-sm">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
           <span className="shrink-0 flex items-center gap-1.5 text-emerald-500" title={t("En direct")}>
@@ -228,7 +174,7 @@ const WeekendResultsBar = () => {
   const marqueeItems = [...loop, ...loop];
 
   return (
-    <div className="bg-emerald-950/60 border-b border-emerald-900/60">
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-20 z-40 backdrop-blur-sm">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
           <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
@@ -302,7 +248,6 @@ const Home = () => {
 
   const published = posts ?? [];
   const [featured] = published;
-  const breaking = published.filter(p => p.isBreaking);
   const latest = published.slice(1, 3);
   const { data: categories = [] } = useCategories();
   const [activeCategory, setActiveCategory] = React.useState("all");
@@ -315,7 +260,6 @@ const Home = () => {
 
   return (
     <div className="pb-16">
-      <BreakingBar posts={breaking.length ? breaking : published.slice(0, 5)} />
       <LiveBigGamesBar />
       <WeekendResultsBar />
 
