@@ -2,18 +2,18 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
-  RiLayoutGridLine,
-  RiNewspaperLine,
-  RiTvLine,
-  RiSearchLine,
-  RiUserLine,
-} from "react-icons/ri";
+  LuLayoutGrid,
+  LuNewspaper,
+  LuTv,
+  LuSearch,
+  LuUser,
+} from "react-icons/lu";
 
 const ITEMS = [
-  { to: "/", label: "Accueil", icon: RiLayoutGridLine, end: true },
-  { to: "/news", label: "News", icon: RiNewspaperLine },
-  { to: "/scores", label: "Direct", icon: RiTvLine },
-  { to: "/recherche", label: "Recherche", icon: RiSearchLine },
+  { to: "/", label: "Accueil", icon: LuLayoutGrid, end: true },
+  { to: "/news", label: "News", icon: LuNewspaper },
+  { to: "/scores", label: "Direct", icon: LuTv },
+  { to: "/recherche", label: "Recherche", icon: LuSearch },
 ];
 
 const BottomNav = () => {
@@ -23,7 +23,7 @@ const BottomNav = () => {
     {
       to: isAuthenticated ? "/mon-espace" : "/compte",
       label: isAuthenticated ? "Espace" : "Compte",
-      icon: RiUserLine,
+      icon: LuUser,
     },
   ];
 
