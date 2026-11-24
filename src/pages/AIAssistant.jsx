@@ -62,17 +62,12 @@ const AIAssistant = () => {
     <Container>
       <div className="py-8 max-w-3xl mx-auto flex flex-col" style={{ minHeight: "70dvh" }}>
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="mb-6 relative flex flex-col items-center text-center">
           <div className="flex items-center gap-3">
             <LuSparkles className="text-2xl text-emerald-500" />
-            <div>
-              <h1 className="text-xl sm:text-2xl font-semibold text-gray-50 tracking-tight">
-                Football Autopsie IA
-              </h1>
-              <p className="text-xs text-gray-500">
-                Pronostics, stats et analyses football
-              </p>
-            </div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-50 tracking-tight">
+              Football Autopsie IA
+            </h1>
           </div>
           {messages.length > 0 && (
             <button
@@ -81,7 +76,7 @@ const AIAssistant = () => {
                 setError(null);
                 inputRef.current?.focus();
               }}
-              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-gray-500 hover:text-emerald-600 hover:bg-emerald-500/10 transition-colors cursor-pointer text-xs font-medium"
+              className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-gray-500 hover:text-emerald-600 hover:bg-emerald-500/10 transition-colors cursor-pointer text-xs font-medium"
               title="Nouvelle conversation"
             >
               <LuPlus className="text-sm" />
@@ -94,12 +89,7 @@ const AIAssistant = () => {
         <div className="flex-1 flex flex-col gap-4 mb-4 overflow-y-auto">
           {messages.length === 0 && (
             <div className="flex flex-col items-center gap-5 py-10">
-              <div className="text-center">
-                <LuBot className="text-4xl text-emerald-500/70 mx-auto mb-3" />
-                <p className="text-gray-400 text-sm">
-                  Pose ta question — pronostic, joueur, équipe, règle…
-                </p>
-              </div>
+              <LuBot className="text-4xl text-emerald-500/70 mx-auto mb-3" />
               <div className="flex flex-wrap justify-center gap-2 max-w-lg">
                 {SUGGESTIONS.map(s => (
                   <button
@@ -170,7 +160,7 @@ const AIAssistant = () => {
             e.preventDefault();
             send();
           }}
-          className="fa-input flex gap-2 items-center rounded-2xl px-2 py-2"
+          className="flex gap-2 items-center px-2 py-2"
         >
           <input
             ref={inputRef}
@@ -183,10 +173,10 @@ const AIAssistant = () => {
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="shrink-0 w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-500 disabled:opacity-40 transition-colors cursor-pointer"
+            className="shrink-0 p-2 text-emerald-600 hover:text-emerald-500 disabled:opacity-40 transition-colors cursor-pointer"
             aria-label="Envoyer"
           >
-            <LuSend className="text-base" />
+            <LuSend className="text-lg" />
           </button>
         </form>
         <p className="text-[0.65rem] text-gray-600 text-center mt-3">
