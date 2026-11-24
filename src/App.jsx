@@ -13,6 +13,7 @@ import TeamDetail from "./pages/TeamDetail";
 import Players from "./pages/Players";
 import PlayerDetail from "./pages/PlayerDetail";
 import Search from "./pages/Search";
+import AIAssistant from "./pages/AIAssistant";
 import Contact from "./pages/Contact";
 import Account from "./pages/Account";
 import MyFootball from "./pages/MyFootball";
@@ -92,6 +93,7 @@ const App = () => {
             <Route path="/joueurs" element={<Players />} />
             <Route path="/joueurs/:id" element={<PlayerDetail />} />
             <Route path="/recherche" element={<Search />} />
+            <Route path="/assistant" element={<AIAssistant />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/compte" element={<Account />} />
             <Route path="*" element={<NotFound />} />

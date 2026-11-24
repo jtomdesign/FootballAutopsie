@@ -23,6 +23,7 @@ const STATIC_ROUTES = [
   { loc: "/equipes", priority: "0.8", changefreq: "daily" },
   { loc: "/joueurs", priority: "0.7", changefreq: "daily" },
   { loc: "/recherche", priority: "0.4", changefreq: "monthly" },
+  { loc: "/assistant", priority: "0.6", changefreq: "weekly" },
   { loc: "/contact", priority: "0.3", changefreq: "yearly" },
 ];
 
