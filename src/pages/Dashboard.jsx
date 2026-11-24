@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { RiEyeFill } from "react-icons/ri";
+import { LuEye } from "react-icons/lu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/authentication/authSlice";
 import { signOut } from "../services/auth";
@@ -83,7 +83,7 @@ const Dashboard = () => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
               >
-                <RiEyeFill className="sm:hidden" />
+                <LuEye className="sm:hidden" />
                 <span className="hidden sm:inline">Voir le site</span>
               </a>
               <button
@@ -135,7 +135,7 @@ const Dashboard = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
                 >
-                  <RiEyeFill /> Voir le site
+                  <LuEye /> Voir le site
                 </a>
               </div>
             </nav>

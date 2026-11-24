@@ -2,17 +2,17 @@ import React from "react";
 import DashLink from "./DashLink";
 
 import {
-  RiBookOpenFill,
-  RiChat4Fill,
-  RiEqualizerFill,
-  RiInboxLine,
-  RiNotification3Fill,
-  RiHome6Fill,
-  RiLogoutBoxFill,
-  RiStackFill,
-  RiTeamLine,
-  RiUserFill,
-} from "react-icons/ri";
+  LuBookOpen,
+  LuMessageSquare,
+  LuSettings,
+  LuInbox,
+  LuBellRing,
+  LuLayoutDashboard,
+  LuLogOut,
+  LuLayers,
+  LuUsers,
+  LuUser,
+} from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { logout } from "../features/authentication/authSlice";
 import { useDispatch } from "react-redux";
@@ -39,43 +39,43 @@ const Sidebar = () => {
         <SectionLabel>Gestion</SectionLabel>
         <DashLink to="/dashboard" end>
           <DashLink.Icon>
-            <RiHome6Fill />
+            <LuLayoutDashboard />
           </DashLink.Icon>
           <DashLink.Name>Vue d'ensemble</DashLink.Name>
         </DashLink>
         <DashLink to="posts">
           <DashLink.Icon>
-            <RiBookOpenFill />
+            <LuBookOpen />
           </DashLink.Icon>
           <DashLink.Name>Articles</DashLink.Name>
         </DashLink>
         <DashLink to="categories">
           <DashLink.Icon>
-            <RiStackFill />
+            <LuLayers />
           </DashLink.Icon>
           <DashLink.Name>Catégories</DashLink.Name>
         </DashLink>
         <DashLink to="comments">
           <DashLink.Icon>
-            <RiChat4Fill />
+            <LuMessageSquare />
           </DashLink.Icon>
           <DashLink.Name>Commentaires</DashLink.Name>
         </DashLink>
         <DashLink to="messages">
           <DashLink.Icon>
-            <RiInboxLine />
+            <LuInbox />
           </DashLink.Icon>
           <DashLink.Name>Messages</DashLink.Name>
         </DashLink>
         <DashLink to="diffusion">
           <DashLink.Icon>
-            <RiNotification3Fill />
+            <LuBellRing />
           </DashLink.Icon>
           <DashLink.Name>Diffusion</DashLink.Name>
         </DashLink>
         <DashLink to="users">
           <DashLink.Icon>
-            <RiTeamLine />
+            <LuUsers />
           </DashLink.Icon>
           <DashLink.Name>Utilisateurs</DashLink.Name>
         </DashLink>
@@ -83,13 +83,13 @@ const Sidebar = () => {
         <SectionLabel>Compte</SectionLabel>
         <DashLink to="profil">
           <DashLink.Icon>
-            <RiUserFill />
+            <LuUser />
           </DashLink.Icon>
           <DashLink.Name>Profil</DashLink.Name>
         </DashLink>
         <DashLink to="settings">
           <DashLink.Icon>
-            <RiEqualizerFill />
+            <LuSettings />
           </DashLink.Icon>
           <DashLink.Name>Paramètres</DashLink.Name>
         </DashLink>
@@ -100,7 +100,7 @@ const Sidebar = () => {
           }}
         >
           <DashLink.Icon>
-            <RiLogoutBoxFill />
+            <LuLogOut />
           </DashLink.Icon>
           <DashLink.Name>Déconnexion</DashLink.Name>
         </DashLink>
