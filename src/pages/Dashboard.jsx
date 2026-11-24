@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { LuEye } from "react-icons/lu";
+import {
+  LuLayoutDashboard,
+  LuBookOpen,
+  LuLayers,
+  LuMessageSquare,
+  LuInbox,
+  LuBellRing,
+  LuUsers,
+  LuUser,
+  LuSettings,
+} from "react-icons/lu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/authentication/authSlice";
 import { signOut } from "../services/auth";
@@ -9,15 +20,15 @@ import HamburgerIcon from "../ui/HamburgerIcon";
 import { useSEO } from "../utils/seo";
 
 const MOBILE_LINKS = [
-  { to: "/dashboard", label: "Vue d'ensemble", end: true },
-  { to: "/dashboard/posts", label: "Articles" },
-  { to: "/dashboard/categories", label: "Catégories" },
-  { to: "/dashboard/comments", label: "Commentaires" },
-  { to: "/dashboard/messages", label: "Messages" },
-  { to: "/dashboard/diffusion", label: "Diffusion" },
-  { to: "/dashboard/users", label: "Utilisateurs" },
-  { to: "/dashboard/profil", label: "Profil" },
-  { to: "/dashboard/settings", label: "Paramètres" },
+  { to: "/dashboard", label: "Vue d'ensemble", end: true, icon: LuLayoutDashboard },
+  { to: "/dashboard/posts", label: "Articles", icon: LuBookOpen },
+  { to: "/dashboard/categories", label: "Catégories", icon: LuLayers },
+  { to: "/dashboard/comments", label: "Commentaires", icon: LuMessageSquare },
+  { to: "/dashboard/messages", label: "Messages", icon: LuInbox },
+  { to: "/dashboard/diffusion", label: "Diffusion", icon: LuBellRing },
+  { to: "/dashboard/users", label: "Utilisateurs", icon: LuUsers },
+  { to: "/dashboard/profil", label: "Profil", icon: LuUser },
+  { to: "/dashboard/settings", label: "Paramètres", icon: LuSettings },
 ];
 
 const ROLE_LABELS = { admin: "Administrateur", editor: "Éditeur", user: "Utilisateur" };
@@ -122,8 +133,9 @@ const Dashboard = () => {
                     key={l.to}
                     to={l.to}
                     onClick={() => setMenuOpen(false)}
-                    className="px-4 py-3 rounded-xl text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
                   >
+                    <l.icon className="text-lg text-emerald-300 shrink-0" />
                     {l.label}
                   </Link>
                 ))}
