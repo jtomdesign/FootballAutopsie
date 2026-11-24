@@ -103,9 +103,11 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="hidden sm:flex items-center gap-2">
-                <p className="font-semibold text-emerald-950 text-sm">
-                  {t("Bonjour, {{name}}", { name: user?.name })}
-                </p>
+                {user?.role !== "admin" && user?.role !== "editor" && (
+                  <p className="font-semibold text-emerald-950 text-sm">
+                    {t("Bonjour, {{name}}", { name: user?.name })}
+                  </p>
+                )}
                 <Button
                   name={t("Mon espace")}
                   onClick={() => navigate("/mon-espace")}
