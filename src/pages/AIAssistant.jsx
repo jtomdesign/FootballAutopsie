@@ -30,6 +30,15 @@ const AIAssistant = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  // Lock page scroll — the chat area scrolls internally instead
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
   const send = async text => {
     const content = (text ?? input).trim();
     if (!content || loading) return;
@@ -60,7 +69,7 @@ const AIAssistant = () => {
 
   return (
     <Container>
-      <div className="py-8 max-w-3xl mx-auto flex flex-col" style={{ minHeight: "70dvh" }}>
+      <div className="py-8 max-w-3xl mx-auto flex flex-col h-[calc(100dvh-5rem)]">
         {/* Header */}
         <div className="mb-6 relative flex flex-col items-center text-center">
           <LuBot className="text-3xl text-emerald-500 mb-2" />
@@ -84,7 +93,7 @@ const AIAssistant = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 flex flex-col gap-4 mb-4 overflow-y-auto">
+        <div className="flex-1 min-h-0 flex flex-col gap-4 mb-4 overflow-y-auto">
           {messages.length === 0 && (
             <div className="flex flex-col items-center gap-5 py-10">
               <div className="flex flex-wrap justify-center gap-2 max-w-lg">
