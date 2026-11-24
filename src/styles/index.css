@@ -438,6 +438,7 @@ html.light .fa-input {
   background-color: color-mix(in srgb, var(--fa-input-bg) 92%, transparent);
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--fa-input-border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 .fa-bottomnav-item {
   color: var(--fa-input-placeholder);
