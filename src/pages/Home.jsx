@@ -138,9 +138,12 @@ const LiveBigGamesBar = () => {
   const { data: allLive = [] } = useLiveFixtures();
 
   const featuredIds = new Set(FEATURED_LEAGUES.map(l => l.id));
-  const live = allLive
-    .filter(f => featuredIds.has(f.league?.id))
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const live = [...allLive].sort((a, b) => {
+    // Featured leagues first, then by kickoff time
+    const af = featuredIds.has(a.league?.id) ? 0 : 1;
+    const bf = featuredIds.has(b.league?.id) ? 0 : 1;
+    return af - bf || new Date(a.date) - new Date(b.date);
+  });
 
   // On matchdays the results marquee takes this slot instead.
   if (isMatchday || !live.length) return null;
