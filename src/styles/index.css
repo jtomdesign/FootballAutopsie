@@ -416,7 +416,6 @@ html.light .fa-input {
 /* AI assistant input bar — subtle elevated surface in both themes */
 .fa-ai-inputbar {
   background-color: var(--fa-input-bg);
-  border: 1px solid color-mix(in srgb, var(--fa-input-border) 60%, transparent);
   border-radius: 1rem;
 }
 .fa-ai-inputbar input::placeholder {
