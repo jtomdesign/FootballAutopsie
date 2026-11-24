@@ -5,7 +5,7 @@ import {
   LuLayoutGrid,
   LuNewspaper,
   LuTv,
-  LuSparkles,
+  LuBot,
   LuUser,
 } from "react-icons/lu";
 
@@ -13,7 +13,7 @@ const ITEMS = [
   { to: "/", label: "Accueil", icon: LuLayoutGrid, end: true },
   { to: "/news", label: "News", icon: LuNewspaper },
   { to: "/scores", label: "Direct", icon: LuTv },
-  { to: "/assistant", label: "Assistant", icon: LuSparkles },
+  { to: "/assistant", label: "Assistant", icon: LuBot },
 ];
 
 const BottomNav = () => {

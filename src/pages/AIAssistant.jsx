@@ -106,11 +106,6 @@ const AIAssistant = () => {
               key={i}
               className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
-              {m.role === "assistant" && (
-                <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-500/15 text-emerald-500 flex items-center justify-center mt-0.5">
-                  <LuBot className="text-sm" />
-                </div>
-              )}
               <div
                 className={`max-w-[85%] sm:max-w-[75%] px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
                   m.role === "user"
@@ -129,10 +124,7 @@ const AIAssistant = () => {
           ))}
 
           {loading && (
-            <div className="flex gap-2.5 justify-start">
-              <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-500/15 text-emerald-500 flex items-center justify-center mt-0.5">
-                <LuBot className="text-sm" />
-              </div>
+            <div className="flex justify-start">
               <div className="flex items-center gap-1.5 px-4 py-3">
                 {[0, 1, 2].map(d => (
                   <span
