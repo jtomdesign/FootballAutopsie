@@ -43,7 +43,7 @@ const BottomNav = () => {
           >
             {({ isActive }) => (
               <>
-                <Icon className="text-2xl" />
+                <Icon className="text-xl" />
                 {label}
               </>
             )}
