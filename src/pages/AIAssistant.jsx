@@ -63,6 +63,7 @@ const AIAssistant = () => {
       <div className="py-8 max-w-3xl mx-auto flex flex-col" style={{ minHeight: "70dvh" }}>
         {/* Header */}
         <div className="mb-6 relative flex flex-col items-center text-center">
+          <LuBot className="text-3xl text-emerald-500 mb-2" />
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-50 tracking-tight">
             Football Autopsie IA
           </h1>
@@ -86,7 +87,6 @@ const AIAssistant = () => {
         <div className="flex-1 flex flex-col gap-4 mb-4 overflow-y-auto">
           {messages.length === 0 && (
             <div className="flex flex-col items-center gap-5 py-10">
-              <LuBot className="text-4xl text-emerald-500/70 mx-auto mb-3" />
               <div className="flex flex-wrap justify-center gap-2 max-w-lg">
                 {SUGGESTIONS.map(s => (
                   <button
