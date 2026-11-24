@@ -18,7 +18,7 @@
 const AI_BASE_URL =
   process.env.AI_BASE_URL ??
   "https://generativelanguage.googleapis.com/v1beta/openai";
-const AI_MODEL = process.env.AI_MODEL ?? "gemini-2.0-flash";
+const AI_MODEL = process.env.AI_MODEL ?? "gemini-3.5-flash-lite";
 const AI_KEY = process.env.AI_API_KEY;
 const FB_KEY = process.env.FOOTBALL_API_KEY ?? process.env.VITE_FOOTBALL_API_KEY;
 const FB_HOST = process.env.FOOTBALL_API_HOST ?? "v3.football.api-sports.io";
