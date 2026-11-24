@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
-  RiHome6Line,
+  RiLayoutGridLine,
   RiNewspaperLine,
   RiTvLine,
   RiSearchLine,
@@ -10,7 +10,7 @@ import {
 } from "react-icons/ri";
 
 const ITEMS = [
-  { to: "/", label: "Accueil", icon: RiHome6Line, end: true },
+  { to: "/", label: "Accueil", icon: RiLayoutGridLine, end: true },
   { to: "/news", label: "News", icon: RiNewspaperLine },
   { to: "/scores", label: "Direct", icon: RiTvLine },
   { to: "/recherche", label: "Recherche", icon: RiSearchLine },
