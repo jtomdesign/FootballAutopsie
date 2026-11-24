@@ -448,9 +448,6 @@ html.light .fa-input {
 .fa-bottomnav-item.is-active {
   color: var(--color-emerald-400);
 }
-.fa-bottomnav-active-bg {
-  background-color: color-mix(in srgb, var(--color-emerald-500) 15%, transparent);
-}
 
 @keyframes fa-back-to-top {
   from { opacity: 0; transform: translateY(12px) scale(0.9); }

@@ -43,13 +43,7 @@ const BottomNav = () => {
           >
             {({ isActive }) => (
               <>
-                <span
-                  className={`p-1 rounded-full transition-colors ${
-                    isActive ? "fa-bottomnav-active-bg" : ""
-                  }`}
-                >
-                  <Icon className="text-xl" />
-                </span>
+                <Icon className="text-2xl" />
                 {label}
               </>
             )}
