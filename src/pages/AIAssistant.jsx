@@ -160,7 +160,7 @@ const AIAssistant = () => {
             e.preventDefault();
             send();
           }}
-          className="flex gap-2 items-center px-2 py-2"
+          className="fa-ai-inputbar flex gap-2 items-center px-2 py-2"
         >
           <input
             ref={inputRef}

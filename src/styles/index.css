@@ -413,6 +413,16 @@ html.light {
 html.light .fa-input {
   color-scheme: light;
 }
+/* AI assistant input bar — subtle elevated surface in both themes */
+.fa-ai-inputbar {
+  background-color: var(--fa-input-bg);
+  border: 1px solid color-mix(in srgb, var(--fa-input-border) 60%, transparent);
+  border-radius: 1rem;
+}
+.fa-ai-inputbar input::placeholder {
+  color: var(--fa-input-placeholder);
+}
+
 /* Prevent iOS Safari auto-zoom on input focus (requires >=16px) */
 @media (max-width: 640px) {
   input,
