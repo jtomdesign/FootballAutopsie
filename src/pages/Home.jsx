@@ -128,6 +128,70 @@ const BreakingBar = ({ posts }) => {
   );
 };
 
+const LiveBigGamesBar = () => {
+  const { t } = useTranslation();
+  // Big-matchday results strip: Mondays (after the weekend) and
+  // Thursdays (after Champions League Tue/Wed fixtures).
+  // UTC day — fixture dates are UTC, so this matches the data window.
+  const day = new Date().getUTCDay();
+  const isMatchday = day === 1 || day === 4;
+  const { data: allLive = [] } = useLiveFixtures();
+
+  const featuredIds = new Set(FEATURED_LEAGUES.map(l => l.id));
+  const live = allLive
+    .filter(f => featuredIds.has(f.league?.id))
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // On matchdays the results marquee takes this slot instead.
+  if (isMatchday || !live.length) return null;
+
+  const reps = Math.max(2, Math.ceil(24 / live.length));
+  const loop = Array.from({ length: reps }, () => live).flat();
+  const marqueeItems = [...loop, ...loop];
+
+  return (
+    <div className="bg-emerald-950/60 border-b border-emerald-900/60">
+      <Container>
+        <div className="flex items-center gap-3 py-2 overflow-hidden">
+          <span className="shrink-0 flex items-center gap-1.5 text-emerald-500" title={t("En direct")}>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+          </span>
+          <div className="overflow-hidden flex-1">
+            <div
+              className="marquee-track marquee-slow flex gap-2"
+              onTouchStart={e => (e.currentTarget.style.animationPlayState = "paused")}
+              onTouchEnd={e => (e.currentTarget.style.animationPlayState = "")}
+              onTouchCancel={e => (e.currentTarget.style.animationPlayState = "")}
+            >
+              {marqueeItems.map((f, i) => (
+                <Link
+                  key={`${f.id}-${i}`}
+                  to={`/match/${f.id}`}
+                  className="shrink-0 flex items-center gap-1.5 sm:gap-2 bg-emerald-900/40 hover:bg-emerald-900/70 rounded-full pl-1.5 sm:pl-2 pr-2.5 sm:pr-3 py-1.5 transition-colors"
+                >
+                  <TeamLogo logo={f.league.logo} name={f.league.name} size="w-4 h-4" />
+                  <TeamLogo logo={f.homeTeam.logo} name={f.homeTeam.name} size="w-4 h-4" />
+                  <span className="text-xs text-gray-300 whitespace-nowrap flex items-center">
+                    <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.homeTeam.name}</span>
+                    <span className="font-bold text-emerald-400 tabular-nums mx-1">
+                      {f.goals.home ?? 0} - {f.goals.away ?? 0}
+                    </span>
+                    <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.awayTeam.name}</span>
+                  </span>
+                  <TeamLogo logo={f.awayTeam.logo} name={f.awayTeam.name} size="w-4 h-4" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Container>
+    </div>
+  );
+};
+
 const WeekendResultsBar = () => {
   const { t } = useTranslation();
   const today = todayParam();
@@ -244,6 +308,7 @@ const Home = () => {
   return (
     <div className="pb-16">
       <BreakingBar posts={breaking.length ? breaking : published.slice(0, 5)} />
+      <LiveBigGamesBar />
       <WeekendResultsBar />
 
       <Container>
