@@ -19,7 +19,7 @@ const BackToTop = () => {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Retour en haut"
-      className="fa-back-to-top fixed bottom-24 md:bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-900/30 flex items-center justify-center hover:bg-emerald-500 active:scale-95 transition-all cursor-pointer"
+      className="fa-back-to-top fixed bottom-32 md:bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-900/30 flex items-center justify-center hover:bg-emerald-500 active:scale-95 transition-all cursor-pointer"
     >
       <LuArrowUp className="text-lg" />
     </button>
