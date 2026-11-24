@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Container } from "../ui/Container";
 import { useSEO } from "../utils/seo";
-import { LuSparkles, LuSend, LuUser, LuBot, LuPlus } from "react-icons/lu";
+import { LuSparkles, LuSendHorizontal, LuUser, LuBot, LuPlus } from "react-icons/lu";
 
 const SUGGESTIONS = [
   "Pronostic pour le prochain Clasico ?",
@@ -176,7 +176,7 @@ const AIAssistant = () => {
             className="shrink-0 p-2 text-emerald-600 hover:text-emerald-500 disabled:opacity-40 transition-colors cursor-pointer"
             aria-label="Envoyer"
           >
-            <LuSend className="text-lg" />
+            <LuSendHorizontal className="text-lg" />
           </button>
         </form>
         <p className="text-[0.65rem] text-gray-600 text-center mt-3">
