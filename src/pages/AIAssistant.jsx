@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Container } from "../ui/Container";
 import { useSEO } from "../utils/seo";
-import { LuSparkles, LuSendHorizontal, LuUser, LuBot, LuPlus } from "react-icons/lu";
+import { LuSendHorizontal, LuUser, LuBot, LuPlus } from "react-icons/lu";
 
 const SUGGESTIONS = [
   "Pronostic pour le prochain Clasico ?",
@@ -63,12 +63,9 @@ const AIAssistant = () => {
       <div className="py-8 max-w-3xl mx-auto flex flex-col" style={{ minHeight: "70dvh" }}>
         {/* Header */}
         <div className="mb-6 relative flex flex-col items-center text-center">
-          <div className="flex items-center gap-3">
-            <LuSparkles className="text-2xl text-emerald-500" />
-            <h1 className="text-xl sm:text-2xl font-semibold text-gray-50 tracking-tight">
-              Football Autopsie IA
-            </h1>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-50 tracking-tight">
+            Football Autopsie IA
+          </h1>
           {messages.length > 0 && (
             <button
               onClick={() => {
