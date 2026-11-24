@@ -41,7 +41,7 @@ const BottomNav = () => {
               }`
             }
           >
-            <Icon className="text-xl" />
+            <Icon className="text-[1.4rem]" />
             {label}
           </NavLink>
         ))}
