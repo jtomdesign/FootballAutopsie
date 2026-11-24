@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useLiveFixtures } from "./football";
+import { useLiveFixtures, useFixturesByDate } from "./football";
+import { todayParam } from "../services/football/endpoints";
 import { supabase } from "../services/supabase";
 import i18n from "../i18n";
 import {
@@ -349,13 +350,19 @@ export const useDeleteNotification = () => {
  */
 export const useSyncNotifications = () => {
   const authed = useSelector(isAuthed);
+  const qc = useQueryClient();
   const { data: favorites = [] } = useFavorites();
   const { data: live = [] } = useLiveFixtures();
-  const done = useRef(false);
+  const { data: todayFixtures = [] } = useFixturesByDate(todayParam());
+  const lastRun = useRef(0);
 
   useEffect(() => {
-    if (!authed || done.current || !favorites.length || !live.length) return;
-    done.current = true;
+    if (!authed || !favorites.length) return;
+    // Re-check on every data refresh, throttled to once a minute
+    const now = Date.now();
+    if (now - lastRun.current < 60 * 1000) return;
+    if (!live.length && !todayFixtures.length) return;
+    lastRun.current = now;
     (async () => {
       try {
         const [notifs, { data: auth }] = await Promise.all([
@@ -364,7 +371,9 @@ export const useSyncNotifications = () => {
         ]);
         const userId = auth.user?.id;
         if (!userId) return;
-        const seen = new Set(notifs.map(n => n.target_url));
+        const seen = new Set(
+          notifs.map(n => `${n.type}:${n.target_url ?? ""}`),
+        );
         const favTeamIds = new Set(
           favorites
             .filter(f => f.entity_type === "team")
@@ -375,28 +384,51 @@ export const useSyncNotifications = () => {
             .filter(f => f.entity_type === "match")
             .map(f => String(f.entity_id)),
         );
+        const involved = f =>
+          favTeamIds.has(f.homeTeam?.id) ||
+          favTeamIds.has(f.awayTeam?.id) ||
+          favMatchIds.has(String(f.id));
+        const score = f =>
+          `${f.homeTeam?.name ?? "?"} ${f.goals?.home ?? 0} - ${f.goals?.away ?? 0} ${f.awayTeam?.name ?? "?"}`;
+
+        // 1. Live matches involving followed teams/matches
         for (const f of live) {
-          const involved =
-            favTeamIds.has(f.homeTeam?.id) ||
-            favTeamIds.has(f.awayTeam?.id) ||
-            favMatchIds.has(String(f.id));
-          if (!involved) continue;
+          if (!involved(f)) continue;
           const url = `/match/${f.id}`;
-          if (seen.has(url)) continue;
+          const key = `match_live:${url}`;
+          if (seen.has(key)) continue;
           await notify({
             userId,
             type: "match_live",
             title: i18n.t("Match en direct"),
-            message: `${f.homeTeam?.name ?? "?"} ${f.goals?.home ?? 0} - ${f.goals?.away ?? 0} ${f.awayTeam?.name ?? "?"} (${f.status?.label ?? ""})`,
+            message: `${score(f)} (${f.status?.label ?? ""})`,
             targetUrl: url,
           });
-          seen.add(url);
+          seen.add(key);
         }
+
+        // 2. Full-time results for followed teams/matches (today's fixtures)
+        for (const f of todayFixtures) {
+          if (!f?.status?.isFinished || !involved(f)) continue;
+          const url = `/match/${f.id}`;
+          const key = `match_result:${url}`;
+          if (seen.has(key)) continue;
+          await notify({
+            userId,
+            type: "match_result",
+            title: i18n.t("Résultat"),
+            message: score(f),
+            targetUrl: url,
+          });
+          seen.add(key);
+        }
+
+        qc.invalidateQueries({ queryKey: [...USER_KEY, "notifications"] });
       } catch {
         /* notifications are best-effort */
       }
     })();
-  }, [authed, favorites, live]);
+  }, [authed, favorites, live, todayFixtures, qc]);
 };
 
 // ---------- Admin: role management ----------

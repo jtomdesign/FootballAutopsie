@@ -24,7 +24,9 @@ const Notifications = () => {
   const { t } = useTranslation();
   const typeLabel = {
     match_live: t("Match en direct"),
+    match_result: t("Résultat"),
     match_reminder: t("Rappel de match"),
+    announcement: t("Annonce"),
     comment_reply: t("Réponse"),
     comment_like: t("Like"),
     news: t("Actualité"),

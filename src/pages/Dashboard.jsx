@@ -14,6 +14,7 @@ const MOBILE_LINKS = [
   { to: "/dashboard/categories", label: "Catégories" },
   { to: "/dashboard/comments", label: "Commentaires" },
   { to: "/dashboard/messages", label: "Messages" },
+  { to: "/dashboard/diffusion", label: "Diffusion" },
   { to: "/dashboard/users", label: "Utilisateurs" },
   { to: "/dashboard/profil", label: "Profil" },
   { to: "/dashboard/settings", label: "Paramètres" },

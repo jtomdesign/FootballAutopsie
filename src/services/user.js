@@ -394,6 +394,22 @@ export const notify = async ({ userId, type, title, message, targetUrl }) => {
   });
 };
 
+export const adminBroadcastNotification = async ({
+  title,
+  message,
+  targetUrl,
+  type = "announcement",
+}) => {
+  const { data, error } = await supabase.rpc("admin_broadcast_notification", {
+    p_title: title,
+    p_message: message ?? null,
+    p_target_url: targetUrl ?? null,
+    p_type: type,
+  });
+  if (error) throw error;
+  return data ?? 0;
+};
+
 // ---------- Admin: user directory ----------
 
 export const adminListUsers = async () => {
