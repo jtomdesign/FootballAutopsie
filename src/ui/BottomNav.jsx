@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import {
   RiHome6Line,
   RiNewspaperLine,
-  RiPulseLine,
+  RiTvLine,
   RiSearchLine,
   RiUserLine,
 } from "react-icons/ri";
@@ -12,7 +12,7 @@ import {
 const ITEMS = [
   { to: "/", label: "Accueil", icon: RiHome6Line, end: true },
   { to: "/news", label: "News", icon: RiNewspaperLine },
-  { to: "/scores", label: "Direct", icon: RiPulseLine },
+  { to: "/scores", label: "Direct", icon: RiTvLine },
   { to: "/recherche", label: "Recherche", icon: RiSearchLine },
 ];
 
