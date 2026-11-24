@@ -13,7 +13,7 @@ const SUGGESTIONS = [
 
 const AIAssistant = () => {
   useSEO({
-    title: "Assistant IA Football — Pronostics, stats et analyses",
+    title: "Football Autopsie IA — Pronostics, stats et analyses",
     description:
       "Pose tes questions football à l'assistant IA de Football Autopsie : pronostics, stats joueurs, classements et analyses.",
     path: "/assistant",
@@ -61,15 +61,18 @@ const AIAssistant = () => {
   return (
     <Container>
       <div className="py-8 max-w-3xl mx-auto flex flex-col" style={{ minHeight: "70dvh" }}>
-        <div className="mb-6 flex items-start justify-between gap-4">
-          <div className="text-center flex-1">
-            <LuSparkles className="text-3xl text-emerald-500 mx-auto mb-3" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-50">
-              Assistant IA Football
-            </h1>
-            <p className="text-sm text-gray-400 mt-2 max-w-md mx-auto">
-              Pronostics, stats joueurs, classements, analyses — pose ta question.
-            </p>
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <LuSparkles className="text-2xl text-emerald-500" />
+            <div>
+              <h1 className="text-xl sm:text-2xl font-semibold text-gray-50 tracking-tight">
+                Football Autopsie IA
+              </h1>
+              <p className="text-xs text-gray-500">
+                Pronostics, stats et analyses football
+              </p>
+            </div>
           </div>
           {messages.length > 0 && (
             <button
@@ -78,7 +81,7 @@ const AIAssistant = () => {
                 setError(null);
                 inputRef.current?.focus();
               }}
-              className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full fa-input text-xs font-bold hover:border-red-500/50 hover:text-red-500 transition-colors cursor-pointer"
+              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-gray-500 hover:text-emerald-600 hover:bg-emerald-500/10 transition-colors cursor-pointer text-xs font-medium"
               title="Nouvelle conversation"
             >
               <LuPlus className="text-sm" />
@@ -88,15 +91,21 @@ const AIAssistant = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 flex flex-col gap-3 mb-4 overflow-y-auto">
+        <div className="flex-1 flex flex-col gap-4 mb-4 overflow-y-auto">
           {messages.length === 0 && (
-            <div className="flex flex-col items-center gap-4 py-8">
+            <div className="flex flex-col items-center gap-5 py-10">
+              <div className="text-center">
+                <LuBot className="text-4xl text-emerald-500/70 mx-auto mb-3" />
+                <p className="text-gray-400 text-sm">
+                  Pose ta question — pronostic, joueur, équipe, règle…
+                </p>
+              </div>
               <div className="flex flex-wrap justify-center gap-2 max-w-lg">
                 {SUGGESTIONS.map(s => (
                   <button
                     key={s}
                     onClick={() => send(s)}
-                    className="px-4 py-2 rounded-full fa-input text-xs font-semibold hover:border-emerald-500/50 hover:text-emerald-600 transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium hover:bg-emerald-500/20 transition-colors cursor-pointer"
                   >
                     {s}
                   </button>
@@ -108,36 +117,36 @@ const AIAssistant = () => {
           {messages.map((m, i) => (
             <div
               key={i}
-              className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
               {m.role === "assistant" && (
-                <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-600/20 text-emerald-500 flex items-center justify-center">
-                  <LuBot className="text-base" />
+                <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-500/15 text-emerald-500 flex items-center justify-center mt-0.5">
+                  <LuBot className="text-sm" />
                 </div>
               )}
               <div
-                className={`max-w-[85%] sm:max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                className={`max-w-[85%] sm:max-w-[75%] px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
                   m.role === "user"
-                    ? "bg-emerald-600 text-white rounded-br-md"
-                    : "bg-emerald-950/60 border border-emerald-900/60 text-gray-200 rounded-bl-md"
+                    ? "bg-emerald-600 text-white rounded-2xl rounded-br-md"
+                    : "text-gray-200"
                 }`}
               >
                 {m.content}
               </div>
               {m.role === "user" && (
-                <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-700/40 text-emerald-200 flex items-center justify-center">
-                  <LuUser className="text-base" />
+                <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-700/30 text-emerald-200 flex items-center justify-center mt-0.5">
+                  <LuUser className="text-sm" />
                 </div>
               )}
             </div>
           ))}
 
           {loading && (
-            <div className="flex gap-3 justify-start">
-              <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-600/20 text-emerald-500 flex items-center justify-center">
-                <LuBot className="text-base" />
+            <div className="flex gap-2.5 justify-start">
+              <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-500/15 text-emerald-500 flex items-center justify-center mt-0.5">
+                <LuBot className="text-sm" />
               </div>
-              <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-emerald-950/60 border border-emerald-900/60 flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 px-4 py-3">
                 {[0, 1, 2].map(d => (
                   <span
                     key={d}
@@ -161,7 +170,7 @@ const AIAssistant = () => {
             e.preventDefault();
             send();
           }}
-          className="flex gap-2"
+          className="flex gap-2 items-center rounded-2xl bg-emerald-950/50 px-2 py-2"
         >
           <input
             ref={inputRef}
@@ -169,18 +178,18 @@ const AIAssistant = () => {
             onChange={e => setInput(e.target.value)}
             placeholder="Pose ta question football…"
             maxLength={1000}
-            className="fa-input flex-1 px-4 py-3 rounded-xl text-sm"
+            className="flex-1 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-gray-500"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="shrink-0 w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-500 disabled:opacity-40 transition-colors cursor-pointer"
+            className="shrink-0 w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center hover:bg-emerald-500 disabled:opacity-40 transition-colors cursor-pointer"
             aria-label="Envoyer"
           >
-            <LuSend className="text-lg" />
+            <LuSend className="text-base" />
           </button>
         </form>
-        <p className="text-[0.65rem] text-gray-500 text-center mt-3">
+        <p className="text-[0.65rem] text-gray-600 text-center mt-3">
           L'IA peut se tromper — les pronostics ne garantissent rien.
         </p>
       </div>
