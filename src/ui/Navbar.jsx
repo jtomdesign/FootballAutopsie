@@ -5,12 +5,11 @@ import Button from "./Button";
 import Logo from "./Logo";
 import { Container } from "./Container";
 import {
-  RiUser3Fill,
-  RiUser3Line,
-  RiSearchLine,
-  RiSunLine,
-  RiMoonLine,
-} from "react-icons/ri";
+  LuUser,
+  LuSearch,
+  LuSun,
+  LuMoon,
+} from "react-icons/lu";
 import { useTheme } from "../theme/context";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/authentication/authSlice";
@@ -70,7 +69,7 @@ const Navbar = () => {
               aria-label={isLight ? t("Mode sombre") : t("Mode clair")}
               title={isLight ? t("Mode sombre") : t("Mode clair")}
             >
-              {isLight ? <RiMoonLine className="text-xl" /> : <RiSunLine className="text-xl" />}
+              {isLight ? <LuMoon className="text-xl" /> : <LuSun className="text-xl" />}
             </button>
 
             <button
@@ -87,7 +86,7 @@ const Navbar = () => {
               className="p-2 sm:p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
               aria-label={t("Rechercher")}
             >
-              <RiSearchLine className="text-xl" />
+              <LuSearch className="text-xl" />
             </button>
 
             {isAuthenticated && <NotificationBell />}
@@ -98,7 +97,7 @@ const Navbar = () => {
                   name={t("Se Connecter")}
                   onClick={() => navigate("/compte")}
                   type="simple"
-                  icon={<RiUser3Line />}
+                  icon={<LuUser />}
                 />
               </div>
             ) : (
@@ -125,7 +124,7 @@ const Navbar = () => {
                     signOut();
                   }}
                   type="simple"
-                  icon={<RiUser3Line />}
+                  icon={<LuUser />}
                 />
               </div>
             )}
@@ -162,7 +161,7 @@ const Navbar = () => {
                   onClick={() => setMenuOpen(false)}
                   className="py-3 px-2 text-emerald-950 uppercase font-bold font-menu text-lg border-b border-gray-100 hover:text-emerald-500 flex items-center gap-2"
                 >
-                  <RiUser3Line className="text-xl" />
+                  <LuUser className="text-xl" />
                   {t("Se Connecter")}
                 </Link>
               )}

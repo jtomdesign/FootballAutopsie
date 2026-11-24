@@ -41,12 +41,8 @@ const BottomNav = () => {
               }`
             }
           >
-            {({ isActive }) => (
-              <>
-                <Icon className="text-xl" />
-                {label}
-              </>
-            )}
+            <Icon className="text-xl" />
+            {label}
           </NavLink>
         ))}
       </div>

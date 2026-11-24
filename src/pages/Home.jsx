@@ -20,8 +20,13 @@ import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
 import ScorerRow from "../components/football/ScorerRow";
 import ImageDownloadButton from "../components/football/ImageDownloadButton";
-import { HiArrowRight, HiBolt } from "react-icons/hi2";
-import { RiTrophyFill } from "react-icons/ri";
+import {
+  LuArrowRight,
+  LuZap,
+} from "react-icons/lu";
+import {
+  LuTrophy,
+} from "react-icons/lu";
 import Spinner from "../ui/Spinner";
 import AdBanner from "../components/AdBanner";
 import { useSEO } from "../utils/seo";
@@ -53,7 +58,7 @@ const NewsCard = ({ post, large = false }) => {
         )}
         {post.isBreaking && (
           <span className="flex items-center gap-1 text-emerald-400 font-bold">
-            <HiBolt /> {t("À la une")}
+            <LuZap /> {t("À la une")}
           </span>
         )}
         <span className="normal-case">{formatDate(post.created_at)}</span>
@@ -178,7 +183,7 @@ const WeekendResultsBar = () => {
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
           <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
-            <RiTrophyFill className="text-base" />
+            <LuTrophy className="text-base" />
           </span>
           <div className="overflow-hidden flex-1">
             <div
@@ -277,7 +282,7 @@ const Home = () => {
                 to="/news"
                 className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
               >
-                {t("Tout voir")} <HiArrowRight />
+                {t("Tout voir")} <LuArrowRight />
               </Link>
             }
           />
@@ -307,7 +312,7 @@ const Home = () => {
                   to="/ligues"
                   className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
                 >
-                  {t("Toutes")} <HiArrowRight />
+                  {t("Toutes")} <LuArrowRight />
                 </Link>
               }
             />
@@ -348,7 +353,7 @@ const Home = () => {
                   to="/scores"
                   className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
                 >
-                  {t("Scores")} <HiArrowRight />
+                  {t("Scores")} <LuArrowRight />
                 </Link>
               }
             />
@@ -372,7 +377,7 @@ const Home = () => {
                   to="/matchs"
                   className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
                 >
-                  {t("Tous les matchs")} <HiArrowRight />
+                  {t("Tous les matchs")} <LuArrowRight />
                 </Link>
               }
             />
@@ -399,7 +404,7 @@ const Home = () => {
                 to="/ligues"
                 className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
               >
-                {t("Compétitions")} <HiArrowRight />
+                {t("Compétitions")} <LuArrowRight />
               </Link>
             }
           />
@@ -461,7 +466,7 @@ const Home = () => {
                 to="/news"
                 className="flex items-center gap-1 text-emerald-600 text-xs font-semibold hover:text-emerald-700"
               >
-                {t("Tout voir")} <HiArrowRight />
+                {t("Tout voir")} <LuArrowRight />
               </Link>
             }
           />

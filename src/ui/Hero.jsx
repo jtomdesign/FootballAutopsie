@@ -1,6 +1,8 @@
 import React from "react";
 import { usePostData } from "../hooks/usePostData";
-import { HiArrowRight } from "react-icons/hi";
+import {
+  LuArrowRight,
+} from "react-icons/lu";
 import Spinner from "./Spinner";
 import PostCard from "./PostCard";
 import { Container } from "./Container";

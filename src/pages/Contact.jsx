@@ -6,13 +6,13 @@ import SectionHeader from "../components/football/SectionHeader";
 import { useSEO } from "../utils/seo";
 import { supabase } from "../services/supabase";
 import {
-  RiMailLine,
-  RiMapPinLine,
-  RiTimeLine,
-  RiSendPlaneLine,
-  RiArticleLine,
-  RiQuillPenLine,
-} from "react-icons/ri";
+  LuMail,
+  LuMapPin,
+  LuClock,
+  LuSend,
+  LuNewspaper,
+  LuFeather,
+} from "react-icons/lu";
 
 const inputCls =
   "fa-input w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-shadow";
@@ -74,7 +74,7 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-2">
           {/* Info */}
           <div className="lg:col-span-2 flex flex-col gap-3">
-            <InfoCard icon={RiMailLine} title={t("Email")}>
+            <InfoCard icon={LuMail} title={t("Email")}>
               <a
                 href="mailto:contact@footautopsie.com"
                 className="text-emerald-400 hover:underline"
@@ -82,13 +82,13 @@ const Contact = () => {
                 contact@footautopsie.com
               </a>
             </InfoCard>
-            <InfoCard icon={RiTimeLine} title={t("Délai de réponse")}>
+            <InfoCard icon={LuClock} title={t("Délai de réponse")}>
               {t("Sous 48 h ouvrées")}
             </InfoCard>
-            <InfoCard icon={RiArticleLine} title={t("Presse & partenariats")}>
+            <InfoCard icon={LuNewspaper} title={t("Presse & partenariats")}>
               {t("Décrivez votre demande dans le formulaire, nous vous orienterons.")}
             </InfoCard>
-            <InfoCard icon={RiQuillPenLine} title={t("Contributions")}>
+            <InfoCard icon={LuFeather} title={t("Contributions")}>
               {t("Analyses, interviews, contenu exclusif : vos articles peuvent être publiés sur Football Autopsie.")}
             </InfoCard>
           </div>
@@ -155,7 +155,7 @@ const Contact = () => {
               disabled={sending}
               className="self-start inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition-colors disabled:opacity-60 cursor-pointer"
             >
-              <RiSendPlaneLine />
+              <LuSend />
               {sending ? t("Envoi…") : t("Envoyer")}
             </button>
           </form>

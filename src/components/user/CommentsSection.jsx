@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import {
-  RiHeartLine,
-  RiHeartFill,
-  RiReplyLine,
-  RiDeleteBinLine,
-  RiEditLine,
-  RiFlagLine,
-  RiChat1Line,
-  RiEmotionLine,
-} from "react-icons/ri";
+  LuHeart,
+  LuReply,
+  LuTrash2,
+  LuPencil,
+  LuFlag,
+  LuMessageCircle,
+  LuSmile,
+} from "react-icons/lu";
 import {
   useEntityComments,
   useAddEntityComment,
@@ -146,7 +145,7 @@ const CommentItem = ({
                   }`}
                   aria-label={t("Emoji")}
                 >
-                  <RiEmotionLine className="text-base" />
+                  <LuSmile className="text-base" />
                 </button>
               </div>
               <EmojiBar
@@ -188,7 +187,7 @@ const CommentItem = ({
                 liked ? "text-red-500" : "text-gray-400 hover:text-red-500"
               }`}
             >
-              {liked ? <RiHeartFill /> : <RiHeartLine />}
+              {liked ? <LuHeart /> : <LuHeart />}
               {likes[comment.id] ?? 0}
             </button>
             )}
@@ -197,7 +196,7 @@ const CommentItem = ({
                 onClick={() => onReply(comment)}
                 className="flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-emerald-600 cursor-pointer"
               >
-                <RiReplyLine /> {t("Répondre")}
+                <LuReply /> {t("Répondre")}
               </button>
             )}
             {isOwn && !editing && (
@@ -206,7 +205,7 @@ const CommentItem = ({
                   onClick={() => setEditing(true)}
                   className="flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-gray-300 cursor-pointer"
                 >
-                  <RiEditLine /> {t("Modifier")}
+                  <LuPencil /> {t("Modifier")}
                 </button>
                 <button
                   onClick={() => {
@@ -215,7 +214,7 @@ const CommentItem = ({
                   }}
                   className="flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-red-500 cursor-pointer"
                 >
-                  <RiDeleteBinLine /> {t("Supprimer")}
+                  <LuTrash2 /> {t("Supprimer")}
                 </button>
               </>
             )}
@@ -224,7 +223,7 @@ const CommentItem = ({
                 onClick={() => setReporting(r => !r)}
                 className="flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-red-500 cursor-pointer"
               >
-                <RiFlagLine /> {t("Signaler")}
+                <LuFlag /> {t("Signaler")}
               </button>
             )}
           </div>
@@ -369,7 +368,7 @@ const CommentsSection = ({ postId, matchId }) => {
     <section className="mt-12 border-t border-emerald-900/60 pt-8">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-sm font-semibold text-gray-100 flex items-center gap-2">
-          <RiChat1Line className="text-emerald-600" />
+          <LuMessageCircle className="text-emerald-600" />
           {t("Commentaires")} {comments.length > 0 && `(${comments.length})`}
         </h3>
         <select
@@ -424,7 +423,7 @@ const CommentsSection = ({ postId, matchId }) => {
               }`}
               aria-label={t("Emoji")}
             >
-              <RiEmotionLine className="text-base" />
+              <LuSmile className="text-base" />
             </button>
             <span className="text-[0.65rem] text-gray-400">{text.length}/2000</span>
           </div>

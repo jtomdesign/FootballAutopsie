@@ -13,13 +13,13 @@ import EmptyState from "../components/football/EmptyState";
 import Spinner from "../ui/Spinner";
 import FollowButton from "../components/user/FollowButton";
 import {
-  RiArrowLeftLine,
-  RiPulseLine,
-  RiTeamLine,
-  RiCakeLine,
-  RiShieldUserLine,
-  RiMapPinLine,
-} from "react-icons/ri";
+  LuArrowLeft,
+  LuActivity,
+  LuUsers,
+  LuCake,
+  LuShieldCheck,
+  LuMapPin,
+} from "react-icons/lu";
 
 // API sometimes returns {} for missing stats — only render primitives.
 const display = v => (v == null || typeof v === "object" ? "—" : v);
@@ -157,7 +157,7 @@ const PlayerDetail = () => {
           to="/joueurs"
           className="inline-flex items-center gap-1.5 text-emerald-400 text-sm font-semibold hover:text-emerald-300 mb-6"
         >
-          <RiArrowLeftLine /> {t("Tous les joueurs")}
+          <LuArrowLeft /> {t("Tous les joueurs")}
         </Link>
 
         {/* Header */}
@@ -202,7 +202,7 @@ const PlayerDetail = () => {
                 )}
                 {player.nationality && (
                   <span className="inline-flex items-center gap-1 text-gray-400 text-xs">
-                    <RiMapPinLine className="text-emerald-500" />
+                    <LuMapPin className="text-emerald-500" />
                     {player.nationality}
                   </span>
                 )}
@@ -235,20 +235,20 @@ const PlayerDetail = () => {
         <SectionHeader title={t("Profil")} />
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
           {player.age != null && (
-            <InfoItem label={t("Âge")} value={player.age} icon={RiPulseLine} />
+            <InfoItem label={t("Âge")} value={player.age} icon={LuActivity} />
           )}
           {player.birth?.date && (
             <InfoItem
               label={t("Date de naissance")}
               value={`${fmtDate(player.birth.date)}${player.birth.place ? ` — ${player.birth.place}` : ""}`}
-              icon={RiCakeLine}
+              icon={LuCake}
             />
           )}
           {player.nationality && (
             <InfoItem
               label={t("Nationalité")}
               value={player.nationality}
-              icon={RiMapPinLine}
+              icon={LuMapPin}
             />
           )}
           {player.height && <InfoItem label={t("Taille")} value={player.height} />}
@@ -257,14 +257,14 @@ const PlayerDetail = () => {
             <InfoItem
               label={t("Club")}
               value={player.team.name}
-              icon={RiTeamLine}
+              icon={LuUsers}
             />
           )}
           {(player.position ?? current.position) && (
             <InfoItem
               label={t("Poste")}
               value={player.position ?? current.position}
-              icon={RiShieldUserLine}
+              icon={LuShieldCheck}
             />
           )}
           {player.injured && (

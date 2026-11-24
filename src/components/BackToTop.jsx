@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { HiArrowUp } from "react-icons/hi2";
+import {
+  LuArrowUp,
+} from "react-icons/lu";
 
 const BackToTop = () => {
   const [visible, setVisible] = useState(false);
@@ -19,7 +21,7 @@ const BackToTop = () => {
       aria-label="Retour en haut"
       className="fa-back-to-top fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-900/30 flex items-center justify-center hover:bg-emerald-500 active:scale-95 transition-all cursor-pointer"
     >
-      <HiArrowUp className="text-lg" />
+      <LuArrowUp className="text-lg" />
     </button>
   );
 };

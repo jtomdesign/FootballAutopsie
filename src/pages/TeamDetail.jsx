@@ -20,7 +20,10 @@ import TeamLogo from "../components/football/TeamLogo";
 import Spinner from "../ui/Spinner";
 import FollowButton from "../components/user/FollowButton";
 import { useEntityFollowers } from "../hooks/user";
-import { RiArrowLeftLine, RiMapPinLine } from "react-icons/ri";
+import {
+  LuArrowLeft,
+  LuMapPin,
+} from "react-icons/lu";
 
 const StatCard = ({ label, value }) => {
   const { t } = useTranslation();
@@ -115,7 +118,7 @@ const TeamDetail = () => {
           to="/equipes"
           className="inline-flex items-center gap-1.5 text-emerald-400 text-sm font-semibold hover:text-emerald-300 mb-6"
         >
-          <RiArrowLeftLine /> {t("Toutes les équipes")}
+          <LuArrowLeft /> {t("Toutes les équipes")}
         </Link>
 
         {/* Header */}
@@ -131,7 +134,7 @@ const TeamDetail = () => {
               </p>
               {team.venue && (
                 <p className="flex items-center justify-center sm:justify-start gap-1.5 text-gray-500 text-xs mt-2">
-                  <RiMapPinLine /> {team.venue.name}
+                  <LuMapPin /> {team.venue.name}
                   {team.venue.city ? ` — ${team.venue.city}` : ""}
                   {team.venue.capacity
                     ? ` · ${team.venue.capacity.toLocaleString(i18n.language?.startsWith("en") ? "en-GB" : "fr-FR")} ${t("places")}`

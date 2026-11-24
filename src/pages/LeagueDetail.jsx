@@ -21,7 +21,9 @@ import ScorerRow from "../components/football/ScorerRow";
 import Spinner from "../ui/Spinner";
 import FollowButton from "../components/user/FollowButton";
 import ImageDownloadButton from "../components/football/ImageDownloadButton";
-import { RiArrowLeftLine } from "react-icons/ri";
+import {
+  LuArrowLeft,
+} from "react-icons/lu";
 
 const LeagueDetail = () => {
   const { t } = useTranslation();
@@ -97,7 +99,7 @@ const LeagueDetail = () => {
           to="/ligues"
           className="inline-flex items-center gap-1.5 text-emerald-400 text-sm font-semibold hover:text-emerald-300 mb-6"
         >
-          <RiArrowLeftLine /> {t("Toutes les compétitions")}
+          <LuArrowLeft /> {t("Toutes les compétitions")}
         </Link>
 
         {/* League header */}

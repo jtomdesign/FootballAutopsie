@@ -8,7 +8,9 @@ import SectionHeader from "../components/football/SectionHeader";
 import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
 import { CardGridSkeleton } from "../components/football/Skeleton";
-import { RiSearchLine } from "react-icons/ri";
+import {
+  LuSearch,
+} from "react-icons/lu";
 import { useSEO } from "../utils/seo";
 
 const TeamCard = ({ team }) => {
@@ -66,7 +68,7 @@ const Teams = () => {
 
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <div className="relative flex-1 max-w-md">
-            <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400" />
+            <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400" />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}

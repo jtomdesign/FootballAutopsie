@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
-import { RiBookmarkLine, RiBookmarkFill } from "react-icons/ri";
+import {
+  LuBookmark,
+} from "react-icons/lu";
 import { useSavedArticles, useToggleSavedArticle } from "../../hooks/user";
 
 const SaveArticleButton = ({ postId }) => {
@@ -34,7 +36,7 @@ const SaveArticleButton = ({ postId }) => {
           : "bg-emerald-600 text-white hover:bg-emerald-700"
       }`}
     >
-      {active ? <RiBookmarkFill /> : <RiBookmarkLine />}
+      {active ? <LuBookmark /> : <LuBookmark />}
       {active ? t("Enregistré") : t("Enregistrer")}
     </button>
   );

@@ -9,28 +9,28 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { TableKit } from "@tiptap/extension-table";
 import CharacterCount from "@tiptap/extension-character-count";
 import {
-  RiArrowGoBackLine,
-  RiArrowGoForwardLine,
-  RiBold,
-  RiItalic,
-  RiUnderline,
-  RiStrikethrough,
-  RiH1,
-  RiH2,
-  RiH3,
-  RiListUnordered,
-  RiListOrdered,
-  RiDoubleQuotesL,
-  RiSeparator,
-  RiLink,
-  RiLinkUnlink,
-  RiImageAddLine,
-  RiAlignLeft,
-  RiAlignCenter,
-  RiAlignRight,
-  RiTableLine,
-  RiLoader4Line,
-} from "react-icons/ri";
+  LuUndo2,
+  LuRedo2,
+  LuBold,
+  LuItalic,
+  LuUnderline,
+  LuStrikethrough,
+  LuHeading1,
+  LuHeading2,
+  LuHeading3,
+  LuList,
+  LuListOrdered,
+  LuQuote,
+  LuSeparatorHorizontal,
+  LuLink,
+  LuLink2Off,
+  LuImagePlus,
+  LuAlignLeft,
+  LuAlignCenter,
+  LuAlignRight,
+  LuTable,
+  LuLoaderCircle,
+} from "react-icons/lu";
 import { uploadPostImage } from "../../services/apiPosts";
 import { toast } from "react-hot-toast";
 
@@ -134,70 +134,70 @@ const RichTextEditor = ({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-emerald-200 bg-emerald-50/60 sticky top-0 z-10">
         <ToolbarButton onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Annuler">
-          <RiArrowGoBackLine />
+          <LuUndo2 />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="Rétablir">
-          <RiArrowGoForwardLine />
+          <LuRedo2 />
         </ToolbarButton>
         <Divider />
         <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Gras">
-          <RiBold />
+          <LuBold />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} title="Italique">
-          <RiItalic />
+          <LuItalic />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleUnderline().run()} active={editor.isActive("underline")} title="Souligné">
-          <RiUnderline />
+          <LuUnderline />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleStrike().run()} active={editor.isActive("strike")} title="Barré">
-          <RiStrikethrough />
+          <LuStrikethrough />
         </ToolbarButton>
         <Divider />
         <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} active={editor.isActive("heading", { level: 1 })} title="Titre 1">
-          <RiH1 />
+          <LuHeading1 />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} active={editor.isActive("heading", { level: 2 })} title="Titre 2">
-          <RiH2 />
+          <LuHeading2 />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} active={editor.isActive("heading", { level: 3 })} title="Titre 3">
-          <RiH3 />
+          <LuHeading3 />
         </ToolbarButton>
         <Divider />
         <ToolbarButton onClick={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")} title="Liste à puces">
-          <RiListUnordered />
+          <LuList />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")} title="Liste numérotée">
-          <RiListOrdered />
+          <LuListOrdered />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")} title="Citation">
-          <RiDoubleQuotesL />
+          <LuQuote />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Séparateur">
-          <RiSeparator />
+          <LuSeparatorHorizontal />
         </ToolbarButton>
         <Divider />
         <ToolbarButton onClick={setLink} active={editor.isActive("link")} title="Lien">
-          <RiLink />
+          <LuLink />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().unsetLink().run()} disabled={!editor.isActive("link")} title="Retirer le lien">
-          <RiLinkUnlink />
+          <LuLink2Off />
         </ToolbarButton>
         <ToolbarButton onClick={() => fileInputRef.current?.click()} title="Insérer une image" disabled={uploading}>
-          {uploading ? <RiLoader4Line className="animate-spin" /> : <RiImageAddLine />}
+          {uploading ? <LuLoaderCircle className="animate-spin" /> : <LuImagePlus />}
         </ToolbarButton>
         <Divider />
         <ToolbarButton onClick={() => editor.chain().focus().setTextAlign("left").run()} active={editor.isActive({ textAlign: "left" })} title="Aligner à gauche">
-          <RiAlignLeft />
+          <LuAlignLeft />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().setTextAlign("center").run()} active={editor.isActive({ textAlign: "center" })} title="Centrer">
-          <RiAlignCenter />
+          <LuAlignCenter />
         </ToolbarButton>
         <ToolbarButton onClick={() => editor.chain().focus().setTextAlign("right").run()} active={editor.isActive({ textAlign: "right" })} title="Aligner à droite">
-          <RiAlignRight />
+          <LuAlignRight />
         </ToolbarButton>
         <Divider />
         <ToolbarButton onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} title="Insérer un tableau">
-          <RiTableLine />
+          <LuTable />
         </ToolbarButton>
       </div>
       <input

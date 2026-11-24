@@ -13,10 +13,10 @@ import {
 } from "../hooks/user";
 import { formatDateTime } from "../utils/helpers";
 import {
-  RiNotification3Line,
-  RiDeleteBinLine,
-  RiCheckDoubleLine,
-} from "react-icons/ri";
+  LuBell,
+  LuTrash2,
+  LuCheckCheck,
+} from "react-icons/lu";
 import { useSEO } from "../utils/seo";
 
 const Notifications = () => {
@@ -50,7 +50,7 @@ const Notifications = () => {
               onClick={() => markAll.mutate()}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 cursor-pointer"
             >
-              <RiCheckDoubleLine /> {t("Tout marquer lu")}
+              <LuCheckCheck /> {t("Tout marquer lu")}
             </button>
           )}
         </div>
@@ -66,7 +66,7 @@ const Notifications = () => {
                   n.is_read ? "opacity-60" : ""
                 }`}
               >
-                <RiNotification3Line
+                <LuBell
                   className={`mt-0.5 text-lg shrink-0 ${n.is_read ? "text-gray-300" : "text-emerald-600"}`}
                 />
                 <div className="flex-1 min-w-0">
@@ -106,7 +106,7 @@ const Notifications = () => {
                     className="text-gray-300 hover:text-red-500 cursor-pointer"
                     aria-label={t("Supprimer")}
                   >
-                    <RiDeleteBinLine />
+                    <LuTrash2 />
                   </button>
                 </div>
               </li>
@@ -116,7 +116,7 @@ const Notifications = () => {
           <EmptyState
             title={t("Aucune notification")}
             message={t("Les notifications liées à vos équipes, matchs et commentaires apparaîtront ici.")}
-            icon={<RiNotification3Line />}
+            icon={<LuBell />}
           />
         )}
       </div>

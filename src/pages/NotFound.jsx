@@ -2,7 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Container } from "../ui/Container";
-import { RiDribbbleLine, RiArrowLeftLine } from "react-icons/ri";
+import {
+  LuGoal,
+  LuArrowLeft,
+} from "react-icons/lu";
 import { useSEO } from "../utils/seo";
 
 const NotFound = () => {
@@ -12,7 +15,7 @@ const NotFound = () => {
     <Container>
       <div className="flex flex-col items-center justify-center py-28 px-6 text-center">
         <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-3xl mb-6">
-          <RiDribbbleLine />
+          <LuGoal />
         </div>
         <p className="font-menu text-7xl sm:text-8xl text-emerald-500 leading-none mb-2">
           404
@@ -34,7 +37,7 @@ const NotFound = () => {
             to="/news"
             className="px-6 py-3 rounded-full border border-emerald-500/40 text-emerald-600 text-sm font-bold hover:bg-emerald-500/10 transition-colors flex items-center gap-1.5"
           >
-            <RiArrowLeftLine /> {t("Actualités")}
+            <LuArrowLeft /> {t("Actualités")}
           </Link>
         </div>
       </div>

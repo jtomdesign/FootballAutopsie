@@ -21,12 +21,12 @@ import TeamLogo from "../components/football/TeamLogo";
 import { CardGridSkeleton, MatchListSkeleton } from "../components/football/Skeleton";
 import { formatDate, localizePost } from "../utils/helpers";
 import {
-  RiUserFollowLine,
-  RiDeleteBinLine,
-  RiEditLine,
-  RiSaveLine,
-  RiLiveLine,
-} from "react-icons/ri";
+  LuUserPlus,
+  LuTrash2,
+  LuPencil,
+  LuSave,
+  LuRadio,
+} from "react-icons/lu";
 import { useSEO } from "../utils/seo";
 
 const FavoriteChip = ({ fav }) => {
@@ -51,7 +51,7 @@ const FavoriteChip = ({ fav }) => {
         className="text-gray-400 hover:text-red-500 cursor-pointer"
         aria-label={t("Retirer")}
       >
-        <RiDeleteBinLine />
+        <LuTrash2 />
       </button>
     </span>
   );
@@ -63,7 +63,7 @@ const FavoriteGroup = ({ title, type, empty }) => {
   return (
     <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-5">
       <h3 className="text-sm font-semibold text-gray-100 mb-3 flex items-center gap-2">
-        <RiUserFollowLine className="text-emerald-600" /> {title}
+        <LuUserPlus className="text-emerald-600" /> {title}
         {favorites.length > 0 && (
           <span className="text-xs text-gray-400 font-normal">({favorites.length})</span>
         )}
@@ -113,7 +113,7 @@ const ProfileCard = () => {
             onClick={startEdit}
             className="text-xs font-semibold text-emerald-600 hover:underline cursor-pointer flex items-center gap-1"
           >
-            <RiEditLine /> {t("Modifier")}
+            <LuPencil /> {t("Modifier")}
           </button>
         )}
       </div>
@@ -201,7 +201,7 @@ const SavedNews = () => {
   return (
     <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-5">
       <h3 className="text-sm font-semibold text-gray-100 mb-3 flex items-center gap-2">
-        <RiSaveLine className="text-emerald-600" /> {t("Articles enregistrés")}
+        <LuSave className="text-emerald-600" /> {t("Articles enregistrés")}
         {items.length > 0 && (
           <span className="text-xs text-gray-400 font-normal">({items.length})</span>
         )}
@@ -221,7 +221,7 @@ const SavedNews = () => {
                 className="text-gray-400 hover:text-red-500 cursor-pointer shrink-0"
                 aria-label={t("Retirer")}
               >
-                <RiDeleteBinLine />
+                <LuTrash2 />
               </button>
             </li>
           ))}
@@ -242,7 +242,7 @@ const SavedMatches = () => {
   return (
     <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-5">
       <h3 className="text-sm font-semibold text-gray-100 mb-3 flex items-center gap-2">
-        <RiLiveLine className="text-emerald-600" /> {t("Matchs suivis")}
+        <LuRadio className="text-emerald-600" /> {t("Matchs suivis")}
         {upcoming.length > 0 && (
           <span className="text-xs text-gray-400 font-normal">({upcoming.length})</span>
         )}
@@ -345,7 +345,7 @@ const MyFootball = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-5">
                 <h3 className="text-sm font-semibold text-gray-100 mb-3 flex items-center gap-2">
-                  <RiLiveLine className="text-red-500" /> {t("Matchs en direct suivis")}
+                  <LuRadio className="text-red-500" /> {t("Matchs en direct suivis")}
                 </h3>
                 {liveLoading ? (
                   <MatchListSkeleton rows={3} />

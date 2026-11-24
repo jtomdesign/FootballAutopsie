@@ -6,7 +6,9 @@ import SectionHeader from "../components/football/SectionHeader";
 import MatchList from "../components/football/MatchList";
 import { MatchListSkeleton } from "../components/football/Skeleton";
 import EmptyState from "../components/football/EmptyState";
-import { RiLiveLine } from "react-icons/ri";
+import {
+  LuRadio,
+} from "react-icons/lu";
 import { useSEO } from "../utils/seo";
 
 const LiveScores = () => {
@@ -33,7 +35,7 @@ const LiveScores = () => {
           action={
             live.length ? (
               <span className="flex items-center gap-2 text-red-500 text-xs font-black uppercase tracking-widest">
-                <RiLiveLine className="animate-pulse text-base" /> Live
+                <LuRadio className="animate-pulse text-base" /> Live
               </span>
             ) : null
           }

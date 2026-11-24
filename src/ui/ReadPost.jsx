@@ -6,12 +6,12 @@ import { incrementPostView } from "../services/apiPosts";
 import { usePostData } from "../hooks/usePostData";
 import Spinner from "./Spinner";
 import {
-  RiChat4Line,
-  RiUser3Line,
-  RiTimeLine,
-  RiEyeLine,
-  RiArrowLeftLine,
-} from "react-icons/ri";
+  LuMessageSquare,
+  LuUser,
+  LuClock,
+  LuEye,
+  LuArrowLeft,
+} from "react-icons/lu";
 import { formatDateTime, localizePost } from "../utils/helpers";
 import { Container } from "./Container";
 import SaveArticleButton, { ShareButtons } from "../components/user/SaveArticleButton";
@@ -158,7 +158,7 @@ const ReadPost = () => {
             to="/news"
             className="inline-flex items-center gap-1.5 text-emerald-400 text-sm font-semibold hover:text-emerald-300 mb-5"
           >
-            <RiArrowLeftLine /> {t("Toutes les actualités")}
+            <LuArrowLeft /> {t("Toutes les actualités")}
           </Link>
 
           <h1 className="font-serif text-gray-50 text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">
@@ -167,13 +167,13 @@ const ReadPost = () => {
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-gray-400 text-xs italic mb-6">
             <span className="flex items-center gap-1.5 not-italic font-semibold text-gray-300">
-              <RiUser3Line /> {lpost.authorId ?? t("Rédaction Football Autopsie")}
+              <LuUser /> {lpost.authorId ?? t("Rédaction Football Autopsie")}
             </span>
             <span className="flex items-center gap-1.5">
-              <RiTimeLine /> {lpost.readingTime ?? "—"} {t("min de lecture")}
+              <LuClock /> {lpost.readingTime ?? "—"} {t("min de lecture")}
             </span>
             <span className="flex items-center gap-1.5">
-              <RiEyeLine /> {(lpost.views ?? 0).toLocaleString()} {t("vues")}
+              <LuEye /> {(lpost.views ?? 0).toLocaleString()} {t("vues")}
             </span>
             <span>{formatDateTime(post.created_at)}</span>
           </div>

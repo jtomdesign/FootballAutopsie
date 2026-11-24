@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { RiNotification3Line } from "react-icons/ri";
+import {
+  LuBell,
+} from "react-icons/lu";
 import {
   useNotifications,
   useUnreadNotifications,
@@ -38,7 +40,7 @@ const NotificationBell = () => {
         className="relative p-2 sm:p-2.5 rounded-full text-emerald-950 hover:bg-emerald-100 transition-colors cursor-pointer"
         aria-label={t("Notifications")}
       >
-        <RiNotification3Line className="text-xl" />
+        <LuBell className="text-xl" />
         {unread > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[0.6rem] font-black flex items-center justify-center">
             {unread > 9 ? "9+" : unread}

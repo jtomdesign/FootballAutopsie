@@ -11,11 +11,11 @@ import EmptyState from "../components/football/EmptyState";
 import Spinner from "../ui/Spinner";
 import { formatDate, localizePost } from "../utils/helpers";
 import {
-  RiSearchLine,
-  RiArrowUpDownLine,
-  RiLayoutGridLine,
-  RiListCheck,
-} from "react-icons/ri";
+  LuSearch,
+  LuArrowUpDown,
+  LuLayoutGrid,
+  LuListChecks,
+} from "react-icons/lu";
 import AdBanner from "../components/AdBanner";
 import { useSEO } from "../utils/seo";
 import i18n from "../i18n";
@@ -186,7 +186,7 @@ const News = () => {
 
         <div className="flex flex-col lg:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
+            <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
             <input
               type="search"
               value={query}
@@ -222,7 +222,7 @@ const News = () => {
                   </option>
                 ))}
               </select>
-              <RiArrowUpDownLine className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none" />
+              <LuArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none" />
             </div>
             <div className="relative">
               <select
@@ -235,7 +235,7 @@ const News = () => {
                 <option value="oldest">{t("Plus anciens")}</option>
                 <option value="az">{t("Titre A → Z")}</option>
               </select>
-              <RiArrowUpDownLine className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none" />
+              <LuArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none" />
             </div>
             <div className="flex rounded-xl overflow-hidden fa-input !p-0">
               <button
@@ -248,7 +248,7 @@ const News = () => {
                 title={t("Vue liste")}
                 aria-label={t("Vue liste")}
               >
-                <RiListCheck className="text-base" />
+                <LuListChecks className="text-base" />
               </button>
               <button
                 onClick={() => setLayout("grid")}
@@ -260,7 +260,7 @@ const News = () => {
                 title={t("Vue grille")}
                 aria-label={t("Vue grille")}
               >
-                <RiLayoutGridLine className="text-base" />
+                <LuLayoutGrid className="text-base" />
               </button>
             </div>
           </div>

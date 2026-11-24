@@ -10,11 +10,11 @@ import MatchList from "../components/football/MatchList";
 import { MatchListSkeleton } from "../components/football/Skeleton";
 import EmptyState from "../components/football/EmptyState";
 import {
-  RiArrowLeftSLine,
-  RiArrowRightSLine,
-  RiCalendarLine,
-  RiSearchLine,
-} from "react-icons/ri";
+  LuChevronLeft,
+  LuChevronRight,
+  LuCalendar,
+  LuSearch,
+} from "react-icons/lu";
 
 const STATUS_FILTERS = [
   { value: "all", labelKey: "Tous" },
@@ -86,7 +86,7 @@ const Fixtures = () => {
             className="p-2.5 rounded-full bg-emerald-900/50 text-emerald-200 hover:bg-emerald-800/60 transition-colors cursor-pointer"
             aria-label={t("Jour précédent")}
           >
-            <RiArrowLeftSLine className="text-xl" />
+            <LuChevronLeft className="text-xl" />
           </button>
           <button
             onClick={() => setDate(todayParam())}
@@ -96,7 +96,7 @@ const Fixtures = () => {
                 : "bg-emerald-900/50 text-emerald-100 hover:bg-emerald-800/60"
             }`}
           >
-            <RiCalendarLine />
+            <LuCalendar />
             {isToday ? t("Aujourd'hui") : formatMatchDay(new Date(`${date}T12:00:00`))}
           </button>
           <button
@@ -104,14 +104,14 @@ const Fixtures = () => {
             className="p-2.5 rounded-full bg-emerald-900/50 text-emerald-200 hover:bg-emerald-800/60 transition-colors cursor-pointer"
             aria-label={t("Jour suivant")}
           >
-            <RiArrowRightSLine className="text-xl" />
+            <LuChevronRight className="text-xl" />
           </button>
         </div>
 
         {/* Filters */}
         <div className="flex flex-col lg:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400" />
+            <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400" />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}

@@ -5,11 +5,11 @@ import { Container } from "./Container";
 import Logo from "./Logo";
 import { useTheme } from "../theme/context";
 import {
-  RiFacebookCircleFill,
-  RiTwitterXFill,
-  RiInstagramFill,
-  RiYoutubeFill,
-} from "react-icons/ri";
+  SiFacebook,
+  SiX,
+  SiInstagram,
+  SiYoutube,
+} from "react-icons/si";
 
 const FOOTER_LINKS = [
   {
@@ -69,22 +69,22 @@ const Footer = () => {
             <div className="flex items-center gap-3 mt-5">
               {[
                 {
-                  icon: <RiFacebookCircleFill />,
+                  icon: <SiFacebook />,
                   label: "Facebook",
                   href: "https://www.facebook.com/autopsiefoot",
                 },
                 {
-                  icon: <RiTwitterXFill />,
+                  icon: <SiX />,
                   label: "X",
                   href: "https://x.com/footautopsie",
                 },
                 {
-                  icon: <RiInstagramFill />,
+                  icon: <SiInstagram />,
                   label: "Instagram",
                   href: "https://www.instagram.com/football_autopsie/",
                 },
                 {
-                  icon: <RiYoutubeFill />,
+                  icon: <SiYoutube />,
                   label: "YouTube",
                   href: "https://www.youtube.com/@footbalautopsie",
                 },

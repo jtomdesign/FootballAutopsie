@@ -1,5 +1,7 @@
 import React from "react";
-import { HiArrowRight } from "react-icons/hi";
+import {
+  LuArrowRight,
+} from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { localizePost } from "../utils/helpers";
 
@@ -30,7 +32,7 @@ const PostCard = ({ post, id }) => {
         >
           <span>Lire plus</span>
           <span>
-            <HiArrowRight />
+            <LuArrowRight />
           </span>
         </Link>
       </div>

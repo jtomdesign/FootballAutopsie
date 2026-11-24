@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { FcGoogle } from "react-icons/fc";
+import {
+  SiGoogle,
+} from "react-icons/si";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import Spinner from "../ui/Spinner";
@@ -144,7 +146,7 @@ const Account = () => {
             onClick={() => googleLogin()}
             className="w-full flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border border-emerald-900/60 text-gray-100 font-semibold text-sm hover:bg-emerald-500/10 transition-colors cursor-pointer"
           >
-            <FcGoogle className="text-lg" />
+            <SiGoogle className="text-lg" />
             {t("Se connecter avec Google")}
           </button>
         </div>

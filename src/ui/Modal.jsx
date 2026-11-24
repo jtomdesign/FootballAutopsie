@@ -5,7 +5,9 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { RiCloseLargeLine } from "react-icons/ri";
+import {
+  LuX,
+} from "react-icons/lu";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const ModalContext = createContext();
@@ -40,7 +42,7 @@ function Window({ children, name }) {
           onClick={close}
           className="py-4  transition-all duration-300 cursor-pointer fixed right-4 top-4  text-gray-400 hover:text-gray-100 rounded-full w-10 h-10 flex items-center justify-center"
         >
-          <RiCloseLargeLine />
+          <LuX />
         </button>
         <div className="mt-9">
           {cloneElement(children, { onCloseModal: close })}

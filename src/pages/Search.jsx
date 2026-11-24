@@ -20,7 +20,9 @@ import MatchList from "../components/football/MatchList";
 import TeamLogo from "../components/football/TeamLogo";
 import EmptyState from "../components/football/EmptyState";
 import { formatDate, localizePost } from "../utils/helpers";
-import { RiSearchLine } from "react-icons/ri";
+import {
+  LuSearch,
+} from "react-icons/lu";
 
 const useDebounced = (value, delay = 400) => {
   const [debounced, setDebounced] = useState(value);
@@ -137,7 +139,7 @@ const Search = () => {
         <SectionHeader title={t("Recherche")} subtitle={t("Actualités, équipes, joueurs, compétitions et matchs")} />
 
         <div className="relative mb-8">
-          <RiSearchLine className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 text-lg" />
+          <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400 text-lg" />
           <input
             autoFocus
             value={input}

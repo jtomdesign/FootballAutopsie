@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import {
-  RiUserFollowLine,
-  RiUserUnfollowLine,
-  RiBookmarkLine,
-  RiBookmarkFill,
-} from "react-icons/ri";
+  LuUserPlus,
+  LuUserMinus,
+  LuBookmark,
+} from "react-icons/lu";
 import { useFavorites, useToggleFavorite } from "../../hooks/user";
 
 /**
@@ -42,8 +41,8 @@ const FollowButton = ({
     toggle.mutate({ entityType, entityId, entityName, entityLogo });
   };
 
-  const Icon = active ? RiUserUnfollowLine : RiUserFollowLine;
-  const MatchIcon = active ? RiBookmarkFill : RiBookmarkLine;
+  const Icon = active ? LuUserMinus : LuUserPlus;
+  const MatchIcon = active ? LuBookmark : LuBookmark;
   const UseIcon = entityType === "match" ? MatchIcon : Icon;
 
   return (

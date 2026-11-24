@@ -12,26 +12,26 @@ import { formatMatchDay, formatMatchTime, countryFlag } from "../utils/helpers";
 import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
 import CommentsSection from "../components/user/CommentsSection";
 import {
-  RiErrorWarningLine,
-  RiArrowLeftLine,
-  RiArrowUpDownLine,
-  RiCloseLine,
-  RiMapPinLine,
-  RiUserLine,
-  RiFootballLine,
-  RiGiftLine,
-} from "react-icons/ri";
+  LuTriangleAlert,
+  LuArrowLeft,
+  LuArrowUpDown,
+  LuX,
+  LuMapPin,
+  LuUser,
+  LuGoal,
+  LuGift,
+} from "react-icons/lu";
 
 const EventIcon = ({ detail }) => {
   const d = (detail ?? "").toLowerCase();
   if (d.includes("missed penalty") || d.includes("penalty missed"))
-    return <RiCloseLine className="text-red-500 text-[0.85rem] leading-none" />;
+    return <LuX className="text-red-500 text-[0.85rem] leading-none" />;
   if (d.includes("yellow") && !d.includes("second"))
     return <span className="w-2.5 h-3.5 rounded-[2px] bg-yellow-400 inline-block" />;
   if (d.includes("red") || d.includes("second yellow"))
     return <span className="w-2.5 h-3.5 rounded-[2px] bg-red-500 inline-block" />;
   if (d.includes("subst"))
-    return <RiArrowUpDownLine className="text-emerald-500 text-[0.9rem] leading-none" />;
+    return <LuArrowUpDown className="text-emerald-500 text-[0.9rem] leading-none" />;
   if (d.includes("goal"))
     return <span className="text-[0.8rem] leading-none">⚽</span>;
   return <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" />;
@@ -297,10 +297,10 @@ const PitchView = ({ lineup, scorers = {}, assisters = {}, players = {} }) => {
             {flag && <span className="mr-0.5">{flag}</span>}
             {p.name}
             {scored && (
-              <RiFootballLine className="inline ml-0.5 text-amber-300 align-[-1px]" />
+              <LuGoal className="inline ml-0.5 text-amber-300 align-[-1px]" />
             )}
             {assisted && (
-              <RiGiftLine className="inline ml-0.5 text-sky-200 align-[-1px]" />
+              <LuGift className="inline ml-0.5 text-sky-200 align-[-1px]" />
             )}
           </>
         );
@@ -432,7 +432,7 @@ const MatchCenter = () => {
           <EmptyState
             title={t("Match introuvable")}
             message={t("Ce match n'existe pas ou n'est pas encore disponible.")}
-            icon={<RiErrorWarningLine />}
+            icon={<LuTriangleAlert />}
           />
         </div>
       </Container>
@@ -514,7 +514,7 @@ const MatchCenter = () => {
             to="/matchs"
             className="inline-flex items-center gap-1.5 text-emerald-400 text-sm font-semibold hover:text-emerald-300"
           >
-            <RiArrowLeftLine /> {t("Tous les matchs")}
+            <LuArrowLeft /> {t("Tous les matchs")}
           </Link>
           <FollowButton
             entityType="match"
@@ -622,14 +622,14 @@ const MatchCenter = () => {
             <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.7rem] text-gray-400">
               {match.venue && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
-                  <RiMapPinLine className="text-emerald-400 text-xs" />
+                  <LuMapPin className="text-emerald-400 text-xs" />
                   {match.venue}
                   {match.city ? `, ${match.city}` : ""}
                 </span>
               )}
               {match.referee && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
-                  <RiUserLine className="text-emerald-400 text-xs" />
+                  <LuUser className="text-emerald-400 text-xs" />
                   {match.referee}
                 </span>
               )}
@@ -817,10 +817,10 @@ const MatchCenter = () => {
                               <span className="truncate">{p.name}</span>
                             )}
                             {scorers[normName(p.name)] && (
-                              <RiFootballLine className="text-emerald-600 shrink-0" />
+                              <LuGoal className="text-emerald-600 shrink-0" />
                             )}
                             {assisters[normName(p.name)] && (
-                              <RiGiftLine className="text-sky-500 shrink-0" />
+                              <LuGift className="text-sky-500 shrink-0" />
                             )}
                           </li>
                           );
