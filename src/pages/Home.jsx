@@ -179,10 +179,15 @@ const LiveBigGamesBar = () => {
                   <TeamLogo logo={f.homeTeam.logo} name={f.homeTeam.name} size="w-4 h-4" />
                   <span className="text-xs text-gray-300 whitespace-nowrap flex items-center">
                     <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.homeTeam.name}</span>
-                    <span className="font-bold text-emerald-400 tabular-nums mx-1">
+                    <span className="font-bold text-red-500 tabular-nums mx-1">
                       {f.goals.home ?? 0} - {f.goals.away ?? 0}
                     </span>
                     <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.awayTeam.name}</span>
+                    {f.status?.isLive && (
+                      <span className="ml-1.5 text-[0.65rem] font-bold text-red-400 tabular-nums">
+                        {f.status.label}
+                      </span>
+                    )}
                   </span>
                   <TeamLogo logo={f.awayTeam.logo} name={f.awayTeam.name} size="w-4 h-4" />
                 </Link>
