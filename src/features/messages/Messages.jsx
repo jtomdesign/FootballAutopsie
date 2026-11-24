@@ -7,11 +7,11 @@ import EmptyState from "../../components/football/EmptyState";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import {
-  RiDeleteBinLine,
-  RiMailLine,
-  RiInboxLine,
-  RiCornerUpLeftLine,
-} from "react-icons/ri";
+  LuTrash2,
+  LuMail,
+  LuInbox,
+  LuReply,
+} from "react-icons/lu";
 
 const Messages = () => {
   const { user } = useSelector(s => s.user);
@@ -32,7 +32,7 @@ const Messages = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold text-gray-100 flex items-center gap-2">
-          <RiInboxLine className="text-emerald-400" /> Messages
+          <LuInbox className="text-emerald-400" /> Messages
         </h1>
         <p className="text-sm text-gray-400 mt-1">
           {messages.length} message{messages.length > 1 ? "s" : ""} reçu
@@ -58,7 +58,7 @@ const Messages = () => {
               className="bg-emerald-950/60 rounded-2xl px-5 py-4 flex flex-col sm:flex-row gap-4"
             >
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-lg shrink-0">
-                <RiMailLine />
+                <LuMail />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -69,7 +69,7 @@ const Messages = () => {
                     href={`mailto:${m.email}?subject=Re: ${m.subject ?? "Contact"}`}
                     className="text-xs text-emerald-400 hover:underline flex items-center gap-1"
                   >
-                    <RiCornerUpLeftLine /> {m.email}
+                    <LuReply /> {m.email}
                   </a>
                   <span className="text-[0.65rem] text-gray-400">
                     {formatDateTime(m.created_at)}
@@ -90,7 +90,7 @@ const Messages = () => {
                   className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 transition-colors"
                   title="Répondre par email"
                 >
-                  <RiCornerUpLeftLine />
+                  <LuReply />
                 </a>
                 <Modal>
                   <Modal.Open opens="delete">
@@ -98,7 +98,7 @@ const Messages = () => {
                       className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors cursor-pointer"
                       title="Supprimer"
                     >
-                      <RiDeleteBinLine />
+                      <LuTrash2 />
                     </button>
                   </Modal.Open>
                   <Modal.Window name="delete">

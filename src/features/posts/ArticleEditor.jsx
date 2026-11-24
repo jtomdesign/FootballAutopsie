@@ -11,12 +11,12 @@ import { getPostById, CreateEditPost } from "../../services/apiPosts";
 import { useCategories } from "../../hooks/useCategories";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
-  RiArrowLeftLine,
-  RiEyeLine,
-  RiSaveLine,
-  RiSendPlaneLine,
-  RiCalendarLine,
-} from "react-icons/ri";
+  LuArrowLeft,
+  LuEye,
+  LuSave,
+  LuSend,
+  LuCalendar,
+} from "react-icons/lu";
 
 const toLocalInput = iso => {
   if (!iso) return "";
@@ -179,7 +179,7 @@ const ArticleEditor = () => {
             to="/dashboard/posts"
             className="p-2 rounded-full text-gray-400 hover:text-gray-100 hover:bg-emerald-500/10 transition-colors"
           >
-            <RiArrowLeftLine className="text-xl" />
+            <LuArrowLeft className="text-xl" />
           </Link>
           <div>
             <h1 className="text-2xl font-extrabold text-gray-100">
@@ -195,7 +195,7 @@ const ArticleEditor = () => {
             type="secondary"
             role="button"
             name={preview ? "Masquer l'aperçu" : "Aperçu"}
-            icon={<RiEyeLine />}
+            icon={<LuEye />}
             onClick={() => setPreview(p => !p)}
           />
           {isEdit && post?.status === "published" && (
@@ -399,21 +399,21 @@ const ArticleEditor = () => {
               type="secondary"
               role="button"
               name="Brouillon"
-              icon={<RiSaveLine />}
+              icon={<LuSave />}
               onClick={handleSubmit(data => onSubmit(data, "draft"))}
             />
             {status === "scheduled" ? (
               <Button
                 role="button"
                 name="Planifier"
-                icon={<RiCalendarLine />}
+                icon={<LuCalendar />}
                 onClick={handleSubmit(data => onSubmit(data, "scheduled"))}
               />
             ) : (
               <Button
                 role="button"
                 name="Publier"
-                icon={<RiSendPlaneLine />}
+                icon={<LuSend />}
                 onClick={handleSubmit(data => onSubmit(data, "published"))}
               />
             )}

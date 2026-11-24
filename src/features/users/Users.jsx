@@ -6,7 +6,12 @@ import { useSetUserRole } from "../../hooks/user";
 import { formatDate, formatDateTime } from "../../utils/helpers";
 import { CardGridSkeleton } from "../../components/football/Skeleton";
 import EmptyState from "../../components/football/EmptyState";
-import { RiTeamLine, RiMailLine, RiCalendarLine, RiLoginCircleLine } from "react-icons/ri";
+import {
+  LuUsers,
+  LuMail,
+  LuCalendar,
+  LuLogIn,
+} from "react-icons/lu";
 
 const Users = () => {
   const { user } = useSelector(s => s.user);
@@ -31,7 +36,7 @@ const Users = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold text-gray-100 flex items-center gap-2">
-          <RiTeamLine className="text-emerald-400" /> Utilisateurs
+          <LuUsers className="text-emerald-400" /> Utilisateurs
         </h1>
         <p className="text-sm text-gray-400 mt-1">
           {users.length} compte{users.length > 1 ? "s" : ""} enregistré{users.length > 1 ? "s" : ""}
@@ -95,7 +100,7 @@ const Users = () => {
                     </td>
                     <td className="px-5 py-3">
                       <span className="flex items-center gap-1.5 text-gray-300">
-                        <RiMailLine className="text-gray-400 shrink-0" />
+                        <LuMail className="text-gray-400 shrink-0" />
                         <span className="truncate max-w-[14rem]">{u.email}</span>
                       </span>
                     </td>
@@ -121,12 +126,12 @@ const Users = () => {
                     </td>
                     <td className="px-5 py-3">
                       <span className="flex items-center gap-1.5 text-gray-400 text-xs whitespace-nowrap">
-                        <RiCalendarLine /> {u.created_at ? formatDate(u.created_at) : "—"}
+                        <LuCalendar /> {u.created_at ? formatDate(u.created_at) : "—"}
                       </span>
                     </td>
                     <td className="px-5 py-3">
                       <span className="flex items-center gap-1.5 text-gray-400 text-xs whitespace-nowrap">
-                        <RiLoginCircleLine /> {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "—"}
+                        <LuLogIn /> {u.last_sign_in_at ? formatDateTime(u.last_sign_in_at) : "—"}
                       </span>
                     </td>
                   </tr>

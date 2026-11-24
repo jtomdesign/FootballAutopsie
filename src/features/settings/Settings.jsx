@@ -1,41 +1,41 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  RiBookOpenFill,
-  RiStackFill,
-  RiChat4Fill,
-  RiInboxLine,
-  RiTeamLine,
-} from "react-icons/ri";
+  LuBookOpen,
+  LuLayers,
+  LuMessageSquare,
+  LuInbox,
+  LuUsers,
+} from "react-icons/lu";
 
 const ITEMS = [
   {
     to: "/dashboard/posts",
-    icon: <RiBookOpenFill />,
+    icon: <LuBookOpen />,
     title: "Articles",
     desc: "Créer, modifier et publier les articles.",
   },
   {
     to: "/dashboard/categories",
-    icon: <RiStackFill />,
+    icon: <LuLayers />,
     title: "Catégories",
     desc: "Gérer les catégories et leurs couleurs.",
   },
   {
     to: "/dashboard/comments",
-    icon: <RiChat4Fill />,
+    icon: <LuMessageSquare />,
     title: "Commentaires",
     desc: "Modération des commentaires des lecteurs.",
   },
   {
     to: "/dashboard/messages",
-    icon: <RiInboxLine />,
+    icon: <LuInbox />,
     title: "Messages",
     desc: "Messages reçus via le formulaire de contact.",
   },
   {
     to: "/dashboard/users",
-    icon: <RiTeamLine />,
+    icon: <LuUsers />,
     title: "Utilisateurs",
     desc: "Liste des comptes enregistrés (admin).",
   },

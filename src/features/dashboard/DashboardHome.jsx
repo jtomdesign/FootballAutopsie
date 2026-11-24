@@ -6,16 +6,16 @@ import { useCategories } from "../../hooks/useCategories";
 import { getAnalyticsStats } from "../../services/analytics";
 import { formatDate } from "../../utils/helpers";
 import {
-  RiBookOpenFill,
-  RiDraftFill,
-  RiCalendarCheckFill,
-  RiAlarmWarningFill,
-  RiStackFill,
-  RiArrowRightSLine,
-  RiEyeLine,
-  RiUserLine,
-  RiGlobalLine,
-} from "react-icons/ri";
+  LuBookOpen,
+  LuPenLine,
+  LuCalendarCheck,
+  LuTriangleAlert,
+  LuLayers,
+  LuChevronRight,
+  LuEye,
+  LuUser,
+  LuGlobe,
+} from "react-icons/lu";
 import Spinner from "../../ui/Spinner";
 import EmptyState from "../../components/football/EmptyState";
 
@@ -95,25 +95,25 @@ const DashboardHome = () => {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
-          icon={<RiBookOpenFill />}
+          icon={<LuBookOpen />}
           label="Articles publiés"
           value={count("published")}
           to="/dashboard/posts?status=published"
         />
         <StatCard
-          icon={<RiDraftFill />}
+          icon={<LuPenLine />}
           label="Brouillons"
           value={count("draft") + count("unpublished")}
           to="/dashboard/posts?status=draft"
         />
         <StatCard
-          icon={<RiCalendarCheckFill />}
+          icon={<LuCalendarCheck />}
           label="Planifiés"
           value={count("scheduled")}
           to="/dashboard/posts?status=scheduled"
         />
         <StatCard
-          icon={<RiAlarmWarningFill />}
+          icon={<LuTriangleAlert />}
           label="Breaking news"
           value={breaking}
           to="/dashboard/posts"
@@ -123,7 +123,7 @@ const DashboardHome = () => {
       {stats && (
         <div className="mb-6">
           <h2 className="font-bold text-gray-100 mb-3 flex items-center gap-2">
-            <RiGlobalLine className="text-emerald-400" /> Audience
+            <LuGlobe className="text-emerald-400" /> Audience
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {PERIODS.map(p => (
@@ -135,11 +135,11 @@ const DashboardHome = () => {
                   {p.label}
                 </p>
                 <p className="text-2xl font-extrabold text-gray-100 tabular-nums mt-1 flex items-center gap-1.5">
-                  <RiUserLine className="text-emerald-400 text-lg" />
+                  <LuUser className="text-emerald-400 text-lg" />
                   {stats[p.key]?.visitors ?? 0}
                 </p>
                 <p className="text-[0.7rem] text-gray-400 mt-0.5 flex items-center gap-1">
-                  <RiEyeLine /> {stats[p.key]?.views ?? 0} vues
+                  <LuEye /> {stats[p.key]?.views ?? 0} vues
                 </p>
               </div>
             ))}
@@ -227,7 +227,7 @@ const DashboardHome = () => {
               to="/dashboard/posts"
               className="flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-400"
             >
-              Tout voir <RiArrowRightSLine />
+              Tout voir <LuChevronRight />
             </Link>
           </div>
           {published.length ? (
@@ -270,13 +270,13 @@ const DashboardHome = () => {
         <div className="bg-emerald-950/60 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-gray-100 flex items-center gap-2">
-              <RiStackFill className="text-emerald-400" /> Catégories
+              <LuLayers className="text-emerald-400" /> Catégories
             </h2>
             <Link
               to="/dashboard/categories"
               className="flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-400"
             >
-              Gérer <RiArrowRightSLine />
+              Gérer <LuChevronRight />
             </Link>
           </div>
           <div className="flex flex-wrap gap-2">

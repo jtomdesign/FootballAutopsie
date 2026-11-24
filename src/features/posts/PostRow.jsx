@@ -1,9 +1,9 @@
 import React from "react";
 import { formatDate } from "../../utils/helpers";
 import {
-  RiDeleteBinFill,
-  RiPencilFill,
-} from "react-icons/ri";
+  LuTrash2,
+  LuPencil,
+} from "react-icons/lu";
 import { useDeletePost } from "../../hooks/useDeletePost";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
@@ -44,12 +44,12 @@ const PostRow = ({ post, gridClass }) => {
           className="p-2 rounded-lg text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
           title="Modifier"
         >
-          <RiPencilFill className="text-base" />
+          <LuPencil className="text-base" />
         </Link>
         <Modal>
           <Modal.Open opens="delete">
             <button className="p-2 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer" title="Supprimer">
-              <RiDeleteBinFill className="text-base" />
+              <LuTrash2 className="text-base" />
             </button>
           </Modal.Open>
           <Modal.Window name="delete">

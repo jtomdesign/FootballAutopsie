@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { RiSendPlaneLine, RiNotification3Line } from "react-icons/ri";
+import {
+  LuSend,
+  LuBell,
+} from "react-icons/lu";
 import { adminBroadcastNotification } from "../../services/user";
 import EmptyState from "../../components/football/EmptyState";
 
@@ -42,7 +45,7 @@ const Broadcast = () => {
     <div className="max-w-xl">
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold text-gray-100 flex items-center gap-2">
-          <RiNotification3Line className="text-emerald-400" /> Diffusion
+          <LuBell className="text-emerald-400" /> Diffusion
         </h1>
         <p className="text-sm text-gray-400 mt-1">
           Envoyez une notification à tous les utilisateurs inscrits.
@@ -98,7 +101,7 @@ const Broadcast = () => {
           disabled={!title.trim() || send.isPending}
           className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-500 disabled:opacity-50 transition-colors cursor-pointer"
         >
-          <RiSendPlaneLine />
+          <LuSend />
           {send.isPending ? "Envoi…" : "Envoyer à tous les utilisateurs"}
         </button>
       </div>

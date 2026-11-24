@@ -7,7 +7,11 @@ import { toast } from "react-hot-toast";
 import { CardGridSkeleton } from "../../components/football/Skeleton";
 import EmptyState from "../../components/football/EmptyState";
 import { formatDateTime } from "../../utils/helpers";
-import { RiDeleteBinLine, RiEyeOffLine, RiCheckLine } from "react-icons/ri";
+import {
+  LuTrash2,
+  LuEyeOff,
+  LuCheck,
+} from "react-icons/lu";
 
 const statusBadge = {
   published: "bg-emerald-500/15 text-emerald-600",
@@ -127,7 +131,7 @@ const Comments = () => {
                     className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 cursor-pointer"
                     title="Publier"
                   >
-                    <RiCheckLine />
+                    <LuCheck />
                   </button>
                 )}
                 {c.status !== "hidden" && c.status !== "deleted" && (
@@ -136,7 +140,7 @@ const Comments = () => {
                     className="p-2 rounded-lg bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 cursor-pointer"
                     title="Masquer"
                   >
-                    <RiEyeOffLine />
+                    <LuEyeOff />
                   </button>
                 )}
                 <button
@@ -144,7 +148,7 @@ const Comments = () => {
                   className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 cursor-pointer"
                   title="Supprimer"
                 >
-                  <RiDeleteBinLine />
+                  <LuTrash2 />
                 </button>
               </div>
             </div>

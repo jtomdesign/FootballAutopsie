@@ -8,10 +8,10 @@ import ConfirmDelete from "../../ui/ConfirmDelete";
 import Spinner from "../../ui/Spinner";
 import EmptyState from "../../components/football/EmptyState";
 import {
-  RiAddLargeLine,
-  RiDeleteBinFill,
-  RiPencilFill,
-} from "react-icons/ri";
+  LuPlus,
+  LuTrash2,
+  LuPencil,
+} from "react-icons/lu";
 
 const PRESET_COLORS = [
   "#10b981", "#f59e0b", "#ef4444", "#3b82f6",
@@ -120,7 +120,7 @@ const Categories = () => {
         </div>
         <Modal>
           <Modal.Open opens="create">
-            <Button type="primary" name="Nouvelle catégorie" icon={<RiAddLargeLine />} />
+            <Button type="primary" name="Nouvelle catégorie" icon={<LuPlus />} />
           </Modal.Open>
           <Modal.Window name="create">
             <CategoryForm />
@@ -146,7 +146,7 @@ const Categories = () => {
               <Modal>
                 <Modal.Open opens="edit">
                   <button className="p-2 rounded-lg text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors cursor-pointer">
-                    <RiPencilFill />
+                    <LuPencil />
                   </button>
                 </Modal.Open>
                 <Modal.Window name="edit">
@@ -156,7 +156,7 @@ const Categories = () => {
               <Modal>
                 <Modal.Open opens="delete">
                   <button className="p-2 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer">
-                    <RiDeleteBinFill />
+                    <LuTrash2 />
                   </button>
                 </Modal.Open>
                 <Modal.Window name="delete">
