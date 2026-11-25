@@ -185,7 +185,7 @@ const PlayerDetail = () => {
                 />
               </div>
               {typeof current.games?.number === "number" && (
-                <span className="absolute -bottom-2 -left-2 w-9 h-9 rounded-full bg-emerald-500 border-2 border-emerald-950 flex items-center justify-center text-sm font-bold text-white shadow-lg">
+                <span className="absolute -bottom-2 -left-2 w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center text-sm font-bold text-white shadow-lg">
                   {current.games.number}
                 </span>
               )}
