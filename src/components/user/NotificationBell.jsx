@@ -50,12 +50,12 @@ const NotificationBell = () => {
 
       {open && (
         <div className={`absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-2rem)] rounded-2xl shadow-xl overflow-hidden z-50 ${
-          isLight ? "bg-white border border-gray-200" : "bg-[#1f1f1f] border border-[#333]"
+          isLight ? "bg-white border border-[#e5e5e5]" : "bg-[#1f1f1f] border border-[#333]"
         }`}>
           <div className={`px-4 py-3 flex items-center justify-between ${
-            isLight ? "border-b border-gray-200" : "border-b border-[#333]"
+            isLight ? "border-b border-[#e5e5e5]" : "border-b border-[#333]"
           }`}>
-            <span className={`text-sm font-bold ${isLight ? "text-gray-900" : "text-white"}`}>{t("Notifications")}</span>
+            <span className={`text-sm font-bold ${isLight ? "text-[#111827]" : "text-white"}`}>{t("Notifications")}</span>
             <Link
               to="/notifications"
               onClick={() => setOpen(false)}
@@ -70,7 +70,7 @@ const NotificationBell = () => {
                 <li
                   key={n.id}
                   className={`border-b last:border-b-0 ${
-                    isLight ? "border-gray-100" : "border-[#2a2a2a]"
+                    isLight ? "border-[#f0f0f0]" : "border-[#2a2a2a]"
                   }`}
                 >
                   <Link
@@ -80,7 +80,7 @@ const NotificationBell = () => {
                       if (!n.is_read) markRead.mutate(n.id);
                     }}
                     className={`flex items-start gap-2.5 px-4 py-3 transition-colors ${
-                      isLight ? "hover:bg-gray-50" : "hover:bg-[#2a2a2a]"
+                      isLight ? "hover:bg-[#f5f5f5]" : "hover:bg-[#2a2a2a]"
                     } ${n.is_read ? "opacity-60" : ""}`}
                   >
                     <span
@@ -89,11 +89,11 @@ const NotificationBell = () => {
                       }`}
                     />
                     <span className="min-w-0 flex-1">
-                      <span className={`block text-xs font-bold truncate ${isLight ? "text-gray-900" : "text-white"}`}>{n.title}</span>
+                      <span className={`block text-xs font-bold truncate ${isLight ? "text-[#111827]" : "text-white"}`}>{n.title}</span>
                       {n.message && (
-                        <span className={`block text-xs truncate mt-0.5 ${isLight ? "text-gray-600" : "text-gray-400"}`}>{n.message}</span>
+                        <span className={`block text-xs truncate mt-0.5 ${isLight ? "text-[#525252]" : "text-gray-400"}`}>{n.message}</span>
                       )}
-                      <span className={`block text-[0.65rem] mt-1 ${isLight ? "text-gray-500" : "text-gray-500"}`}>
+                      <span className={`block text-[0.65rem] mt-1 ${isLight ? "text-[#737373]" : "text-gray-500"}`}>
                         {formatDateTime(n.created_at)}
                       </span>
                     </span>
@@ -102,7 +102,7 @@ const NotificationBell = () => {
               ))}
             </ul>
           ) : (
-            <p className={`px-4 py-6 text-sm text-center ${isLight ? "text-gray-500" : "text-gray-500"}`}>
+            <p className={`px-4 py-6 text-sm text-center ${isLight ? "text-[#737373]" : "text-gray-500"}`}>
               {t("Aucune notification")}
             </p>
           )}
