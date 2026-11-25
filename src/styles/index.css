@@ -418,6 +418,9 @@ html.light .fa-input {
   background-color: var(--fa-input-bg);
   border-radius: 1rem;
 }
+.fa-ai-inputbar input {
+  color: var(--fa-input-text);
+}
 .fa-ai-inputbar input::placeholder {
   color: var(--fa-input-placeholder);
 }
