@@ -184,6 +184,11 @@ const PlayerDetail = () => {
                   size="w-full h-full"
                 />
               </div>
+              {typeof current.games?.number === "number" && (
+                <span className="absolute -bottom-2 -left-2 w-9 h-9 rounded-full bg-emerald-500 border-2 border-emerald-950 flex items-center justify-center text-sm font-bold text-white shadow-lg">
+                  {current.games.number}
+                </span>
+              )}
               {player.injured && (
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-red-500/90 text-white text-[0.6rem] font-semibold tracking-wide whitespace-nowrap">
                   {t("Blessé")}
@@ -222,13 +227,6 @@ const PlayerDetail = () => {
               </div>
             </div>
             <div className="flex items-center gap-4 shrink-0">
-              {typeof current.games?.number === "number" && (
-                <div className="w-14 h-14 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
-                  <span className="text-xl font-bold text-emerald-400">
-                    {current.games.number}
-                  </span>
-                </div>
-              )}
               {followers != null && followers > 0 && (
                 <div className="text-center">
                   <CountUp
