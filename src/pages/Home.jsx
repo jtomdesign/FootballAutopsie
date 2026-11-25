@@ -87,6 +87,7 @@ const LiveBigGamesBar = () => {
   const day = new Date().getUTCDay();
   const isMatchday = day === 1 || day === 4;
   const { data: allLive = [] } = useLiveFixtures();
+  const today = todayParam();
 
   const featuredIds = new Set(FEATURED_LEAGUES.map(l => l.id));
   const live = [...allLive].sort((a, b) => {
@@ -97,22 +98,42 @@ const LiveBigGamesBar = () => {
   });
 
   // On matchdays the results marquee takes this slot instead.
-  if (isMatchday || !live.length) return null;
+  // When fewer than 3 live matches, top up the strip with the latest
+  // finished results from the big leagues.
+  const needResults = !isMatchday && live.length < 3;
+  const d1 = useFixturesByDate(shiftDays(today, -1), needResults);
+  const d2 = useFixturesByDate(shiftDays(today, -2), needResults);
+  const recentResults = needResults
+    ? [d1.data, d2.data]
+        .flat()
+        .filter(f => f?.status?.isFinished && featuredIds.has(f.league?.id))
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 12)
+    : [];
 
-  const reps = Math.max(2, Math.ceil(24 / live.length));
-  const loop = Array.from({ length: reps }, () => live).flat();
+  const items = [...live, ...recentResults];
+  if (isMatchday || !items.length) return null;
+
+  const reps = Math.max(2, Math.ceil(24 / items.length));
+  const loop = Array.from({ length: reps }, () => items).flat();
   const marqueeItems = [...loop, ...loop];
 
   return (
     <div className="bg-emerald-950/60 border-b border-emerald-900/60 sticky top-20 z-40 backdrop-blur-sm">
       <Container>
         <div className="flex items-center gap-3 py-2 overflow-hidden">
-          <span className="shrink-0 flex items-center gap-1.5 text-emerald-500" title={t("En direct")}>
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          {live.length ? (
+            <span className="shrink-0 flex items-center gap-1.5 text-emerald-500" title={t("En direct")}>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
             </span>
-          </span>
+          ) : (
+            <span className="shrink-0 flex items-center text-emerald-500" title={t("Grands résultats")}>
+              <LuTrophy className="text-base" />
+            </span>
+          )}
           <div className="overflow-hidden flex-1">
             <div
               className="marquee-track marquee-slow flex gap-2"
@@ -130,7 +151,11 @@ const LiveBigGamesBar = () => {
                   <TeamLogo logo={f.homeTeam.logo} name={f.homeTeam.name} size="w-4 h-4" />
                   <span className="text-xs text-gray-300 whitespace-nowrap flex items-center">
                     <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.homeTeam.name}</span>
-                    <span className="font-bold text-red-500 tabular-nums mx-1">
+                    <span
+                      className={`font-bold tabular-nums mx-1 ${
+                        f.status?.isLive ? "text-red-500" : "text-gray-100"
+                      }`}
+                    >
                       {f.goals.home ?? 0} - {f.goals.away ?? 0}
                     </span>
                     <span className="max-w-[4.5rem] sm:max-w-none truncate">{f.awayTeam.name}</span>
