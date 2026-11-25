@@ -175,8 +175,8 @@ const PlayerDetail = () => {
 
         {/* Header */}
         <div className="fa-profile-card relative overflow-hidden rounded-3xl p-6 sm:p-8 mb-8">
-          <div className="fa-profile-glow pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
-          <div className="fa-profile-glow pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
+          <div className="fa-profile-glow pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl" />
+          <div className="fa-profile-glow pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/5 blur-3xl" />
           <div className="relative flex flex-col sm:flex-row items-center gap-6">
             <div className="relative shrink-0">
               <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden ring-4 ring-emerald-400/50 bg-emerald-900/40 shadow-[0_0_35px_-5px_rgba(16,185,129,0.5)]">

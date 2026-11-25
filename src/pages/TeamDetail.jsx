@@ -124,8 +124,8 @@ const TeamDetail = () => {
 
         {/* Header */}
         <div className="fa-profile-card relative overflow-hidden rounded-3xl p-6 sm:p-8 mb-8">
-          <div className="fa-profile-glow pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
-          <div className="fa-profile-glow pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
+          <div className="fa-profile-glow pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl" />
+          <div className="fa-profile-glow pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/5 blur-3xl" />
           <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <div className="relative shrink-0 drop-shadow-[0_0_20px_rgba(16,185,129,0.35)]">
               <TeamLogo logo={team.logo} name={team.name} size="w-24 h-24 sm:w-32 sm:h-32" />
