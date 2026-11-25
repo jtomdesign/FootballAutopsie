@@ -236,7 +236,7 @@ const PlayerDetail = () => {
                     className="text-2xl font-semibold text-gray-50 tabular-nums"
                   />
                   <p className="text-[0.6rem] tracking-wide text-gray-500">
-                    {t("abonnés")}
+                    {t("Abonnés")}
                   </p>
                 </div>
               )}
