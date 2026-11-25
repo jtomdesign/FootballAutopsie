@@ -315,6 +315,33 @@ export default async function handler(req, res) {
       }).catch(() => null);
     }
 
+    // 8. Fill H2H fixture scores for these gameweeks
+    for (const gw of gws) {
+      const leagues = await sb(
+        `fantasy_leagues?season_id=eq.${gw.season_id}&type=eq.h2h&select=id`,
+      ).catch(() => null);
+      const leagueIds = (leagues ?? []).map(l => l.id);
+      if (!leagueIds.length) continue;
+      const h2h = await sb(
+        `fantasy_h2h_fixtures?gw=eq.${gw.number}&league_id=in.(${leagueIds.join(",")})&select=id,home_team_id,away_team_id`,
+      ).catch(() => null);
+      for (const f of h2h ?? []) {
+        const [hp, ap] = await Promise.all([
+          sb(`fantasy_manager_points?team_id=eq.${f.home_team_id}&season_id=eq.${gw.season_id}&gw=eq.${gw.number}&select=points`),
+          sb(`fantasy_manager_points?team_id=eq.${f.away_team_id}&season_id=eq.${gw.season_id}&gw=eq.${gw.number}&select=points`),
+        ]);
+        const hPts = hp?.[0]?.points, aPts = ap?.[0]?.points;
+        if (hPts == null || aPts == null) continue;
+        await sb(`fantasy_h2h_fixtures?id=eq.${f.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            home_points: hPts, away_points: aPts,
+            status: "completed",
+          }),
+        });
+      }
+    }
+
     return res.json({
       ok: true,
       fixturesProcessed,

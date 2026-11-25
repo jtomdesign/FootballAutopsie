@@ -8,6 +8,7 @@ const TABS = [
   { to: "/fantasy/equipe", key: "Mon Équipe" },
   { to: "/fantasy/transferts", key: "Transferts" },
   { to: "/fantasy/joueurs", key: "Joueurs" },
+  { to: "/fantasy/ligues", key: "Ligues" },
   { to: "/fantasy/points", key: "Points" },
 ];
 

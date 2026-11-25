@@ -45,6 +45,8 @@ import FantasyMyTeam from "./pages/fantasy/FantasyMyTeam";
 import FantasyTransfers from "./pages/fantasy/FantasyTransfers";
 import FantasyPlayers from "./pages/fantasy/FantasyPlayers";
 import FantasyPoints from "./pages/fantasy/FantasyPoints";
+import FantasyLeagues from "./pages/fantasy/FantasyLeagues";
+import FantasyLeagueDetail from "./pages/fantasy/FantasyLeagueDetail";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import UserRoute from "./ui/UserRoute";
@@ -109,6 +111,8 @@ const App = () => {
               <Route path="transferts" element={<FantasyTransfers />} />
               <Route path="joueurs" element={<FantasyPlayers />} />
               <Route path="points" element={<FantasyPoints />} />
+              <Route path="ligues" element={<FantasyLeagues />} />
+              <Route path="ligues/:id" element={<FantasyLeagueDetail />} />
             </Route>
             <Route path="/compte" element={<Account />} />
             <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />

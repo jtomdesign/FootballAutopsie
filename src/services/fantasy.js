@@ -258,3 +258,105 @@ export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
   if (error) throw error;
   return rows.length;
 };
+
+// ---------- Leagues ----------
+
+export const getFantasyLeagues = async seasonId => {
+  const { data, error } = await supabase
+    .from("fantasy_leagues")
+    .select("*, fantasy_league_members(count), fantasy_comps:fantasy_seasons!inner(comp_id)")
+    .eq("season_id", seasonId)
+    .eq("is_active", true)
+    .order("type")
+    .order("name");
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const getLeagueDetail = async leagueId => {
+  const { data: league, error } = await supabase
+    .from("fantasy_leagues")
+    .select("*")
+    .eq("id", leagueId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!league) return null;
+
+  const [{ data: members }, { data: h2h }] = await Promise.all([
+    supabase
+      .from("fantasy_league_members")
+      .select("team_id, joined_at, fantasy_teams(name, badge, total_points, user_id)")
+      .eq("league_id", leagueId)
+      .order("joined_at"),
+    supabase
+      .from("fantasy_h2h_fixtures")
+      .select("*")
+      .eq("league_id", leagueId)
+      .order("gw"),
+  ]);
+
+  return { ...league, members: members ?? [], h2h: h2h ?? [] };
+};
+
+export const createFantasyLeague = async ({ seasonId, name, description, type, maxMembers }) => {
+  const { data, error } = await supabase.rpc("fantasy_create_league", {
+    p_season_id: seasonId,
+    p_name: name,
+    p_description: description ?? null,
+    p_type: type,
+    p_max_members: maxMembers ?? null,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const joinFantasyLeague = async identifier => {
+  const { data, error } = await supabase.rpc("fantasy_join_league", {
+    p_identifier: identifier,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const leaveFantasyLeague = async leagueId => {
+  const { error } = await supabase.rpc("fantasy_leave_league", {
+    p_league_id: leagueId,
+  });
+  if (error) throw new Error(error.message);
+};
+
+export const generateH2H = async (leagueId, gw) => {
+  const { data, error } = await supabase.rpc("fantasy_generate_h2h", {
+    p_league_id: leagueId,
+    p_gw: gw,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const getLeagueTable = async leagueId => {
+  // Points per member team across the season
+  const { data: members } = await supabase
+    .from("fantasy_league_members")
+    .select("team_id, fantasy_teams(name, badge, total_points, user_id)")
+    .eq("league_id", leagueId);
+  if (!members?.length) return [];
+  const teamIds = members.map(m => m.team_id);
+  const { data: pts } = await supabase
+    .from("fantasy_manager_points")
+    .select("team_id, points")
+    .in("team_id", teamIds);
+  const totals = {};
+  (pts ?? []).forEach(p => {
+    totals[p.team_id] = (totals[p.team_id] ?? 0) + Number(p.points ?? 0);
+  });
+  return members
+    .map(m => ({
+      team_id: m.team_id,
+      name: m.fantasy_teams?.name,
+      badge: m.fantasy_teams?.badge,
+      user_id: m.fantasy_teams?.user_id,
+      points: totals[m.team_id] ?? 0,
+    }))
+    .sort((a, b) => b.points - a.points);
+};

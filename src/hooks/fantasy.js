@@ -113,3 +113,68 @@ export const useFantasySetLineup = () => {
 
 export const useSyncFantasyPlayers = () =>
   useMutation({ mutationFn: syncFantasyPlayers });
+
+import {
+  getFantasyLeagues,
+  getLeagueDetail,
+  getLeagueTable,
+  createFantasyLeague,
+  joinFantasyLeague,
+  leaveFantasyLeague,
+  generateH2H,
+} from "../services/fantasy";
+
+export const useFantasyLeagues = seasonId =>
+  useQuery({
+    queryKey: ["fantasy", "leagues", seasonId],
+    queryFn: () => getFantasyLeagues(seasonId),
+    enabled: !!seasonId,
+  });
+
+export const useLeagueDetail = leagueId =>
+  useQuery({
+    queryKey: ["fantasy", "league", leagueId],
+    queryFn: () => getLeagueDetail(leagueId),
+    enabled: !!leagueId,
+    refetchInterval: 60_000,
+  });
+
+export const useLeagueTable = leagueId =>
+  useQuery({
+    queryKey: ["fantasy", "leaguetable", leagueId],
+    queryFn: () => getLeagueTable(leagueId),
+    enabled: !!leagueId,
+    refetchInterval: 60_000,
+  });
+
+export const useCreateLeague = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: createFantasyLeague,
+    onSuccess: (_, v) => qc.invalidateQueries({ queryKey: ["fantasy", "leagues", v.seasonId] }),
+  });
+};
+
+export const useJoinLeague = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: joinFantasyLeague,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["fantasy", "leagues"] }),
+  });
+};
+
+export const useLeaveLeague = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: leaveFantasyLeague,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["fantasy", "leagues"] }),
+  });
+};
+
+export const useGenerateH2H = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ leagueId, gw }) => generateH2H(leagueId, gw),
+    onSuccess: (_, v) => qc.invalidateQueries({ queryKey: ["fantasy", "league", v.leagueId] }),
+  });
+};
