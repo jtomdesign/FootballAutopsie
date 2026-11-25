@@ -174,9 +174,9 @@ const PlayerDetail = () => {
         </Link>
 
         {/* Header */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900/50 via-emerald-950/70 to-emerald-950 border border-emerald-500/20 rounded-3xl p-6 sm:p-8 mb-8 shadow-[0_10px_40px_-15px_rgba(16,185,129,0.35)]">
-          <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
+        <div className="fa-profile-card relative overflow-hidden rounded-3xl p-6 sm:p-8 mb-8">
+          <div className="fa-profile-glow pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
+          <div className="fa-profile-glow pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
           <div className="relative flex flex-col sm:flex-row items-center gap-6">
             <div className="relative shrink-0">
               <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden ring-4 ring-emerald-400/50 bg-emerald-900/40 shadow-[0_0_35px_-5px_rgba(16,185,129,0.5)]">
@@ -198,7 +198,7 @@ const PlayerDetail = () => {
               )}
             </div>
             <div className="flex-1 text-center sm:text-left min-w-0">
-              <h1 className="text-3xl sm:text-4xl font-bold font-menu tracking-wide bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
+              <h1 className="fa-profile-name text-3xl sm:text-4xl font-bold font-menu tracking-wide">
                 {player.name}
               </h1>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">

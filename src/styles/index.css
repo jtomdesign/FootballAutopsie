@@ -425,6 +425,39 @@ html.light .fa-input {
   color: var(--fa-input-placeholder);
 }
 
+/* Profile header cards (player / team) — no borders, theme-aware gradient */
+.fa-profile-card {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 78, 59, 0.55),
+    rgba(2, 44, 34, 0.75) 50%,
+    #022c22
+  );
+  box-shadow: 0 10px 40px -15px rgba(16, 185, 129, 0.35);
+}
+html.light .fa-profile-card {
+  background: linear-gradient(135deg, #ffffff, #f5f5f5);
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.12);
+}
+.fa-profile-name {
+  background: linear-gradient(90deg, #6ee7b7, #34d399, #5eead4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+html.light .fa-profile-name {
+  background: linear-gradient(90deg, #047857, #059669, #0d9488);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+html.light .fa-profile-glow { display: none; }
+/* Chip/link borders inside profile cards — keep them subtle on white */
+html.light .fa-profile-card .border-emerald-500\/40,
+html.light .fa-profile-card .border-emerald-800,
+html.light .fa-profile-card .border-emerald-500\/30 {
+  border-color: #e5e5e5;
+}
+
 /* Prevent iOS Safari auto-zoom on input focus (requires >=16px) */
 @media (max-width: 640px) {
   input,

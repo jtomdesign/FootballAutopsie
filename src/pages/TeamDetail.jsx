@@ -123,15 +123,15 @@ const TeamDetail = () => {
         </Link>
 
         {/* Header */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900/50 via-emerald-950/70 to-emerald-950 border border-emerald-500/20 rounded-3xl p-6 sm:p-8 mb-8 shadow-[0_10px_40px_-15px_rgba(16,185,129,0.35)]">
-          <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
+        <div className="fa-profile-card relative overflow-hidden rounded-3xl p-6 sm:p-8 mb-8">
+          <div className="fa-profile-glow pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
+          <div className="fa-profile-glow pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
           <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <div className="relative shrink-0 drop-shadow-[0_0_20px_rgba(16,185,129,0.35)]">
               <TeamLogo logo={team.logo} name={team.name} size="w-24 h-24 sm:w-32 sm:h-32" />
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-3xl sm:text-4xl font-black font-menu tracking-wide uppercase bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
+              <h1 className="fa-profile-name text-3xl sm:text-4xl font-black font-menu tracking-wide uppercase">
                 {team.name}
               </h1>
               <p className="text-gray-400 text-sm mt-1">
