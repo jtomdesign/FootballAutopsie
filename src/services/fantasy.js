@@ -238,19 +238,27 @@ export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
   const players = json?.response ?? [];
   if (!players.length) throw new Error("No players returned by API");
 
-  const rows = players.map(p => ({
-    api_player_id: p.player.id,
-    name: p.player.name,
-    position: p.statistics?.[0]?.games?.position ?? "M",
-    club_api_id: p.statistics?.[0]?.team?.id ?? null,
-    club_name: p.statistics?.[0]?.team?.name ?? null,
-    club_logo: p.statistics?.[0]?.team?.logo ?? null,
-    photo: p.player.photo ?? null,
-    nationality: p.player.nationality ?? null,
-    enabled: true,
-    // Default price by position until admin adjusts
-    price: { G: 4.5, D: 4.5, M: 5.5, F: 7.0 }[p.statistics?.[0]?.games?.position] ?? 5.0,
-  }));
+  const POS = {
+    Goalkeeper: "G", Defender: "D", Midfielder: "M",
+    Attacker: "F", Forward: "F",
+  };
+  const rows = players.map(p => {
+    const rawPos = p.statistics?.[0]?.games?.position;
+    const pos = POS[rawPos] ?? rawPos ?? "M";
+    return {
+      api_player_id: p.player.id,
+      name: p.player.name,
+      position: ["G", "D", "M", "F"].includes(pos) ? pos : "M",
+      club_api_id: p.statistics?.[0]?.team?.id ?? null,
+      club_name: p.statistics?.[0]?.team?.name ?? null,
+      club_logo: p.statistics?.[0]?.team?.logo ?? null,
+      photo: p.player.photo ?? null,
+      nationality: p.player.nationality ?? null,
+      enabled: true,
+      // Default price by position until admin adjusts
+      price: { G: 4.5, D: 4.5, M: 5.5, F: 7.0 }[pos] ?? 5.0,
+    };
+  });
 
   const { error } = await supabase
     .from("fantasy_players")
