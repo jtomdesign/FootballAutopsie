@@ -221,10 +221,10 @@ const PlayerDetail = () => {
                 )}
               </div>
             </div>
-            <div className="flex flex-col items-center gap-1 shrink-0">
+            <div className="flex items-center gap-4 shrink-0">
               {typeof current.games?.number === "number" && (
-                <div className="w-16 h-16 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-emerald-400">
+                <div className="w-14 h-14 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
+                  <span className="text-xl font-bold text-emerald-400">
                     {current.games.number}
                   </span>
                 </div>
@@ -233,9 +233,9 @@ const PlayerDetail = () => {
                 <div className="text-center">
                   <CountUp
                     value={followers}
-                    className="text-3xl font-semibold text-gray-50 tabular-nums"
+                    className="text-2xl font-semibold text-gray-50 tabular-nums"
                   />
-                  <p className="text-[0.6rem] uppercase tracking-[0.2em] text-gray-500">
+                  <p className="text-[0.55rem] uppercase tracking-[0.2em] text-gray-500">
                     {t("abonnés")}
                   </p>
                 </div>
