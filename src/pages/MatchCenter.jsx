@@ -527,12 +527,14 @@ const MatchCenter = () => {
 
         {/* Header */}
         <div className="bg-emerald-950/70 border border-emerald-900/60 rounded-3xl p-5 sm:p-10 text-center mb-8 fa-fade-up">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-400 uppercase tracking-widest mb-6">
+          <div className="flex items-center justify-center gap-2 text-sm font-semibold text-gray-300 mb-6">
             {league.logo && <TeamLogo logo={league.logo} name={league.name} size="w-4 h-4" />}
             <Link to={`/ligues/${league.id}`} className="hover:text-emerald-300">
               {league.name}
             </Link>
-            {league.round && <span>· {league.round}</span>}
+            {league.round && (
+              <span className="text-gray-500 font-normal">· {league.round}</span>
+            )}
           </div>
 
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
@@ -569,10 +571,8 @@ const MatchCenter = () => {
                     {goals.home ?? 0} - {goals.away ?? 0}
                   </span>
                   <span
-                    className={`mt-3 text-[0.65rem] font-medium uppercase tracking-wider px-3 py-1 rounded-full ${
-                      status.isLive
-                        ? "bg-red-500/15 text-red-500"
-                        : "bg-emerald-500/15 text-emerald-500"
+                    className={`mt-3 text-xs font-semibold ${
+                      status.isLive ? "text-red-500" : "text-emerald-500"
                     }`}
                   >
                     {t(status.label)}
@@ -621,14 +621,14 @@ const MatchCenter = () => {
           {(match.venue || match.referee) && (
             <div className="flex items-center justify-center gap-1.5 mt-5 text-[0.7rem] text-gray-400">
               {match.venue && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
+                <span className="inline-flex items-center gap-1">
                   <LuMapPin className="text-emerald-400 text-xs" />
                   {match.venue}
                   {match.city ? `, ${match.city}` : ""}
                 </span>
               )}
               {match.referee && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10">
+                <span className="inline-flex items-center gap-1">
                   <LuUser className="text-emerald-400 text-xs" />
                   {match.referee}
                 </span>
