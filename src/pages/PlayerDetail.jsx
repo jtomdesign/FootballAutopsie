@@ -220,24 +220,24 @@ const PlayerDetail = () => {
                   </span>
                 )}
               </div>
-              {followers != null && followers > 0 && (
-                <div className="mt-4">
-                  <CountUp
-                    value={followers}
-                    className="text-5xl sm:text-6xl font-extrabold text-gray-50 tracking-tight"
-                  />
-                  <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
-                    {t("abonnés")}
-                  </p>
-                </div>
-              )}
             </div>
-            <div className="flex flex-col items-center gap-3 shrink-0">
+            <div className="flex flex-col items-center gap-1 shrink-0">
               {typeof current.games?.number === "number" && (
                 <div className="w-16 h-16 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 flex items-center justify-center">
                   <span className="text-2xl font-bold text-emerald-400">
                     {current.games.number}
                   </span>
+                </div>
+              )}
+              {followers != null && followers > 0 && (
+                <div className="text-center">
+                  <CountUp
+                    value={followers}
+                    className="text-3xl font-semibold text-gray-50 tabular-nums"
+                  />
+                  <p className="text-[0.6rem] uppercase tracking-[0.2em] text-gray-500">
+                    {t("abonnés")}
+                  </p>
                 </div>
               )}
               <FollowButton
