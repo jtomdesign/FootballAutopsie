@@ -66,10 +66,47 @@ export default async function handler(req, res) {
     if (v !== undefined && v !== "") upstream.searchParams.set(k, String(v));
   });
 
-  try {
-    const r = await fetch(upstream.toString(), {
+  const callUpstream = () =>
+    fetch(upstream.toString(), {
       headers: { "x-apisports-key": API_KEY },
     });
+
+  try {
+    let r = await callUpstream();
+
+    // Vercel egress IPs are shared — API-Sports may throttle per-IP even
+    // when the key has quota left. Retry once on rate-limit responses.
+    if (r.status === 429 || r.status === 403) {
+      await new Promise(res => setTimeout(res, 1200));
+      r = await callUpstream();
+    }
+
+    const body = await r.text();
+
+    // Never edge-cache errors — a throttled response must not stick.
+    if (!r.ok) {
+      const retryAfter = r.headers.get("retry-after");
+      if (retryAfter) res.setHeader("Retry-After", retryAfter);
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(r.status).send(body);
+    }
+
+    // API-Sports can return 200 with an errors payload (e.g. daily quota).
+    // Don't cache those either.
+    let isErrorPayload = false;
+    try {
+      const j = JSON.parse(body);
+      isErrorPayload =
+        j?.errors &&
+        typeof j.errors === "object" &&
+        Object.keys(j.errors).length > 0;
+    } catch {
+      /* non-JSON body — treat as success passthrough */
+    }
+    if (isErrorPayload) {
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(200).send(body);
+    }
 
     const sMaxAge = cacheSeconds(pathname, params);
     res.setHeader(
@@ -77,11 +114,7 @@ export default async function handler(req, res) {
       `public, s-maxage=${sMaxAge}, stale-while-revalidate=${sMaxAge * 2}`,
     );
     res.setHeader("Content-Type", "application/json; charset=utf-8");
-
-    const body = await r.text();
-    const retryAfter = r.headers.get("retry-after");
-    if (retryAfter) res.setHeader("Retry-After", retryAfter);
-    return res.status(r.status).send(body);
+    return res.status(200).send(body);
   } catch (e) {
     return res.status(502).json({ error: "Upstream football API error" });
   }
