@@ -137,7 +137,7 @@ const Navbar = () => {
               onClick={() => setMenuOpen(o => !o)}
               aria-label={t("Menu")}
             >
-              <HamburgerIcon open={menuOpen} className="text-emerald-950" />
+              <HamburgerIcon open={menuOpen} small className="text-emerald-950" />
             </button>
           </div>
         </div>
