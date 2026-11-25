@@ -12,10 +12,11 @@ import {
 import Button from "../../ui/Button";
 import { PositionBadge } from "./components";
 import { LuArrowLeftRight, LuX } from "react-icons/lu";
+import { notify } from "../../services/user";
 
 const Transfers = () => {
   const { t } = useTranslation();
-  const { isAuthenticated } = useSelector(s => s.user);
+  const { isAuthenticated, user } = useSelector(s => s.user);
   const { data: comps } = useFantasyComps();
   const season = useMemo(
     () =>
@@ -77,6 +78,13 @@ const Transfers = () => {
         inPlayerId: buyPick.id,
       });
       toast.success(t("Transfert effectué"));
+      notify({
+        userId: user?.id,
+        type: "fantasy_transfer",
+        title: "Transfert fantasy",
+        message: `${sellPick?.name} → ${buyPick?.name}`,
+        targetUrl: "/fantasy/equipe",
+      }).catch(() => {});
       setSellPick(null);
       setBuyPick(null);
     } catch (e) {

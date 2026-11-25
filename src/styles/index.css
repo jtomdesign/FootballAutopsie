@@ -523,3 +523,8 @@ html.light .fa-profile-card .border-emerald-500\/30 {
 /* Full-screen loader — solid black in dark mode, solid white in light */
 .fa-spinner-bg { background-color: #000000; }
 html.light .fa-spinner-bg { background-color: #ffffff; }
+
+@keyframes storybar {
+  from { width: 0%; }
+  to { width: 100%; }
+}

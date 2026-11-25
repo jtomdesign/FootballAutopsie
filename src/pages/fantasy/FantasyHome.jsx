@@ -10,6 +10,7 @@ import {
 } from "../../hooks/fantasy";
 import Button from "../../ui/Button";
 import { LuTrophy, LuClock, LuUsers, LuTarget } from "react-icons/lu";
+import { StoriesRail, AchievementsShelf, ChallengesShelf } from "./Social";
 
 const Stat = ({ icon, label, value, sub }) => (
   <div className="rounded-2xl bg-white border border-gray-200 p-4">
@@ -154,6 +155,13 @@ const FantasyHome = () => {
           />
         </div>
       )}
+
+      {/* Social: stories, achievements, challenges */}
+      <StoriesRail seasonId={activeSeason?.id} myTeam={myTeam} />
+      <div className="grid lg:grid-cols-2 gap-5">
+        <AchievementsShelf teamId={myTeam?.id} />
+        <ChallengesShelf seasonId={activeSeason?.id} />
+      </div>
 
       {/* Leaderboard */}
       <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">

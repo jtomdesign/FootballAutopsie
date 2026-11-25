@@ -360,3 +360,85 @@ export const getLeagueTable = async leagueId => {
     }))
     .sort((a, b) => b.points - a.points);
 };
+
+// ---------- Stories ----------
+
+export const getFantasyStories = async () => {
+  const { data, error } = await supabase
+    .from("fantasy_stories")
+    .select("*")
+    .gt("expires_at", new Date().toISOString())
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  // Resolve author display names via the public RPC (user_profiles is RLS-locked)
+  const { getCommentAuthors } = await import("./user");
+  const ids = [...new Set((data ?? []).map(s => s.user_id))];
+  const authors = await getCommentAuthors(ids).catch(() => ({}));
+  return (data ?? []).map(s => ({ ...s, author: authors[s.user_id] ?? null }));
+};
+
+export const createFantasyStory = async ({ text, imageUrl, teamId, seasonId }) => {
+  const id = await uid();
+  if (!id) throw new Error("not authenticated");
+  const { error } = await supabase.from("fantasy_stories").insert({
+    user_id: id, text, image_url: imageUrl ?? null,
+    team_id: teamId ?? null, season_id: seasonId ?? null,
+  });
+  if (error) throw error;
+};
+
+export const deleteFantasyStory = async storyId => {
+  const { error } = await supabase.from("fantasy_stories").delete().eq("id", storyId);
+  if (error) throw error;
+};
+
+export const markStoryViewed = async storyId => {
+  const id = await uid();
+  if (!id) return;
+  await supabase.from("fantasy_story_views").upsert(
+    { story_id: storyId, user_id: id },
+    { onConflict: "story_id,user_id" },
+  );
+};
+
+export const reactToStory = async (storyId, emoji) => {
+  const id = await uid();
+  if (!id) throw new Error("not authenticated");
+  const { error } = await supabase.from("fantasy_story_reactions").upsert(
+    { story_id: storyId, user_id: id, emoji },
+    { onConflict: "story_id,user_id" },
+  );
+  if (error) throw error;
+};
+
+// ---------- Achievements ----------
+
+export const getAchievements = async () => {
+  const [{ data: all }, { data: unlocked }] = await Promise.all([
+    supabase.from("fantasy_achievements").select("*").order("sort"),
+    supabase.from("fantasy_manager_achievements").select("*, fantasy_achievements(*)"),
+  ]);
+  return { all: all ?? [], unlocked: unlocked ?? [] };
+};
+
+export const checkAchievements = async teamId => {
+  const { data, error } = await supabase.rpc("fantasy_check_achievements", {
+    p_team_id: teamId,
+  });
+  if (error) throw error;
+  return data;
+};
+
+// ---------- Challenges ----------
+
+export const getChallenges = async seasonId => {
+  let q = supabase.from("fantasy_challenges")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+  if (seasonId) q = q.eq("season_id", seasonId);
+  const { data, error } = await q.limit(10);
+  if (error) throw error;
+  return data ?? [];
+};

@@ -226,7 +226,7 @@ export default async function handler(req, res) {
 
     // 6. Manager gameweek points via lineup + stats
     const teams = await sb(
-      "fantasy_teams?select=id,season_id&season_id=in.(" +
+      "fantasy_teams?select=id,season_id,user_id&season_id=in.(" +
         [...new Set(gws.map(g => g.season_id))].join(",") + ")",
     );
 
@@ -315,7 +315,33 @@ export default async function handler(req, res) {
       }).catch(() => null);
     }
 
-    // 8. Fill H2H fixture scores for these gameweeks
+    // 8. Notify managers of their gameweek points
+    const notifRows = managerRows.map(r => {
+      const team = teams.find(t => t.id === r.team_id);
+      return team?.user_id ? {
+        user_id: team.user_id,
+        type: "fantasy_points",
+        title: `Fantasy GW${r.gw} : ${r.points} points`,
+        message: `Votre équipe a marqué ${r.points} points sur la journée ${r.gw}.`,
+        target_url: "/fantasy/points",
+      } : null;
+    }).filter(Boolean);
+    for (let i = 0; i < notifRows.length; i += 200) {
+      await sb("notifications", {
+        method: "POST",
+        body: JSON.stringify(notifRows.slice(i, i + 200)),
+      }).catch(() => null);
+    }
+
+    // 9. Check achievements for all teams in active seasons
+    for (const t of teams) {
+      await sb("rpc/fantasy_check_achievements", {
+        method: "POST",
+        body: JSON.stringify({ p_team_id: t.id }),
+      }).catch(() => null);
+    }
+
+    // 10. Fill H2H fixture scores for these gameweeks
     for (const gw of gws) {
       const leagues = await sb(
         `fantasy_leagues?season_id=eq.${gw.season_id}&type=eq.h2h&select=id`,

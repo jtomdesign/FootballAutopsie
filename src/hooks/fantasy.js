@@ -178,3 +178,47 @@ export const useGenerateH2H = () => {
     onSuccess: (_, v) => qc.invalidateQueries({ queryKey: ["fantasy", "league", v.leagueId] }),
   });
 };
+
+import {
+  getFantasyStories, createFantasyStory, deleteFantasyStory,
+  markStoryViewed, reactToStory,
+  getAchievements, checkAchievements, getChallenges,
+} from "../services/fantasy";
+
+export const useFantasyStories = () =>
+  useQuery({ queryKey: ["fantasy", "stories"], queryFn: getFantasyStories, refetchInterval: 60_000 });
+
+export const useCreateStory = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: createFantasyStory,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["fantasy", "stories"] }),
+  });
+};
+
+export const useDeleteStory = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteFantasyStory,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["fantasy", "stories"] }),
+  });
+};
+
+export const useMarkStoryViewed = () =>
+  useMutation({ mutationFn: markStoryViewed });
+
+export const useReactToStory = () =>
+  useMutation({ mutationFn: ({ storyId, emoji }) => reactToStory(storyId, emoji) });
+
+export const useAchievements = () =>
+  useQuery({ queryKey: ["fantasy", "achievements"], queryFn: getAchievements });
+
+export const useChallenges = seasonId =>
+  useQuery({
+    queryKey: ["fantasy", "challenges", seasonId],
+    queryFn: () => getChallenges(seasonId),
+    enabled: !!seasonId,
+  });
+
+export const useCheckAchievements = () =>
+  useMutation({ mutationFn: checkAchievements });
