@@ -12,9 +12,9 @@ import { PositionBadge } from "./components";
 import { LuChartSpline } from "react-icons/lu";
 
 const StatCard = ({ label, value, sub }) => (
-  <div className="rounded-2xl bg-white border border-gray-200 p-4">
+  <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
     <p className="text-xs font-bold uppercase text-gray-400">{label}</p>
-    <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+    <p className="text-2xl font-bold text-gray-100 mt-1">{value}</p>
     {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
   </div>
 );
@@ -49,18 +49,18 @@ const FantasyStatistics = () => {
   );
 
   const PosTable = ({ title, players }) => (
-    <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100">
-        <h3 className="font-bold text-gray-900 text-sm">{title}</h3>
+    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
+      <div className="px-4 py-3 border-b border-white/10">
+        <h3 className="font-bold text-gray-100 text-sm">{title}</h3>
       </div>
       <table className="w-full text-sm">
         <tbody>
           {(players?.players ?? []).slice(0, 5).map((p, i) => (
-            <tr key={p.id} className="border-b border-gray-50 last:border-0">
+            <tr key={p.id} className="border-b border-white/5 last:border-0">
               <td className="px-4 py-2 w-6 font-bold text-gray-400">{i + 1}</td>
-              <td className="px-2 py-2 font-semibold text-gray-900 truncate max-w-[140px]">{p.name}</td>
+              <td className="px-2 py-2 font-semibold text-gray-100 truncate max-w-[140px]">{p.name}</td>
               <td className="px-2 py-2 text-xs text-gray-500">{p.club_name}</td>
-              <td className="px-4 py-2 text-right font-bold text-emerald-600">{p.totalPoints ?? 0}</td>
+              <td className="px-4 py-2 text-right font-bold text-emerald-400">{p.totalPoints ?? 0}</td>
             </tr>
           ))}
         </tbody>
@@ -70,8 +70,8 @@ const FantasyStatistics = () => {
 
   return (
     <div className="space-y-5">
-      <h2 className="font-bold text-gray-900 flex items-center gap-2">
-        <LuChartSpline className="text-emerald-600" /> {t("Statistiques Fantasy")}
+      <h2 className="font-bold text-gray-100 flex items-center gap-2">
+        <LuChartSpline className="text-emerald-400" /> {t("Statistiques Fantasy")}
       </h2>
 
       {team && (
@@ -89,14 +89,14 @@ const FantasyStatistics = () => {
 
       {/* Weekly performance bars */}
       {myPts.length > 0 && (
-        <div className="rounded-2xl bg-white border border-gray-200 p-4">
-          <h3 className="font-bold text-gray-900 text-sm mb-3">{t("Performance par journée")}</h3>
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+          <h3 className="font-bold text-gray-100 text-sm mb-3">{t("Performance par journée")}</h3>
           <div className="flex items-end gap-1.5 h-28">
             {myPts.map((p, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
                 <span className="text-[10px] font-bold text-gray-500">{p}</span>
                 <div
-                  className="w-full rounded-t bg-emerald-500"
+                  className="w-full rounded-t bg-emerald-500/100"
                   style={{ height: `${Math.max(4, (p / Math.max(...myPts)) * 80)}px` }}
                 />
                 <span className="text-[10px] text-gray-400">GW{i + 1}</span>

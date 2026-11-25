@@ -35,7 +35,7 @@ const FantasyLeagueDetail = () => {
   if (isLoading) return <p className="text-gray-500 py-10 text-center">{t("Chargement…")}</p>;
   if (!league) {
     return (
-      <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center text-gray-500">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center text-gray-500">
         {t("Ligue introuvable ou privée.")}
       </div>
     );
@@ -77,17 +77,17 @@ const FantasyLeagueDetail = () => {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="rounded-2xl bg-emerald-950 text-white p-6 relative overflow-hidden">
-        <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-emerald-500/20 blur-3xl" />
+      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-6 relative overflow-hidden">
+        <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-emerald-500/100/20 blur-3xl" />
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold">{league.name}</h2>
-            <p className="text-emerald-200/70 text-sm mt-1">
+            <p className="text-gray-400 text-sm mt-1">
               {season?.comp?.name} · {season?.name} · {members.length} {t("membres")}
               {league.invite_code && ` · Code: ${league.invite_code}`}
             </p>
             {league.description && (
-              <p className="text-emerald-200/60 text-sm mt-2">{league.description}</p>
+              <p className="text-gray-400 text-sm mt-2">{league.description}</p>
             )}
           </div>
           {myMember && (
@@ -99,10 +99,10 @@ const FantasyLeagueDetail = () => {
 
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Table */}
-        <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/10 flex items-center gap-2">
             <LuCrown className="text-amber-500" />
-            <h3 className="font-bold text-gray-900">{t("Classement")}</h3>
+            <h3 className="font-bold text-gray-100">{t("Classement")}</h3>
           </div>
           <table className="w-full text-sm">
             <tbody>
@@ -110,13 +110,13 @@ const FantasyLeagueDetail = () => {
                 const isMe = String(row.user_id) === String(user?.id);
                 return (
                   <tr key={row.team_id}
-                    className={`border-b border-gray-50 last:border-0 ${isMe ? "bg-emerald-50" : ""}`}>
+                    className={`border-b border-white/5 last:border-0 ${isMe ? "bg-emerald-500/10" : ""}`}>
                     <td className="px-5 py-2.5 w-10 font-bold text-gray-400">{i + 1}</td>
-                    <td className="px-2 py-2.5 font-bold text-gray-900">
+                    <td className="px-2 py-2.5 font-bold text-gray-100">
                       {row.name}
-                      {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-600">{t("Vous")}</span>}
+                      {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-400">{t("Vous")}</span>}
                     </td>
-                    <td className="px-5 py-2.5 text-right font-bold text-emerald-600">
+                    <td className="px-5 py-2.5 text-right font-bold text-emerald-400">
                       {row.points} pts
                     </td>
                   </tr>
@@ -130,21 +130,21 @@ const FantasyLeagueDetail = () => {
         </div>
 
         {/* Members */}
-        <div className="rounded-2xl bg-white border border-gray-200 p-4">
-          <h3 className="font-bold text-gray-900 mb-3">{t("Membres")}</h3>
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+          <h3 className="font-bold text-gray-100 mb-3">{t("Membres")}</h3>
           <div className="space-y-2">
             {members.map(m => {
               const isMe = String(m.fantasy_teams?.user_id) === String(user?.id);
               return (
                 <div key={m.team_id}
-                  className={`flex items-center gap-3 rounded-xl border p-2.5 ${isMe ? "border-emerald-300 bg-emerald-50" : "border-gray-200"}`}>
+                  className={`flex items-center gap-3 rounded-xl border p-2.5 ${isMe ? "border-emerald-500/40 bg-emerald-500/10" : "border-white/10"}`}>
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
                     {(m.fantasy_teams?.name ?? "?").slice(0, 1).toUpperCase()}
                   </div>
-                  <span className="flex-1 font-bold text-gray-900 text-sm truncate">
+                  <span className="flex-1 font-bold text-gray-100 text-sm truncate">
                     {m.fantasy_teams?.name}
                   </span>
-                  <span className="text-xs font-bold text-emerald-600">
+                  <span className="text-xs font-bold text-emerald-400">
                     {m.fantasy_teams?.total_points ?? 0} pts
                   </span>
                 </div>
@@ -156,9 +156,9 @@ const FantasyLeagueDetail = () => {
 
       {/* H2H fixtures */}
       {league.type === "h2h" && (
-        <div className="rounded-2xl bg-white border border-gray-200 p-5">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-gray-900 flex items-center gap-2">
+            <h3 className="font-bold text-gray-100 flex items-center gap-2">
               <LuSwords className="text-rose-500" /> {t("Matchs head-to-head")}
             </h3>
             {isOwner && (
@@ -166,7 +166,7 @@ const FantasyLeagueDetail = () => {
                 {[1, 2, 3, 4, 5].map(gw => (
                   <button key={gw}
                     onClick={() => doGenerate(gw)}
-                    className="px-3 py-1 rounded-lg text-xs font-bold bg-gray-100 text-gray-600 hover:bg-emerald-100 hover:text-emerald-700"
+                    className="px-3 py-1 rounded-lg text-xs font-bold bg-white/5 text-gray-400 hover:bg-emerald-500/15 hover:text-emerald-300"
                     title={`GW${gw}`}>
                     GW{gw}
                   </button>
@@ -191,8 +191,8 @@ const FantasyLeagueDetail = () => {
                         m.home_team_id === myTeam?.id || m.away_team_id === myTeam?.id;
                       return (
                         <div key={m.id}
-                          className={`flex items-center justify-between rounded-xl border p-3 text-sm ${mine ? "border-emerald-300 bg-emerald-50" : "border-gray-200"}`}>
-                          <span className={`font-bold truncate ${m.home_team_id === myTeam?.id ? "text-emerald-700" : "text-gray-800"}`}>
+                          className={`flex items-center justify-between rounded-xl border p-3 text-sm ${mine ? "border-emerald-500/40 bg-emerald-500/10" : "border-white/10"}`}>
+                          <span className={`font-bold truncate ${m.home_team_id === myTeam?.id ? "text-emerald-300" : "text-gray-200"}`}>
                             {teamName(m.home_team_id)}
                           </span>
                           <span className="font-bold text-gray-400 px-2">
@@ -200,7 +200,7 @@ const FantasyLeagueDetail = () => {
                               ? `${m.home_points} – ${m.away_points}`
                               : "vs"}
                           </span>
-                          <span className={`font-bold truncate text-right ${m.away_team_id === myTeam?.id ? "text-emerald-700" : "text-gray-800"}`}>
+                          <span className={`font-bold truncate text-right ${m.away_team_id === myTeam?.id ? "text-emerald-300" : "text-gray-200"}`}>
                             {teamName(m.away_team_id)}
                           </span>
                         </div>

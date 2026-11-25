@@ -23,14 +23,14 @@ const StoryRing = ({ story, onOpen, isMine }) => (
         {story.image_url ? (
           <img src={story.image_url} alt="" className="w-full h-full object-cover rounded-full" />
         ) : (
-          <div className="w-full h-full rounded-full bg-emerald-100 flex items-center justify-center text-xl font-bold text-emerald-600">
+          <div className="w-full h-full rounded-full bg-emerald-500/15 flex items-center justify-center text-xl font-bold text-emerald-400">
             {(story.author?.username ?? story.author?.full_name ?? "F")
               .slice(0, 1).toUpperCase()}
           </div>
         )}
       </div>
     </div>
-    <span className="text-[11px] font-bold text-gray-600 max-w-[64px] truncate">
+    <span className="text-[11px] font-bold text-gray-400 max-w-[64px] truncate">
       {isMine ? "Vous" : (story.author?.username ?? story.author?.full_name ?? "?")}
     </span>
   </button>
@@ -68,9 +68,9 @@ export const StoriesRail = ({ seasonId, myTeam }) => {
   };
 
   return (
-    <div className="rounded-2xl bg-white border border-gray-200 p-4">
+    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
+        <h3 className="font-bold text-gray-100 text-sm uppercase tracking-wide">
           {t("Stories Fantasy")}
         </h3>
         {isAuthenticated && (
@@ -99,19 +99,19 @@ export const StoriesRail = ({ seasonId, myTeam }) => {
       </div>
 
       {compose && (
-        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-2">
+        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-500/10/50 p-4 space-y-2">
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
             placeholder={t("Partagez votre actualité fantasy…")}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm h-20"
+            className="w-full rounded-lg fa-input px-3 py-2 text-sm h-20"
             maxLength={300}
           />
           <input
             value={imageUrl}
             onChange={e => setImageUrl(e.target.value)}
             placeholder={t("URL image (optionnel)")}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+            className="w-full rounded-lg fa-input px-3 py-2 text-sm"
           />
           <div className="flex gap-2">
             <button onClick={submit}
@@ -176,7 +176,7 @@ const StoryViewer = ({ stories, index, onClose, onNav, onDelete }) => {
     <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
       onClick={onClose}>
       <div
-        className="relative w-full max-w-sm rounded-2xl overflow-hidden bg-emerald-950 text-white"
+        className="relative w-full max-w-sm rounded-2xl overflow-hidden bg-emerald-500/10 border border-emerald-500/30 text-gray-100"
         onClick={e => e.stopPropagation()}
       >
         {/* progress bars */}
@@ -196,14 +196,14 @@ const StoryViewer = ({ stories, index, onClose, onNav, onDelete }) => {
 
         <div className="p-6 pt-12 min-h-[380px] flex flex-col">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-full bg-emerald-500/100 flex items-center justify-center font-bold">
               {(story.author?.username ?? "?").slice(0, 1).toUpperCase()}
             </div>
             <div>
               <p className="font-bold text-sm">
                 {story.author?.username ?? story.author?.full_name ?? "?"}
               </p>
-              <p className="text-[11px] text-emerald-300/60">
+              <p className="text-[11px] text-gray-500">
                 {new Date(story.created_at).toLocaleString("fr-FR", {
                   day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
                 })}
@@ -260,8 +260,8 @@ export const AchievementsShelf = ({ teamId }) => {
   );
 
   return (
-    <div className="rounded-2xl bg-white border border-gray-200 p-4">
-      <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
+    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+      <h3 className="font-bold text-gray-100 text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
         <LuTrophy className="text-amber-500" /> {t("Succès")}
       </h3>
       <div className="flex gap-3 overflow-x-auto pb-1">
@@ -270,9 +270,9 @@ export const AchievementsShelf = ({ teamId }) => {
           return (
             <div key={a.id}
               title={a.description_fr ?? a.name_fr}
-              className={`shrink-0 w-24 rounded-xl border p-3 text-center ${got ? "border-amber-300 bg-amber-50" : "border-gray-200 opacity-50"}`}>
+              className={`shrink-0 w-24 rounded-xl border p-3 text-center ${got ? "border-amber-500/40 bg-amber-500/10" : "border-white/10 opacity-50"}`}>
               <div className="text-2xl mb-1">{got ? "🏆" : "🔒"}</div>
-              <p className="text-[11px] font-bold text-gray-700 leading-tight">{a.name_fr}</p>
+              <p className="text-[11px] font-bold text-gray-300 leading-tight">{a.name_fr}</p>
             </div>
           );
         })}
@@ -286,7 +286,7 @@ export const ChallengesShelf = ({ seasonId }) => {
   const { data: challenges } = useChallenges(seasonId);
   if (!challenges?.length) return null;
   return (
-    <div className="rounded-2xl bg-emerald-950 text-white p-4">
+    <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-4">
       <h3 className="font-bold text-sm uppercase tracking-wide text-emerald-300 mb-3">
         {t("Défis de la saison")}
       </h3>
@@ -294,7 +294,7 @@ export const ChallengesShelf = ({ seasonId }) => {
         {challenges.map(c => (
           <div key={c.id} className="rounded-xl bg-white/5 p-3">
             <p className="font-bold text-sm">{c.title}</p>
-            {c.description && <p className="text-xs text-emerald-200/60 mt-0.5">{c.description}</p>}
+            {c.description && <p className="text-xs text-gray-400 mt-0.5">{c.description}</p>}
             {c.reward && <p className="text-xs text-amber-300 mt-1 font-bold">🏆 {c.reward}</p>}
           </div>
         ))}

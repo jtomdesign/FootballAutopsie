@@ -61,7 +61,7 @@ const FantasyPoints = () => {
             className={`px-4 py-2 rounded-full text-sm font-bold ${
               tab === k
                 ? "bg-emerald-600 text-white"
-                : "bg-white border border-gray-200 text-gray-600"
+                : "bg-emerald-950/60 border border-emerald-900/60 text-gray-400"
             }`}
           >
             {label}
@@ -77,17 +77,17 @@ const FantasyPoints = () => {
               [t("Meilleure journée"), bestGw],
               [t("Jouées"), (myPoints ?? []).length],
             ].map(([l, v]) => (
-              <div key={l} className="rounded-2xl bg-white border border-gray-200 p-4 text-center">
-                <p className="text-2xl font-bold text-gray-900">{v}</p>
+              <div key={l} className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 text-center">
+                <p className="text-2xl font-bold text-gray-100">{v}</p>
                 <p className="text-xs text-gray-500 font-bold uppercase">{l}</p>
               </div>
             ))}
           </div>
 
-          <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+          <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100 text-left text-xs uppercase text-gray-400">
+                <tr className="border-b border-white/10 text-left text-xs uppercase text-gray-400">
                   <th className="px-5 py-3">{t("Journée")}</th>
                   <th className="px-5 py-3 text-right">{t("Points")}</th>
                   <th className="px-5 py-3 text-right">{t("Rang GW")}</th>
@@ -96,9 +96,9 @@ const FantasyPoints = () => {
               </thead>
               <tbody>
                 {(myPoints ?? []).map(g => (
-                  <tr key={g.id} className="border-b border-gray-50 last:border-0">
-                    <td className="px-5 py-2.5 font-bold text-gray-900">GW {g.gw}</td>
-                    <td className="px-5 py-2.5 text-right font-bold text-emerald-600">
+                  <tr key={g.id} className="border-b border-white/5 last:border-0">
+                    <td className="px-5 py-2.5 font-bold text-gray-100">GW {g.gw}</td>
+                    <td className="px-5 py-2.5 text-right font-bold text-emerald-400">
                       {g.points}
                     </td>
                     <td className="px-5 py-2.5 text-right text-gray-500">
@@ -122,8 +122,8 @@ const FantasyPoints = () => {
 
           {/* Player points detail */}
           {pstats?.length > 0 && (
-            <div className="rounded-2xl bg-white border border-gray-200 p-4">
-              <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+              <h3 className="font-bold text-gray-100 mb-3 flex items-center gap-2">
                 <LuTrendingUp className="text-emerald-500" /> {t("Points par joueur")}
               </h3>
               <div className="space-y-1.5">
@@ -135,10 +135,10 @@ const FantasyPoints = () => {
                   return (
                     <div key={pid} className="flex items-center gap-3 text-sm">
                       <PositionBadge position={p?.position} className="!w-6 !h-6 text-[10px]" />
-                      <span className="flex-1 font-semibold text-gray-800 truncate">
+                      <span className="flex-1 font-semibold text-gray-200 truncate">
                         {p?.name}
                       </span>
-                      <span className="font-bold text-emerald-600">{pts} pts</span>
+                      <span className="font-bold text-emerald-400">{pts} pts</span>
                     </div>
                   );
                 })}
@@ -149,10 +149,10 @@ const FantasyPoints = () => {
       )}
 
       {tab === "players" && (
-        <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100 text-left text-xs uppercase text-gray-400">
+              <tr className="border-b border-white/10 text-left text-xs uppercase text-gray-400">
                 <th className="px-5 py-3">#</th>
                 <th className="px-5 py-3">{t("Joueur")}</th>
                 <th className="px-5 py-3">{t("Club")}</th>
@@ -162,19 +162,19 @@ const FantasyPoints = () => {
             </thead>
             <tbody>
               {(topPlayersData?.players ?? []).map((p, i) => (
-                <tr key={p.id} className="border-b border-gray-50 last:border-0">
+                <tr key={p.id} className="border-b border-white/5 last:border-0">
                   <td className="px-5 py-2.5 font-bold text-gray-400">{i + 1}</td>
                   <td className="px-5 py-2.5">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-gray-100 overflow-hidden shrink-0">
+                      <div className="w-7 h-7 rounded-full bg-white/5 overflow-hidden shrink-0">
                         {p.photo && <img src={p.photo} alt="" className="w-full h-full object-cover" />}
                       </div>
-                      <span className="font-bold text-gray-900">{p.name}</span>
+                      <span className="font-bold text-gray-100">{p.name}</span>
                     </div>
                   </td>
                   <td className="px-5 py-2.5 text-gray-500 text-xs">{p.club_name}</td>
                   <td className="px-5 py-2.5 text-right font-bold">£{Number(p.price).toFixed(1)}m</td>
-                  <td className="px-5 py-2.5 text-right font-bold text-emerald-600">
+                  <td className="px-5 py-2.5 text-right font-bold text-emerald-400">
                     {p.totalPoints ?? 0}
                   </td>
                 </tr>
@@ -185,10 +185,10 @@ const FantasyPoints = () => {
       )}
 
       {tab === "board" && (
-        <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100 text-left text-xs uppercase text-gray-400">
+              <tr className="border-b border-white/10 text-left text-xs uppercase text-gray-400">
                 <th className="px-5 py-3">#</th>
                 <th className="px-5 py-3">{t("Manager")}</th>
                 <th className="px-5 py-3 text-right">{t("Points")}</th>
@@ -199,13 +199,13 @@ const FantasyPoints = () => {
                 const teamRow = row.fantasy_teams;
                 const isMe = String(teamRow?.user_id) === String(user?.id);
                 return (
-                  <tr key={row.team_id} className={`border-b border-gray-50 last:border-0 ${isMe ? "bg-emerald-50" : ""}`}>
+                  <tr key={row.team_id} className={`border-b border-white/5 last:border-0 ${isMe ? "bg-emerald-500/10" : ""}`}>
                     <td className="px-5 py-2.5 font-bold text-gray-400">{i + 1}</td>
-                    <td className="px-5 py-2.5 font-bold text-gray-900">
+                    <td className="px-5 py-2.5 font-bold text-gray-100">
                       {teamRow?.name}
-                      {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-600">{t("Vous")}</span>}
+                      {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-400">{t("Vous")}</span>}
                     </td>
-                    <td className="px-5 py-2.5 text-right font-bold text-emerald-600">
+                    <td className="px-5 py-2.5 text-right font-bold text-emerald-400">
                       {row.points}
                     </td>
                   </tr>

@@ -33,7 +33,7 @@ const FantasyFixtures = () => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl bg-emerald-950 text-white p-5">
+      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-5">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">
           {season.comp?.name} · {season.name}
         </p>
@@ -41,23 +41,23 @@ const FantasyFixtures = () => {
           {gw ? `${t("Gameweek")} ${gw.number}` : t("Prochains matchs")}
         </h2>
         {gw?.deadline && (
-          <p className="text-emerald-200/70 text-sm mt-1">
+          <p className="text-gray-400 text-sm mt-1">
             {t("Deadline")} : {new Date(gw.deadline).toLocaleString("fr-FR")}
           </p>
         )}
       </div>
 
-      <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
         {!fixtures.length ? (
           <p className="p-8 text-center text-gray-400 text-sm">{t("Aucun match à venir.")}</p>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-white/5">
             {fixtures.map(f => (
               <Link key={f.fixture.id} to={`/match/${f.fixture.id}`}
-                className="flex items-center justify-between px-5 py-3 hover:bg-gray-50">
+                className="flex items-center justify-between px-5 py-3 hover:bg-white/5">
                 <div className="flex items-center gap-3 flex-1">
                   <img src={f.teams.home.logo} alt="" className="w-6 h-6 object-contain" />
-                  <span className="font-semibold text-gray-900 text-sm">{f.teams.home.name}</span>
+                  <span className="font-semibold text-gray-100 text-sm">{f.teams.home.name}</span>
                 </div>
                 <div className="text-center px-4">
                   {f.fixture.status.short === "NS" || f.fixture.status.short === "TBD" ? (
@@ -73,7 +73,7 @@ const FantasyFixtures = () => {
                   )}
                 </div>
                 <div className="flex items-center gap-3 flex-1 justify-end">
-                  <span className="font-semibold text-gray-900 text-sm">{f.teams.away.name}</span>
+                  <span className="font-semibold text-gray-100 text-sm">{f.teams.away.name}</span>
                   <img src={f.teams.away.logo} alt="" className="w-6 h-6 object-contain" />
                 </div>
               </Link>

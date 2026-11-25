@@ -26,7 +26,7 @@ const FantasyHallOfFame = () => {
     <div className="space-y-6">
       {/* Trophy cabinet */}
       <div>
-        <h2 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+        <h2 className="font-bold text-gray-100 mb-3 flex items-center gap-2">
           <LuTrophy className="text-amber-500" /> {t("Vitrine des succès")}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -39,13 +39,13 @@ const FantasyHallOfFame = () => {
             return (
               <div key={a.id}
                 className={`rounded-2xl border p-4 text-center ${
-                  got ? "border-amber-300 bg-amber-50" : "border-gray-200 opacity-50"
+                  got ? "border-amber-500/40 bg-amber-500/10" : "border-white/10 opacity-50"
                 }`}>
                 <div className="text-3xl mb-2">{got ? "🏆" : "🔒"}</div>
-                <p className="text-sm font-bold text-gray-900">{a.name_fr}</p>
+                <p className="text-sm font-bold text-gray-100">{a.name_fr}</p>
                 <p className="text-xs text-gray-500 mt-1">{a.description_fr}</p>
                 {mine && (
-                  <p className="text-[10px] font-bold uppercase text-emerald-600 mt-2">
+                  <p className="text-[10px] font-bold uppercase text-emerald-400 mt-2">
                     {t("Débloqué par vous")}
                   </p>
                 )}
@@ -56,7 +56,7 @@ const FantasyHallOfFame = () => {
       </div>
 
       {/* Legends — top managers */}
-      <div className="rounded-2xl bg-emerald-950 text-white overflow-hidden">
+      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 overflow-hidden">
         <div className="px-5 py-4 flex items-center gap-2">
           <LuMedal className="text-amber-400" />
           <h3 className="font-bold">{t("Légendes de la saison")}</h3>
@@ -68,10 +68,10 @@ const FantasyHallOfFame = () => {
               const isMe = String(team?.user_id) === String(user?.id);
               return (
                 <tr key={row.team_id}
-                  className={`border-t border-white/10 ${isMe ? "bg-emerald-500/20" : ""}`}>
+                  className={`border-t border-white/10 ${isMe ? "bg-emerald-500/100/20" : ""}`}>
                   <td className="px-5 py-3 w-12">
                     {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (
-                      <span className="font-bold text-emerald-300/60">{i + 1}</span>
+                      <span className="font-bold text-gray-500">{i + 1}</span>
                     )}
                   </td>
                   <td className="px-2 py-3 font-bold">{team?.name}</td>
@@ -82,7 +82,7 @@ const FantasyHallOfFame = () => {
               );
             })}
             {!board?.length && (
-              <tr><td className="px-5 py-8 text-center text-emerald-200/50">
+              <tr><td className="px-5 py-8 text-center text-gray-500">
                 {t("Pas encore de classement.")}
               </td></tr>
             )}

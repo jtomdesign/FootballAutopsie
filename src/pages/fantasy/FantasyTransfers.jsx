@@ -49,9 +49,9 @@ const Transfers = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center">
-        <p className="text-gray-600">{t("Connectez-vous pour effectuer des transferts.")}</p>
-        <Link to="/compte" className="text-emerald-600 font-bold text-sm mt-2 inline-block">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+        <p className="text-gray-400">{t("Connectez-vous pour effectuer des transferts.")}</p>
+        <Link to="/compte" className="text-emerald-400 font-bold text-sm mt-2 inline-block">
           {t("Se connecter")}
         </Link>
       </div>
@@ -60,9 +60,9 @@ const Transfers = () => {
   if (isLoading) return <p className="text-gray-500 py-10 text-center">{t("Chargement…")}</p>;
   if (!team) {
     return (
-      <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center">
-        <p className="text-gray-600">{t("Créez d'abord votre équipe.")}</p>
-        <Link to="/fantasy/equipe" className="text-emerald-600 font-bold text-sm mt-2 inline-block">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+        <p className="text-gray-400">{t("Créez d'abord votre équipe.")}</p>
+        <Link to="/fantasy/equipe" className="text-emerald-400 font-bold text-sm mt-2 inline-block">
           {t("Mon équipe")}
         </Link>
       </div>
@@ -99,16 +99,16 @@ const Transfers = () => {
   const deduction = freeLeft > 0 ? 0 : (season?.extra_transfer_cost ?? 4);
 
   const PlayerRow = ({ p, side }) => (
-    <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-2.5">
-      <div className="w-9 h-9 rounded-full bg-gray-100 overflow-hidden shrink-0">
+    <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5">
+      <div className="w-9 h-9 rounded-full bg-white/5 overflow-hidden shrink-0">
         {p.photo && <img src={p.photo} alt="" className="w-full h-full object-cover" />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-bold text-gray-900 truncate">{p.name}</p>
+        <p className="text-sm font-bold text-gray-100 truncate">{p.name}</p>
         <p className="text-xs text-gray-500 truncate">{p.club_name}</p>
       </div>
       <PositionBadge position={p.position} />
-      <span className="text-xs font-bold text-emerald-600">
+      <span className="text-xs font-bold text-emerald-400">
         £{Number(p.price ?? p.price_paid).toFixed(1)}m
       </span>
       <button
@@ -123,25 +123,25 @@ const Transfers = () => {
   return (
     <div className="space-y-5">
       {/* Status bar */}
-      <div className="rounded-2xl bg-emerald-950 text-white p-4 flex flex-wrap gap-6 text-sm">
+      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-4 flex flex-wrap gap-6 text-sm">
         <div>
-          <p className="text-emerald-300/70 text-xs uppercase font-bold">{t("Budget")}</p>
+          <p className="text-gray-400 text-xs uppercase font-bold">{t("Budget")}</p>
           <p className="font-bold">£{Number(team.budget ?? 0).toFixed(1)}m</p>
         </div>
         <div>
-          <p className="text-emerald-300/70 text-xs uppercase font-bold">{t("Transferts libres")}</p>
+          <p className="text-gray-400 text-xs uppercase font-bold">{t("Transferts libres")}</p>
           <p className="font-bold">{freeLeft}</p>
         </div>
         <div>
-          <p className="text-emerald-300/70 text-xs uppercase font-bold">{t("Prochains transferts")}</p>
+          <p className="text-gray-400 text-xs uppercase font-bold">{t("Prochains transferts")}</p>
           <p className="font-bold">−{deduction} pts</p>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-5">
         {/* My squad — sell side */}
-        <div className="rounded-2xl bg-white border border-gray-200 p-4">
-          <h3 className="font-bold text-gray-900 mb-3">{t("Mon effectif")}</h3>
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+          <h3 className="font-bold text-gray-100 mb-3">{t("Mon effectif")}</h3>
           <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
             {squad.map(p => (
               <PlayerRow key={p.id} p={p} side="sell" />
@@ -150,9 +150,9 @@ const Transfers = () => {
         </div>
 
         {/* Market — buy side */}
-        <div className="rounded-2xl bg-white border border-gray-200 p-4">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <h3 className="font-bold text-gray-900 mr-auto">{t("Marché")}</h3>
+            <h3 className="font-bold text-gray-100 mr-auto">{t("Marché")}</h3>
             {["", "G", "D", "M", "F"].map(p => (
               <button
                 key={p}
@@ -160,7 +160,7 @@ const Transfers = () => {
                 className={`px-3 py-1 rounded-lg text-xs font-bold ${
                   posFilter === p
                     ? "bg-emerald-600 text-white"
-                    : "bg-gray-100 text-gray-500"
+                    : "bg-white/5 text-gray-500"
                 }`}
               >
                 {p || t("Tous")}
@@ -170,7 +170,7 @@ const Transfers = () => {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t("Rechercher…")}
-              className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm"
+              className="rounded-lg fa-input px-3 py-1.5 text-sm"
             />
           </div>
           <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
@@ -187,15 +187,15 @@ const Transfers = () => {
 
       {/* Confirmation bar */}
       {(sellPick || buyPick) && (
-        <div className="rounded-2xl bg-white border-2 border-emerald-500 p-4 flex flex-wrap items-center gap-4">
-          <LuArrowLeftRight className="text-emerald-600 text-2xl" />
+        <div className="rounded-2xl bg-emerald-950/60 border-2 border-emerald-500 p-4 flex flex-wrap items-center gap-4">
+          <LuArrowLeftRight className="text-emerald-400 text-2xl" />
           <div className="flex-1 min-w-[200px] text-sm">
-            <p className="font-bold text-gray-900">
+            <p className="font-bold text-gray-100">
               {sellPick?.name ?? "?"} → {buyPick?.name ?? "?"}
             </p>
             <p className="text-gray-500">
               {t("Budget après transfert")}:{" "}
-              <strong className={costDelta > Number(team.budget) ? "text-red-600" : "text-emerald-600"}>
+              <strong className={costDelta > Number(team.budget) ? "text-red-600" : "text-emerald-400"}>
                 £{(Number(team.budget) - costDelta).toFixed(1)}m
               </strong>
               {deduction > 0 && (
@@ -213,7 +213,7 @@ const Transfers = () => {
           />
           <button
             onClick={() => { setSellPick(null); setBuyPick(null); }}
-            className="p-2 text-gray-400 hover:text-gray-600"
+            className="p-2 text-gray-400 hover:text-gray-400"
           >
             <LuX className="w-5 h-5" />
           </button>

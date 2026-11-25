@@ -14,7 +14,7 @@ import Button from "../../ui/Button";
 import { LuLock, LuGlobe, LuCopy, LuPlus } from "react-icons/lu";
 
 const TYPE_META = {
-  public_global: { icon: LuGlobe, label: "Globale", cls: "bg-emerald-100 text-emerald-700" },
+  public_global: { icon: LuGlobe, label: "Globale", cls: "bg-emerald-500/15 text-emerald-300" },
   public_country: { icon: LuGlobe, label: "Pays", cls: "bg-sky-100 text-sky-700" },
   private: { icon: LuLock, label: "Privée", cls: "bg-amber-100 text-amber-700" },
   h2h: { icon: LuGlobe, label: "Head-to-head", cls: "bg-rose-100 text-rose-700" },
@@ -85,11 +85,11 @@ const FantasyLeagues = () => {
     return (
       <Link
         to={`/fantasy/ligues/${league.id}`}
-        className="block rounded-2xl bg-white border border-gray-200 p-4 hover:border-emerald-400 transition-colors"
+        className="block rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 hover:border-emerald-400 transition-colors"
       >
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="font-bold text-gray-900">{league.name}</p>
+            <p className="font-bold text-gray-100">{league.name}</p>
             {league.description && (
               <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{league.description}</p>
             )}
@@ -111,7 +111,7 @@ const FantasyLeagues = () => {
                   toast.error(err.message);
                 }
               }}
-              className="font-bold text-emerald-600 hover:underline"
+              className="font-bold text-emerald-400 hover:underline"
             >
               {t("Rejoindre")}
             </button>
@@ -122,7 +122,7 @@ const FantasyLeagues = () => {
                 navigator.clipboard?.writeText(league.invite_code);
                 toast.success(t("Code copié"));
               }}
-              className="flex items-center gap-1 font-bold text-emerald-600 hover:underline"
+              className="flex items-center gap-1 font-bold text-emerald-400 hover:underline"
             >
               <LuCopy className="w-3 h-3" /> {league.invite_code}
             </button>
@@ -144,8 +144,8 @@ const FantasyLeagues = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center">
-        <p className="text-gray-600">{t("Connectez-vous pour voir les ligues.")}</p>
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+        <p className="text-gray-400">{t("Connectez-vous pour voir les ligues.")}</p>
       </div>
     );
   }
@@ -153,12 +153,12 @@ const FantasyLeagues = () => {
   return (
     <div className="space-y-6">
       {/* Join by code */}
-      <div className="rounded-2xl bg-white border border-gray-200 p-4 flex flex-wrap items-center gap-3">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 flex flex-wrap items-center gap-3">
         <input
           value={joinCode}
           onChange={e => setJoinCode(e.target.value.toUpperCase())}
           placeholder={t("Code d'invitation ou ID de ligue")}
-          className="rounded-lg border border-gray-200 px-3 py-2 text-sm flex-1 min-w-[200px]"
+          className="rounded-lg fa-input px-3 py-2 text-sm flex-1 min-w-[200px]"
         />
         <Button name={joining ? "…" : t("Rejoindre")} type="primary"
           onClick={doJoin} disabled={joining || !joinCode.trim()} />
@@ -171,24 +171,24 @@ const FantasyLeagues = () => {
             <Button name={t("Créer une ligue")} type="secondary" icon={<LuPlus />}
               onClick={() => setShowCreate(true)} />
           ) : (
-            <div className="rounded-2xl bg-white border border-gray-200 p-5 space-y-3">
-              <h3 className="font-bold text-gray-900">{t("Nouvelle ligue")}</h3>
+            <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-5 space-y-3">
+              <h3 className="font-bold text-gray-100">{t("Nouvelle ligue")}</h3>
               <div className="grid sm:grid-cols-2 gap-3">
-                <input className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                <input className="rounded-lg fa-input px-3 py-2 text-sm"
                   placeholder={t("Nom de la ligue")}
                   value={form.name}
                   onChange={e => setForm(v => ({ ...v, name: e.target.value }))} />
-                <input className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                <input className="rounded-lg fa-input px-3 py-2 text-sm"
                   placeholder={t("Description (optionnel)")}
                   value={form.description}
                   onChange={e => setForm(v => ({ ...v, description: e.target.value }))} />
-                <select className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                <select className="rounded-lg fa-input px-3 py-2 text-sm"
                   value={form.type}
                   onChange={e => setForm(v => ({ ...v, type: e.target.value }))}>
                   <option value="private">{t("Privée (code d'invitation)")}</option>
                   <option value="h2h">{t("Head-to-head")}</option>
                 </select>
-                <input className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                <input className="rounded-lg fa-input px-3 py-2 text-sm"
                   placeholder={t("Max membres (optionnel)")}
                   type="number"
                   value={form.maxMembers}
@@ -197,7 +197,7 @@ const FantasyLeagues = () => {
               <div className="flex gap-2">
                 <Button name={t("Créer")} type="primary" onClick={doCreate}
                   disabled={!form.name.trim() || createLeague.isPending} />
-                <Button name={t("Annuler")} type="simple"
+                <Button name={t("Annuler")} type="secondary"
                   onClick={() => setShowCreate(false)} />
               </div>
             </div>
@@ -207,7 +207,7 @@ const FantasyLeagues = () => {
       {!myTeam && (
         <p className="text-sm text-gray-500">
           {t("Créez votre équipe pour pouvoir créer ou rejoindre des ligues.")}{" "}
-          <Link to="/fantasy/equipe" className="text-emerald-600 font-bold">
+          <Link to="/fantasy/equipe" className="text-emerald-400 font-bold">
             {t("Mon équipe")}
           </Link>
         </p>

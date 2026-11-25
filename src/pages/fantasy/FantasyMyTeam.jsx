@@ -116,8 +116,8 @@ const CreateTeam = ({ season, onCreated }) => {
     Object.values(clubCounts).every(c => c <= maxClub);
 
   return (
-    <div className="rounded-2xl bg-white border border-gray-200 p-6">
-      <h2 className="text-xl font-bold text-gray-900">{t("Créer mon équipe")}</h2>
+    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-6">
+      <h2 className="text-xl font-bold text-gray-100">{t("Créer mon équipe")}</h2>
       <p className="text-sm text-gray-500 mt-1">
         {season.comp?.name} · {season.name} — £{budget}m, 15 joueurs (2G 5D 5M 3F)
       </p>
@@ -129,14 +129,14 @@ const CreateTeam = ({ season, onCreated }) => {
             key={p}
             className={`px-3 py-1 rounded-full ${
               counts[p] === QUOTAS[p]
-                ? "bg-emerald-100 text-emerald-700"
-                : "bg-gray-100 text-gray-500"
+                ? "bg-emerald-500/15 text-emerald-300"
+                : "bg-white/5 text-gray-500"
             }`}
           >
             {p}: {counts[p] ?? 0}/{QUOTAS[p]}
           </span>
         ))}
-        <span className="ml-auto text-emerald-600">
+        <span className="ml-auto text-emerald-400">
           £{remaining.toFixed(1)}m {t("restants")}
         </span>
       </div>
@@ -147,7 +147,7 @@ const CreateTeam = ({ season, onCreated }) => {
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder={t("Nom de l'équipe")}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm mb-3"
+            className="w-full rounded-lg fa-input px-3 py-2 text-sm mb-3"
           />
           <div className="flex gap-1 mb-2">
             {["G", "D", "M", "F"].map(p => (
@@ -157,7 +157,7 @@ const CreateTeam = ({ season, onCreated }) => {
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold ${
                   posFilter === p
                     ? "bg-emerald-600 text-white"
-                    : "bg-gray-100 text-gray-500"
+                    : "bg-white/5 text-gray-500"
                 }`}
               >
                 {p}
@@ -168,7 +168,7 @@ const CreateTeam = ({ season, onCreated }) => {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder={t("Rechercher…")}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+            className="w-full rounded-lg fa-input px-3 py-2 text-sm"
           />
         </div>
         <div className="grid sm:grid-cols-2 gap-2 max-h-[420px] overflow-y-auto pr-1">
@@ -282,20 +282,20 @@ const MyTeamView = ({ team, season, gw }) => {
         }}
         className={`flex items-center gap-3 rounded-xl border p-2.5 cursor-pointer transition-colors ${
           isCap
-            ? "border-amber-400 bg-amber-50"
+            ? "border-amber-400 bg-amber-500/10"
             : isVc
-              ? "border-sky-300 bg-sky-50"
-              : "border-gray-200 bg-white"
+              ? "border-sky-500/40 bg-sky-500/10"
+              : "border-white/10 bg-white/5"
         }`}
       >
         <span className="text-xs font-bold text-gray-400 w-5">{index + 1}</span>
-        <div className="w-9 h-9 rounded-full bg-gray-100 overflow-hidden shrink-0">
+        <div className="w-9 h-9 rounded-full bg-white/5 overflow-hidden shrink-0">
           {p.photo && (
             <img src={p.photo} alt="" className="w-full h-full object-cover" />
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-gray-900 truncate flex items-center gap-1">
+          <p className="text-sm font-bold text-gray-100 truncate flex items-center gap-1">
             {p.name}
             {isCap && <LuCrown className="text-amber-500 w-4 h-4" />}
             {isVc && <LuCrown className="text-sky-400 w-3.5 h-3.5" />}
@@ -303,7 +303,7 @@ const MyTeamView = ({ team, season, gw }) => {
           <p className="text-xs text-gray-500 truncate">{p.club_name}</p>
         </div>
         <PositionBadge position={p.position} />
-        <span className="text-xs font-bold text-emerald-600">
+        <span className="text-xs font-bold text-emerald-400">
           £{Number(p.price ?? p.price_paid).toFixed(1)}m
         </span>
       </div>
@@ -314,7 +314,7 @@ const MyTeamView = ({ team, season, gw }) => {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">{team.name}</h2>
+          <h2 className="text-xl font-bold text-gray-100">{team.name}</h2>
           <p className="text-sm text-gray-500">
             {season?.comp?.name} · {season?.name} ·{" "}
             {t("{{pts}} points", { pts: team.total_points ?? 0 })}
@@ -328,7 +328,7 @@ const MyTeamView = ({ team, season, gw }) => {
               className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
                 formation.id === f.id
                   ? "bg-emerald-600 text-white"
-                  : "bg-white border border-gray-200 text-gray-500"
+                  : "bg-emerald-950/60 border border-emerald-900/60 text-gray-500"
               }`}
             >
               {f.id}
@@ -338,8 +338,8 @@ const MyTeamView = ({ team, season, gw }) => {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-5">
-        <div className="rounded-2xl bg-white border border-gray-200 p-4">
-          <h3 className="font-bold text-gray-900 mb-3">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+          <h3 className="font-bold text-gray-100 mb-3">
             {t("Titulaire")}
             <span className="text-xs font-normal text-gray-400 ml-2">
               {t("Cliquer pour nommer capitaine / vice-capitaine")}
@@ -352,8 +352,8 @@ const MyTeamView = ({ team, season, gw }) => {
           </div>
         </div>
         <div className="space-y-5">
-          <div className="rounded-2xl bg-white border border-gray-200 p-4">
-            <h3 className="font-bold text-gray-900 mb-3">
+          <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+            <h3 className="font-bold text-gray-100 mb-3">
               {t("Remplaçants")}
             </h3>
             <div className="space-y-2">
@@ -362,16 +362,16 @@ const MyTeamView = ({ team, season, gw }) => {
               ))}
             </div>
           </div>
-          <div className="rounded-2xl bg-emerald-950 text-white p-4 flex items-center justify-between">
+          <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-4 flex items-center justify-between">
             <div className="text-sm">
               <p className="font-bold">{t("Capitaine")}</p>
-              <p className="text-emerald-200/70 text-xs">
+              <p className="text-gray-400 text-xs">
                 {squad.find(p => p.id === capId)?.name ?? "—"} · ×2
               </p>
             </div>
             <div className="text-sm text-right">
               <p className="font-bold">{t("Vice-capitaine")}</p>
-              <p className="text-emerald-200/70 text-xs">
+              <p className="text-gray-400 text-xs">
                 {squad.find(p => p.id === vcId)?.name ?? t("Aucun")}
               </p>
             </div>
@@ -406,9 +406,9 @@ const FantasyMyTeam = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center">
-        <p className="text-gray-600">{t("Connectez-vous pour gérer votre équipe fantasy.")}</p>
-        <Link to="/compte" className="text-emerald-600 font-bold text-sm mt-2 inline-block">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+        <p className="text-gray-400">{t("Connectez-vous pour gérer votre équipe fantasy.")}</p>
+        <Link to="/compte" className="text-emerald-400 font-bold text-sm mt-2 inline-block">
           {t("Se connecter")}
         </Link>
       </div>

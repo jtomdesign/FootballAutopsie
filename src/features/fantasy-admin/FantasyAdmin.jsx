@@ -10,11 +10,11 @@ import Button from "../../ui/Button";
 import { LuRefreshCw, LuPlus, LuPlay } from "react-icons/lu";
 
 const inputCls =
-  "rounded-lg border border-gray-200 px-3 py-2 text-sm w-full";
+  "rounded-lg fa-input px-3 py-2 text-sm w-full";
 
 const Section = ({ title, children }) => (
-  <div className="rounded-2xl bg-white border border-gray-200 p-5">
-    <h3 className="font-bold text-gray-900 mb-4">{title}</h3>
+  <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-5">
+    <h3 className="font-bold text-gray-100 mb-4">{title}</h3>
     {children}
   </div>
 );
@@ -221,9 +221,9 @@ const FantasyAdmin = () => {
           "Gameweeks": counts.fantasy_gameweeks,
           "Transferts": counts.fantasy_transfers,
         }).map(([l, v]) => (
-          <div key={l} className="rounded-2xl bg-white border border-gray-200 p-4">
-            <p className="text-2xl font-bold text-gray-900">{v ?? "—"}</p>
-            <p className="text-xs text-gray-500 font-bold uppercase">{l}</p>
+          <div key={l} className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+            <p className="text-2xl font-bold text-gray-100">{v ?? "—"}</p>
+            <p className="text-xs text-gray-400 font-bold uppercase">{l}</p>
           </div>
         ))}
       </div>
@@ -239,21 +239,21 @@ const FantasyAdmin = () => {
       <Section title="Compétitions & joueurs">
         <div className="space-y-4">
           {(comps ?? []).map(comp => (
-            <div key={comp.id} className="border border-gray-100 rounded-xl p-4">
+            <div key={comp.id} className="border border-white/10 rounded-xl p-4">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <p className="font-bold text-gray-900">{comp.name}</p>
+                <p className="font-bold text-gray-100">{comp.name}</p>
                 <Button name="Sync joueurs" type="simple" icon={<LuRefreshCw />}
                   onClick={() => runPlayerSync(comp)} />
               </div>
               <div className="space-y-2">
                 {(comp.fantasy_seasons ?? []).map(s => (
                   <div key={s.id} className="flex flex-wrap items-center gap-2 text-sm">
-                    <span className="font-semibold text-gray-800">{s.name}</span>
+                    <span className="font-semibold text-gray-200">{s.name}</span>
                     <span className="text-xs text-gray-400">API {s.api_season}</span>
                     <select
                       value={s.status}
                       onChange={e => setSeasonStatus(s.id, e.target.value)}
-                      className="rounded-lg border border-gray-200 px-2 py-1 text-xs"
+                      className="rounded-lg fa-input px-2 py-1 text-xs"
                     >
                       {["draft", "active", "completed", "archived"].map(st => (
                         <option key={st} value={st}>{st}</option>
@@ -274,7 +274,7 @@ const FantasyAdmin = () => {
         </div>
 
         {/* New season */}
-        <div className="mt-5 pt-4 border-t border-gray-100 grid sm:grid-cols-4 gap-2 items-end">
+        <div className="mt-5 pt-4 border-t border-white/10 grid sm:grid-cols-4 gap-2 items-end">
           <select className={inputCls} value={newSeason.compId}
             onChange={e => setNewSeason(v => ({ ...v, compId: e.target.value }))}>
             <option value="">Compétition…</option>
@@ -317,8 +317,8 @@ const FantasyAdmin = () => {
                 {s.comp?.name} {s.name}
               </p>
               {(s.fantasy_gameweeks ?? []).map(gw => (
-                <div key={gw.id} className="flex flex-wrap items-center gap-2 text-sm py-1.5 border-b border-gray-50">
-                  <span className="font-bold text-gray-800">GW{gw.number}</span>
+                <div key={gw.id} className="flex flex-wrap items-center gap-2 text-sm py-1.5 border-b border-white/5">
+                  <span className="font-bold text-gray-200">GW{gw.number}</span>
                   <span className="text-xs text-gray-400">
                     {gw.deadline ? new Date(gw.deadline).toLocaleString("fr-FR") : ""}
                   </span>
@@ -328,7 +328,7 @@ const FantasyAdmin = () => {
                   <select
                     value={gw.status}
                     onChange={e => setGwStatus(gw.id, e.target.value)}
-                    className="rounded-lg border border-gray-200 px-2 py-1 text-xs"
+                    className="rounded-lg fa-input px-2 py-1 text-xs"
                   >
                     {["upcoming", "open", "deadline_passed", "live", "processing", "completed"].map(st => (
                       <option key={st} value={st}>{st}</option>
@@ -367,9 +367,9 @@ const FantasyAdmin = () => {
           onClick={createChallenge} />
         <div className="mt-4 space-y-2">
           {challenges.map(c => (
-            <div key={c.id} className="flex items-center gap-3 text-sm border-b border-gray-50 pb-2">
+            <div key={c.id} className="flex items-center gap-3 text-sm border-b border-white/5 pb-2">
               <div className="flex-1">
-                <p className="font-bold text-gray-800">{c.title}</p>
+                <p className="font-bold text-gray-200">{c.title}</p>
                 {c.reward && <p className="text-xs text-amber-600">🏆 {c.reward}</p>}
               </div>
               <button onClick={() => deleteChallenge(c.id)}

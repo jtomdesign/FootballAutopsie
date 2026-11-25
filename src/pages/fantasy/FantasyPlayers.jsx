@@ -45,12 +45,12 @@ const FantasyPlayers = () => {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="rounded-2xl bg-white border border-gray-200 p-4 flex flex-wrap gap-2 items-center">
+      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 flex flex-wrap gap-2 items-center">
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder={t("Rechercher un joueur…")}
-          className="rounded-lg border border-gray-200 px-3 py-2 text-sm flex-1 min-w-[180px]"
+          className="rounded-lg fa-input px-3 py-2 text-sm flex-1 min-w-[180px]"
         />
         <div className="flex gap-1">
           {["", "G", "D", "M", "F"].map(p => (
@@ -58,7 +58,7 @@ const FantasyPlayers = () => {
               key={p}
               onClick={() => setPos(p)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
-                pos === p ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-500"
+                pos === p ? "bg-emerald-600 text-white" : "bg-white/5 text-gray-500"
               }`}
             >
               {p || t("Tous")}
@@ -68,7 +68,7 @@ const FantasyPlayers = () => {
         <select
           value={club}
           onChange={e => setClub(e.target.value)}
-          className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm"
+          className="rounded-lg fa-input px-2 py-1.5 text-sm"
         >
           <option value="">{t("Tous les clubs")}</option>
           {clubs.map(([id, name]) => (
@@ -81,7 +81,7 @@ const FantasyPlayers = () => {
           placeholder="Min £"
           type="number"
           step="0.5"
-          className="w-20 rounded-lg border border-gray-200 px-2 py-1.5 text-sm"
+          className="w-20 rounded-lg fa-input px-2 py-1.5 text-sm"
         />
         <input
           value={maxP}
@@ -89,12 +89,12 @@ const FantasyPlayers = () => {
           placeholder="Max £"
           type="number"
           step="0.5"
-          className="w-20 rounded-lg border border-gray-200 px-2 py-1.5 text-sm"
+          className="w-20 rounded-lg fa-input px-2 py-1.5 text-sm"
         />
         <select
           value={sort}
           onChange={e => setSort(e.target.value)}
-          className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm"
+          className="rounded-lg fa-input px-2 py-1.5 text-sm"
         >
           <option value="points">{t("Points")}</option>
           <option value="price_desc">{t("Prix ↓")}</option>
@@ -113,7 +113,7 @@ const FantasyPlayers = () => {
         ))}
       </div>
       {!isLoading && !players.length && (
-        <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center text-gray-500">
+        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center text-gray-500">
           {t("Aucun joueur ne correspond aux filtres.")}
         </div>
       )}
