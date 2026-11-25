@@ -79,7 +79,8 @@ const TeamDetail = () => {
   const { data: followers } = useEntityFollowers("team", team?.id);
   const { data: leagues = [] } = useTeamLeagues(id);
   const [season, setSeason] = useState(null);
-  const activeSeason = season ?? getCurrentSeason();
+  const currentSeason = getCurrentSeason();
+  const activeSeason = season ?? currentSeason;
 
   const primaryLeague = leagues[0] ?? null;
   const { data: fixtures } = useTeamFixtures({ team: id, season: activeSeason });
@@ -177,7 +178,7 @@ const TeamDetail = () => {
                 onChange={e => setSeason(Number(e.target.value))}
                 className="px-4 py-2.5 rounded-full fa-input text-sm text-gray-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
               >
-                {[activeSeason, activeSeason - 1, activeSeason - 2].map(y => (
+                {[currentSeason, currentSeason - 1, currentSeason - 2].map(y => (
                   <option key={y} value={y}>
                     {t("Saison {{year}}", { year: y })}
                   </option>
