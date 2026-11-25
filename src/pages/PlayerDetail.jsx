@@ -235,7 +235,7 @@ const PlayerDetail = () => {
                     value={followers}
                     className="text-2xl font-semibold text-gray-50 tabular-nums"
                   />
-                  <p className="text-[0.55rem] uppercase tracking-[0.2em] text-gray-500">
+                  <p className="text-[0.6rem] tracking-wide text-gray-500">
                     {t("abonnés")}
                   </p>
                 </div>
