@@ -292,18 +292,16 @@ const PlayerDetail = () => {
         {/* Season stats — current season, all competitions */}
         {scope.length > 0 && (
           <>
-            <SectionHeader
-              title={t("Statistiques")}
-              subtitle={
-                scope.length > 1
-                  ? `${t("Toutes compétitions")} — ${t("Saison en cours {{season}}", { season: leagueSeason })}`
-                  : `${scope[0].league?.name ?? ""}${
-                      scope[0].league?.country?.name ?? scope[0].league?.country
-                        ? ` · ${scope[0].league?.country?.name ?? scope[0].league?.country}`
-                        : ""
-                    } — ${t("Saison en cours {{season}}", { season: leagueSeason })}`
-              }
-            />
+            <SectionHeader title={t("Statistiques")} />
+            <p className="text-xs text-gray-500 -mt-2 mb-4">
+              {scope.length > 1
+                ? `${t("Toutes compétitions")} — ${t("Saison en cours {{season}}", { season: leagueSeason })}`
+                : `${scope[0].league?.name ?? ""}${
+                    scope[0].league?.country?.name ?? scope[0].league?.country
+                      ? ` · ${scope[0].league?.country?.name ?? scope[0].league?.country}`
+                      : ""
+                  } — ${t("Saison en cours {{season}}", { season: leagueSeason })}`}
+            </p>
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-4 mb-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
               <StatCell label={t("Matchs")} value={agg.apps} />
               <StatCell label={t("Minutes")} value={agg.minutes} />
