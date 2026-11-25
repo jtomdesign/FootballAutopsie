@@ -9,6 +9,10 @@ const TABS = [
   { to: "/fantasy/transferts", key: "Transferts" },
   { to: "/fantasy/joueurs", key: "Joueurs" },
   { to: "/fantasy/ligues", key: "Ligues" },
+  { to: "/fantasy/fixtures", key: "Fixtures" },
+  { to: "/fantasy/stats", key: "Stats" },
+  { to: "/fantasy/hall-of-fame", key: "Hall of Fame" },
+  { to: "/fantasy/regles", key: "Règles" },
   { to: "/fantasy/points", key: "Points" },
 ];
 

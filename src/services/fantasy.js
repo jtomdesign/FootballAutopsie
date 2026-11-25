@@ -417,7 +417,8 @@ export const reactToStory = async (storyId, emoji) => {
 export const getAchievements = async () => {
   const [{ data: all }, { data: unlocked }] = await Promise.all([
     supabase.from("fantasy_achievements").select("*").order("sort"),
-    supabase.from("fantasy_manager_achievements").select("*, fantasy_achievements(*)"),
+    supabase.from("fantasy_manager_achievements")
+      .select("*, fantasy_achievements(*), fantasy_teams(user_id)"),
   ]);
   return { all: all ?? [], unlocked: unlocked ?? [] };
 };

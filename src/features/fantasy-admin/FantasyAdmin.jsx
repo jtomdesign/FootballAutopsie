@@ -29,6 +29,40 @@ const FantasyAdmin = () => {
   const [newGw, setNewGw] = useState({ seasonId: "", number: "", deadline: "" });
   const [rulesText, setRulesText] = useState(null);
   const [syncing, setSyncing] = useState(false);
+  const [challenges, setChallenges] = useState([]);
+  const [newChallenge, setNewChallenge] = useState({ title: "", description: "", reward: "", endsAt: "" });
+
+  const loadChallenges = async () => {
+    const { data } = await supabase
+      .from("fantasy_challenges")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(20);
+    setChallenges(data ?? []);
+  };
+  React.useEffect(() => { loadChallenges(); }, []);
+
+  const createChallenge = async () => {
+    if (!newChallenge.title.trim()) return toast.error("Titre requis");
+    const season = seasons[0];
+    const { error } = await supabase.from("fantasy_challenges").insert({
+      season_id: season?.id ?? null,
+      title: newChallenge.title.trim(),
+      description: newChallenge.description || null,
+      reward: newChallenge.reward || null,
+      ends_at: newChallenge.endsAt ? new Date(newChallenge.endsAt).toISOString() : null,
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Défi créé");
+    setNewChallenge({ title: "", description: "", reward: "", endsAt: "" });
+    loadChallenges();
+  };
+
+  const deleteChallenge = async id => {
+    const { error } = await supabase.from("fantasy_challenges").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    loadChallenges();
+  };
 
   const seasons = useMemo(
     () =>
@@ -310,6 +344,43 @@ const FantasyAdmin = () => {
               ))}
             </div>
           ))}
+        </div>
+      </Section>
+
+      {/* Challenges */}
+      <Section title="Défis">
+        <div className="grid sm:grid-cols-4 gap-2 items-end mb-4">
+          <input className={`${inputCls} sm:col-span-2`} placeholder="Titre du défi"
+            value={newChallenge.title}
+            onChange={e => setNewChallenge(v => ({ ...v, title: e.target.value }))} />
+          <input className={inputCls} placeholder="Récompense"
+            value={newChallenge.reward}
+            onChange={e => setNewChallenge(v => ({ ...v, reward: e.target.value }))} />
+          <input className={inputCls} type="datetime-local"
+            value={newChallenge.endsAt}
+            onChange={e => setNewChallenge(v => ({ ...v, endsAt: e.target.value }))} />
+        </div>
+        <input className={`${inputCls} mb-3`} placeholder="Description"
+          value={newChallenge.description}
+          onChange={e => setNewChallenge(v => ({ ...v, description: e.target.value }))} />
+        <Button name="Créer le défi" type="secondary" icon={<LuPlus />}
+          onClick={createChallenge} />
+        <div className="mt-4 space-y-2">
+          {challenges.map(c => (
+            <div key={c.id} className="flex items-center gap-3 text-sm border-b border-gray-50 pb-2">
+              <div className="flex-1">
+                <p className="font-bold text-gray-800">{c.title}</p>
+                {c.reward && <p className="text-xs text-amber-600">🏆 {c.reward}</p>}
+              </div>
+              <button onClick={() => deleteChallenge(c.id)}
+                className="text-xs font-bold text-red-500 hover:underline">
+                Supprimer
+              </button>
+            </div>
+          ))}
+          {!challenges.length && (
+            <p className="text-xs text-gray-400">Aucun défi.</p>
+          )}
         </div>
       </Section>
 
