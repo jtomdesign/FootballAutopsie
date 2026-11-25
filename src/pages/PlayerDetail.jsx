@@ -229,11 +229,11 @@ const PlayerDetail = () => {
               </div>
             </div>
             <div className="flex items-center gap-4 shrink-0">
-              {followers != null && followers > 0 && (
-                <div className="text-center">
+              {followers != null && (
+                <div className="text-center bg-transparent">
                   <CountUp
                     value={followers}
-                    className="text-2xl font-semibold text-gray-50 tabular-nums"
+                    className="text-2xl font-semibold text-gray-50 tabular-nums bg-transparent"
                   />
                   <p className="text-[0.6rem] tracking-wide text-gray-500 -mt-1.5">
                     {t("Abonnés")}
