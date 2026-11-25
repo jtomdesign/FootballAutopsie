@@ -123,11 +123,15 @@ const TeamDetail = () => {
         </Link>
 
         {/* Header */}
-        <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-3xl p-6 sm:p-8 mb-8">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            <TeamLogo logo={team.logo} name={team.name} size="w-24 h-24 sm:w-32 sm:h-32" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900/50 via-emerald-950/70 to-emerald-950 border border-emerald-500/20 rounded-3xl p-6 sm:p-8 mb-8 shadow-[0_10px_40px_-15px_rgba(16,185,129,0.35)]">
+          <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl" />
+          <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <div className="relative shrink-0 drop-shadow-[0_0_20px_rgba(16,185,129,0.35)]">
+              <TeamLogo logo={team.logo} name={team.name} size="w-24 h-24 sm:w-32 sm:h-32" />
+            </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-3xl sm:text-4xl font-black text-gray-50 font-menu tracking-wide uppercase">
+              <h1 className="text-3xl sm:text-4xl font-black font-menu tracking-wide uppercase bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
                 {team.name}
               </h1>
               <p className="text-gray-400 text-sm mt-1">
