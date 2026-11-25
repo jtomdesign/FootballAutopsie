@@ -220,6 +220,17 @@ const PlayerDetail = () => {
                   </span>
                 )}
               </div>
+              {followers != null && followers > 0 && (
+                <div className="mt-4">
+                  <CountUp
+                    value={followers}
+                    className="text-5xl sm:text-6xl font-extrabold text-gray-50 tracking-tight"
+                  />
+                  <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+                    {t("abonnés")}
+                  </p>
+                </div>
+              )}
             </div>
             <div className="flex flex-col items-center gap-3 shrink-0">
               {typeof current.games?.number === "number" && (
@@ -235,18 +246,6 @@ const PlayerDetail = () => {
                 entityName={player.name}
                 entityLogo={player.photo}
               />
-              {followers != null && (
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/50 border border-emerald-800">
-                  <LuUsers className="text-emerald-400 text-sm" />
-                  <CountUp
-                    value={followers}
-                    className="text-sm font-bold text-gray-100"
-                  />
-                  <span className="text-[0.65rem] uppercase tracking-wide text-gray-500">
-                    {t("abonnés")}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         </div>

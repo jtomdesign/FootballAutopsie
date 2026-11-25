@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useAllPosts } from "../../hooks/usePostData";
 import { useCategories } from "../../hooks/useCategories";
 import { getAnalyticsStats } from "../../services/analytics";
+import { useTopFollowed } from "../../hooks/user";
+import TeamLogo from "../../components/football/TeamLogo";
 import { formatDate } from "../../utils/helpers";
 import {
   LuBookOpen,
@@ -15,6 +17,7 @@ import {
   LuEye,
   LuUser,
   LuGlobe,
+  LuTrendingUp,
 } from "react-icons/lu";
 import Spinner from "../../ui/Spinner";
 import EmptyState from "../../components/football/EmptyState";
@@ -73,6 +76,7 @@ const DashboardHome = () => {
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
+  const { data: topFollowed } = useTopFollowed();
 
   if (isLoading) return <Spinner />;
 
@@ -215,6 +219,63 @@ const DashboardHome = () => {
                 <p className="text-sm text-gray-400">Aucune donnée.</p>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {(topFollowed?.teams?.length > 0 || topFollowed?.players?.length > 0) && (
+        <div className="mb-6">
+          <h2 className="font-bold text-gray-100 mb-3 flex items-center gap-2">
+            <LuTrendingUp className="text-emerald-400" /> Les plus suivis
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {[
+              {
+                title: "Équipes",
+                items: topFollowed?.teams ?? [],
+                to: id => `/equipes/${id}`,
+              },
+              {
+                title: "Joueurs",
+                items: topFollowed?.players ?? [],
+                to: id => `/joueurs/${id}`,
+              },
+            ].map(col =>
+              col.items.length ? (
+                <div
+                  key={col.title}
+                  className="bg-emerald-950/60 rounded-2xl p-5"
+                >
+                  <h3 className="font-bold text-gray-100 text-sm mb-3">
+                    {col.title} les plus suivis
+                  </h3>
+                  <div className="flex flex-col">
+                    {col.items.map((item, i) => (
+                      <Link
+                        key={item.entity_id}
+                        to={col.to(item.entity_id)}
+                        className="flex items-center gap-3 py-2 border-b border-emerald-900/40 last:border-0 hover:bg-emerald-900/30 -mx-2 px-2 rounded-lg transition-colors"
+                      >
+                        <span className="text-[0.65rem] font-bold text-gray-500 w-4 shrink-0">
+                          {i + 1}
+                        </span>
+                        <TeamLogo
+                          logo={item.logo}
+                          name={item.name}
+                          size="w-7 h-7"
+                        />
+                        <span className="flex-1 min-w-0 truncate text-sm text-gray-200 font-medium">
+                          {item.name}
+                        </span>
+                        <span className="text-xs font-bold text-emerald-400 tabular-nums shrink-0">
+                          {Number(item.followers).toLocaleString()} abonnés
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null,
+            )}
           </div>
         </div>
       )}

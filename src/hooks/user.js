@@ -35,6 +35,7 @@ import {
   deleteNotification,
   notify,
   adminSetUserRole,
+  adminTopFollowed,
   getContactMessages,
   deleteContactMessage,
 } from "../services/user";
@@ -444,6 +445,15 @@ export const useSetUserRole = () => {
     onError: e => toast.error(e.message),
   });
 };
+
+export const useTopFollowed = enabled =>
+  useQuery({
+    queryKey: ["admin", "top-followed"],
+    queryFn: adminTopFollowed,
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
 
 // ---------- Admin: contact messages ----------
 

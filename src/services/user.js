@@ -418,6 +418,12 @@ export const adminListUsers = async () => {
   return data ?? [];
 };
 
+export const adminTopFollowed = async () => {
+  const { data, error } = await supabase.rpc("admin_top_followed");
+  if (error) throw error;
+  return data ?? { teams: [], players: [] };
+};
+
 export const adminSetUserRole = async (userId, role) => {
   const { error } = await supabase.rpc("admin_set_user_role", {
     p_user_id: userId,
