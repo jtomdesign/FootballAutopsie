@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import TeamLogo from "./TeamLogo";
-import { formatMatchDateTime } from "../../utils/helpers";
+import { formatMatchDateTime, formatMatchDay } from "../../utils/helpers";
 
 const ScoreOrTime = ({ fixture }) => {
   const { t } = useTranslation();
@@ -34,13 +34,20 @@ const ScoreOrTime = ({ fixture }) => {
     );
   }
 
+  const isToday =
+    new Date(fixture.date).toDateString() === new Date().toDateString();
+  const subLabel =
+    status.isUpcoming && !isToday
+      ? formatMatchDay(fixture.date)
+      : t(status.label);
+
   return (
     <div className="flex flex-col items-center min-w-20">
       <span className="text-sm font-semibold text-gray-300 tabular-nums">
         {formatMatchDateTime(fixture.date)}
       </span>
       <span className="text-[0.65rem] uppercase tracking-wide text-gray-500">
-        {t(status.label)}
+        {subLabel}
       </span>
     </div>
   );

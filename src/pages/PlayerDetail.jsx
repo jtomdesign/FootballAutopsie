@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import { Container } from "../ui/Container";
 import { usePlayer } from "../hooks/football";
-import { getCurrentSeason } from "../services/football/leagues";
 import { useEntityFollowers } from "../hooks/user";
 import SectionHeader from "../components/football/SectionHeader";
 import { useSEO, metaDescription, SITE_URL } from "../utils/seo";
@@ -12,6 +11,7 @@ import TeamLogo from "../components/football/TeamLogo";
 import EmptyState from "../components/football/EmptyState";
 import Spinner from "../ui/Spinner";
 import FollowButton from "../components/user/FollowButton";
+import CountUp from "../ui/CountUp";
 import {
   LuArrowLeft,
   LuActivity,
@@ -104,16 +104,29 @@ const PlayerDetail = () => {
   const stats = player.statistics ?? [];
   const current = stats[0] ?? {};
 
-  // Stats for the player's respective league (identified by the primary
-  // entry's league id — domestic leagues have the most appearances).
-  const currentSeason = getCurrentSeason();
+  // Stats for the player's respective league, restricted to its current
+  // (most recent) season — domestic leagues have the most appearances.
   const leagueId = player.primaryLeague?.id;
-  const scope = leagueId
+  const leagueEntries = leagueId
     ? stats.filter(s => s.league?.id === leagueId)
     : stats.slice(0, 1);
-  const seasonStats = stats.filter(s => s.league?.season === currentSeason);
-  const otherComps = seasonStats.filter(s => s.league?.id !== leagueId);
-  const pastStats = stats.filter(s => s.league?.season !== currentSeason);
+  const leagueSeason = leagueEntries.length
+    ? Math.max(...leagueEntries.map(s => s.league?.season ?? 0))
+    : null;
+  const scope = leagueEntries.filter(
+    s => s.league?.season === leagueSeason,
+  );
+  const otherComps = stats.filter(
+    s =>
+      s.league?.id !== leagueId &&
+      s.league?.season === leagueSeason &&
+      s.league?.season != null,
+  );
+  const scopeKeys = new Set(scope);
+  const otherKeys = new Set(otherComps);
+  const pastStats = stats.filter(
+    s => !scopeKeys.has(s) && !otherKeys.has(s),
+  );
 
   const num = v => (typeof v === "number" ? v : 0);
   const agg = scope.reduce(
@@ -223,9 +236,16 @@ const PlayerDetail = () => {
                 entityLogo={player.photo}
               />
               {followers != null && (
-                <p className="text-xs text-gray-500">
-                  {t("{{count}} abonné(s)", { count: followers })}
-                </p>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/50 border border-emerald-800">
+                  <LuUsers className="text-emerald-400 text-sm" />
+                  <CountUp
+                    value={followers}
+                    className="text-sm font-bold text-gray-100"
+                  />
+                  <span className="text-[0.65rem] uppercase tracking-wide text-gray-500">
+                    {t("abonnés")}
+                  </span>
+                </div>
               )}
             </div>
           </div>
@@ -279,12 +299,12 @@ const PlayerDetail = () => {
               title={t("Statistiques")}
               subtitle={
                 scope.length > 1
-                  ? `${t("Toutes compétitions")} — ${t("Saison {{season}}", { season: currentSeason })}`
+                  ? `${t("Toutes compétitions")} — ${t("Saison en cours {{season}}", { season: leagueSeason })}`
                   : `${scope[0].league?.name ?? ""}${
                       scope[0].league?.country?.name ?? scope[0].league?.country
                         ? ` · ${scope[0].league?.country?.name ?? scope[0].league?.country}`
                         : ""
-                    } — ${t("Saison {{season}}", { season: scope[0].league?.season ?? "" })}`
+                    } — ${t("Saison en cours {{season}}", { season: leagueSeason })}`
               }
             />
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl p-4 mb-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -314,7 +334,7 @@ const PlayerDetail = () => {
           <section className="mb-10">
             <SectionHeader
               title={t("Autres compétitions")}
-              subtitle={t("Saison {{season}}", { season: currentSeason })}
+              subtitle={t("Saison en cours {{season}}", { season: leagueSeason })}
             />
             <div className="bg-emerald-950/60 border border-emerald-900/60 rounded-2xl overflow-hidden">
               {otherComps.map((s, i) => (

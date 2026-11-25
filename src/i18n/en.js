@@ -216,6 +216,8 @@ export default {
   "Oui": "Yes",
   "Non": "No",
   "Saison {{season}}": "Season {{season}}",
+  "Saison en cours {{season}}": "Current season {{season}}",
+  "abonnés": "followers",
   "Minutes": "Minutes",
   "Buts": "Goals",
   "Passes": "Assists",
