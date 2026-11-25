@@ -27,7 +27,7 @@ const FORMATIONS = [
 
 const QUOTAS = { G: 2, D: 5, M: 5, F: 3 };
 
-const ClubCount = ({ players }) => {
+const ClubCount = players => {
   const counts = {};
   players.forEach(p => {
     const k = p.club_api_id ?? p.club_name;
