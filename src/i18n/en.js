@@ -274,6 +274,26 @@ export default {
   "Connectez-vous pour commenter": "Log in to comment",
   "Connectez-vous pour sauvegarder": "Log in to save",
   "Connectez-vous pour enregistrer": "Log in to save",
+  "Mot de passe oublié": "Forgot password",
+  "Mot de passe oublié ?": "Forgot password?",
+  "Entrez votre email pour recevoir un lien de réinitialisation":
+    "Enter your email to receive a reset link",
+  "Retour à la connexion": "Back to log in",
+  "Envoyer le lien": "Send link",
+  "Lien de réinitialisation envoyé — vérifiez votre email":
+    "Reset link sent — check your email",
+  "Nouveau mot de passe": "New password",
+  "Choisissez un nouveau mot de passe pour votre compte":
+    "Choose a new password for your account",
+  "Confirmer le mot de passe": "Confirm password",
+  "Les mots de passe ne correspondent pas": "Passwords do not match",
+  "Mettre à jour": "Update",
+  "Enregistrement…": "Saving…",
+  "Mot de passe mis à jour": "Password updated",
+  "Vérification du lien…": "Verifying link…",
+  "Lien invalide ou expiré": "Invalid or expired link",
+  "Demandez un nouveau lien de réinitialisation.":
+    "Request a new reset link.",
 
   // ---------- Follow / save ----------
   "Suivre": "Follow",

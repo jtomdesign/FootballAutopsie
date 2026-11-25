@@ -16,6 +16,7 @@ import Search from "./pages/Search";
 import AIAssistant from "./pages/AIAssistant";
 import Contact from "./pages/Contact";
 import Account from "./pages/Account";
+import ResetPassword from "./pages/ResetPassword";
 import MyFootball from "./pages/MyFootball";
 import Notifications from "./pages/Notifications";
 import Dashboard from "./pages/Dashboard";
@@ -96,6 +97,7 @@ const App = () => {
             <Route path="/assistant" element={<AIAssistant />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/compte" element={<Account />} />
+            <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route element={<UserRoute />}>

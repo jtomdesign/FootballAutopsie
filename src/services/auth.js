@@ -48,6 +48,18 @@ export async function signUp({ name, email, password }) {
   return toAppUser(data.user, role);
 }
 
+export async function requestPasswordReset(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reinitialiser-mot-de-passe`,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function updatePassword(password) {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw new Error(error.message);
+}
+
 export async function signInWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",

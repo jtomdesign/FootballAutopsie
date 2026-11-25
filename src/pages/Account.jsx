@@ -7,6 +7,9 @@ import {
 } from "react-icons/si";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
+import { requestPasswordReset } from "../services/auth";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 import Spinner from "../ui/Spinner";
 import { useSEO } from "../utils/seo";
 
@@ -16,9 +19,18 @@ const inputCls =
 const Account = () => {
   const { t } = useTranslation();
   useSEO({ title: "Mon compte", path: "/compte", noindex: true });
-  const [mode, setMode] = useState("login"); // login | signup
-  const { submit, isPending, googleLogin } = useAuth(mode);
+  const [mode, setMode] = useState("login"); // login | signup | forgot
+  const { submit, isPending, googleLogin } = useAuth(mode === "forgot" ? "login" : mode);
   const { isAuthenticated, hydrated } = useSelector(s => s.user);
+
+  const resetMutation = useMutation({
+    mutationFn: ({ email }) => requestPasswordReset(email),
+    onSuccess: () => {
+      toast.success(t("Lien de réinitialisation envoyé — vérifiez votre email"));
+      setMode("login");
+    },
+    onError: err => toast.error(err.message),
+  });
 
   const {
     register,
@@ -29,24 +41,32 @@ const Account = () => {
   // Already signed in — /compte is the login page, send them to their space
   if (hydrated && isAuthenticated) return <Navigate to="/mon-espace" replace />;
 
-  const onSubmit = data => submit(data);
+  const onSubmit = data =>
+    mode === "forgot" ? resetMutation.mutate(data) : submit(data);
 
-  if (isPending) return <Spinner />;
+  if (isPending || resetMutation.isPending) return <Spinner />;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-[90vh]">
       <div className="h-full flex items-center justify-center py-10 px-4">
         <div className="w-full max-w-md bg-emerald-950/60 border border-emerald-900/60 rounded-3xl p-6 sm:p-8 fa-fade-up">
           <h1 className="text-gray-100 text-2xl sm:text-3xl font-bold text-center mb-1">
-            {mode === "login" ? t("Se connecter") : t("Créer un compte")}
+            {mode === "login"
+              ? t("Se connecter")
+              : mode === "signup"
+                ? t("Créer un compte")
+                : t("Mot de passe oublié")}
           </h1>
           <p className="text-gray-500 text-sm text-center mb-6">
             {mode === "login"
               ? t("Accédez à votre espace Football Autopsie")
-              : t("Rejoignez la communauté Football Autopsie")}
+              : mode === "signup"
+                ? t("Rejoignez la communauté Football Autopsie")
+                : t("Entrez votre email pour recevoir un lien de réinitialisation")}
           </p>
 
           {/* Mode toggle */}
+          {mode !== "forgot" && (
           <div className="flex gap-1.5 mb-6">
             <button
               type="button"
@@ -71,8 +91,18 @@ const Account = () => {
               {t("Inscription")}
             </button>
           </div>
+          )}
 
           <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+            {mode === "forgot" && (
+              <button
+                type="button"
+                onClick={() => setMode("login")}
+                className="self-start text-xs font-semibold text-emerald-400 hover:text-emerald-300 cursor-pointer mb-1"
+              >
+                ← {t("Retour à la connexion")}
+              </button>
+            )}
             {mode === "signup" && (
               <div className="flex flex-col">
                 <input
@@ -105,6 +135,7 @@ const Account = () => {
                 </span>
               )}
             </div>
+            {mode !== "forgot" && (
             <div className="flex flex-col">
               <input
                 className={inputCls}
@@ -125,14 +156,30 @@ const Account = () => {
                 </span>
               )}
             </div>
+            )}
+            {mode === "login" && (
+              <button
+                type="button"
+                onClick={() => setMode("forgot")}
+                className="self-end text-xs font-semibold text-emerald-400 hover:text-emerald-300 cursor-pointer -mt-1"
+              >
+                {t("Mot de passe oublié ?")}
+              </button>
+            )}
             <button
               className="mt-2 cursor-pointer bg-emerald-600 hover:bg-emerald-500 py-3.5 px-4 text-white font-semibold rounded-xl transition-colors"
               type="submit"
             >
-              {mode === "login" ? t("Se connecter") : t("S'inscrire")}
+              {mode === "login"
+                ? t("Se connecter")
+                : mode === "signup"
+                  ? t("S'inscrire")
+                  : t("Envoyer le lien")}
             </button>
           </form>
 
+          {mode !== "forgot" && (
+          <>
           <div className="flex items-center gap-3 my-5">
             <span className="flex-1 h-px bg-emerald-900/60" />
             <span className="text-[0.65rem] uppercase tracking-widest text-gray-500">
@@ -149,6 +196,8 @@ const Account = () => {
             <SiGoogle className="text-lg" />
             {t("Se connecter avec Google")}
           </button>
+          </>
+          )}
         </div>
       </div>
       <div
