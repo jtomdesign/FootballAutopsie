@@ -1,0 +1,115 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getFantasyComps,
+  getFantasySeason,
+  getActiveGameweek,
+  getScoringRules,
+  searchFantasyPlayers,
+  getMyTeam,
+  getTeamSquad,
+  getLeaderboard,
+  getMyPoints,
+  getPlayerGameweekPoints,
+  fantasyCreateTeam,
+  fantasyTransfer,
+  fantasySetLineup,
+  syncFantasyPlayers,
+} from "../services/fantasy";
+
+export const useFantasyComps = () =>
+  useQuery({ queryKey: ["fantasy", "comps"], queryFn: getFantasyComps });
+
+export const useFantasySeason = seasonId =>
+  useQuery({
+    queryKey: ["fantasy", "season", seasonId],
+    queryFn: () => getFantasySeason(seasonId),
+    enabled: !!seasonId,
+  });
+
+export const useActiveGameweek = seasonId =>
+  useQuery({
+    queryKey: ["fantasy", "gw", seasonId],
+    queryFn: () => getActiveGameweek(seasonId),
+    enabled: !!seasonId,
+    refetchInterval: 60_000,
+  });
+
+export const useScoringRules = () =>
+  useQuery({ queryKey: ["fantasy", "rules"], queryFn: getScoringRules });
+
+export const useFantasyPlayers = params =>
+  useQuery({
+    queryKey: ["fantasy", "players", params],
+    queryFn: () => searchFantasyPlayers(params),
+    enabled: params?.enabled !== false,
+    placeholderData: prev => prev,
+  });
+
+export const useMyTeam = seasonId =>
+  useQuery({
+    queryKey: ["fantasy", "myteam", seasonId],
+    queryFn: () => getMyTeam(seasonId),
+    enabled: !!seasonId,
+    refetchInterval: 30_000,
+  });
+
+export const useTeamSquad = teamId =>
+  useQuery({
+    queryKey: ["fantasy", "squad", teamId],
+    queryFn: () => getTeamSquad(teamId),
+    enabled: !!teamId,
+  });
+
+export const useLeaderboard = params =>
+  useQuery({
+    queryKey: ["fantasy", "board", params],
+    queryFn: () => getLeaderboard(params),
+  });
+
+export const useMyPoints = params =>
+  useQuery({
+    queryKey: ["fantasy", "points", params],
+    queryFn: () => getMyPoints(params),
+    enabled: !!params?.seasonId,
+  });
+
+export const usePlayerGameweekPoints = params =>
+  useQuery({
+    queryKey: ["fantasy", "pstats", params],
+    queryFn: () => getPlayerGameweekPoints(params),
+    enabled: !!params?.seasonId && !!params?.playerIds?.length,
+  });
+
+export const useFantasyCreateTeam = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fantasyCreateTeam,
+    onSuccess: (_, v) => {
+      qc.invalidateQueries({ queryKey: ["fantasy", "myteam", v.seasonId] });
+      qc.invalidateQueries({ queryKey: ["fantasy", "board"] });
+    },
+  });
+};
+
+export const useFantasyTransfer = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fantasyTransfer,
+    onSuccess: (_, v) => {
+      qc.invalidateQueries({ queryKey: ["fantasy", "myteam"] });
+      qc.invalidateQueries({ queryKey: ["fantasy", "squad"] });
+      qc.invalidateQueries({ queryKey: ["fantasy", "players"] });
+    },
+  });
+};
+
+export const useFantasySetLineup = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: fantasySetLineup,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["fantasy", "myteam"] }),
+  });
+};
+
+export const useSyncFantasyPlayers = () =>
+  useMutation({ mutationFn: syncFantasyPlayers });

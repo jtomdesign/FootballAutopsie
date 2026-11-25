@@ -37,7 +37,14 @@ import Settings from "./features/settings/Settings";
 import Users from "./features/users/Users";
 import Messages from "./features/messages/Messages";
 import Broadcast from "./features/broadcast/Broadcast";
+import FantasyAdmin from "./features/fantasy-admin/FantasyAdmin";
 import NotFound from "./pages/NotFound";
+import FantasyLayout from "./pages/fantasy/FantasyLayout";
+import FantasyHome from "./pages/fantasy/FantasyHome";
+import FantasyMyTeam from "./pages/fantasy/FantasyMyTeam";
+import FantasyTransfers from "./pages/fantasy/FantasyTransfers";
+import FantasyPlayers from "./pages/fantasy/FantasyPlayers";
+import FantasyPoints from "./pages/fantasy/FantasyPoints";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import UserRoute from "./ui/UserRoute";
@@ -96,6 +103,13 @@ const App = () => {
             <Route path="/recherche" element={<Search />} />
             <Route path="/assistant" element={<AIAssistant />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/fantasy" element={<FantasyLayout />}>
+              <Route index element={<FantasyHome />} />
+              <Route path="equipe" element={<FantasyMyTeam />} />
+              <Route path="transferts" element={<FantasyTransfers />} />
+              <Route path="joueurs" element={<FantasyPlayers />} />
+              <Route path="points" element={<FantasyPoints />} />
+            </Route>
             <Route path="/compte" element={<Account />} />
             <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
@@ -130,6 +144,7 @@ const App = () => {
               <Route path="comments" element={<Comments />} />
               <Route path="messages" element={<Messages />} />
               <Route path="diffusion" element={<Broadcast />} />
+              <Route path="fantasy" element={<FantasyAdmin />} />
               <Route path="users" element={<Users />} />
               <Route path="profil" element={<Profil />} />
               <Route path="settings" element={<Settings />} />

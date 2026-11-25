@@ -1,0 +1,260 @@
+import { supabase } from "./supabase";
+
+const uid = async () => {
+  const { data } = await supabase.auth.getUser();
+  return data.user?.id ?? null;
+};
+
+// ---------- Lookups ----------
+
+export const getFantasyComps = async () => {
+  const { data, error } = await supabase
+    .from("fantasy_comps")
+    .select("*, fantasy_seasons(*)")
+    .eq("enabled", true)
+    .order("name");
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const getFantasySeason = async seasonId => {
+  const { data, error } = await supabase
+    .from("fantasy_seasons")
+    .select("*, fantasy_comps(name, api_league_id, logo), fantasy_gameweeks(*)")
+    .eq("id", seasonId)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+};
+
+export const getActiveGameweek = async seasonId => {
+  const { data, error } = await supabase
+    .from("fantasy_gameweeks")
+    .select("*")
+    .eq("season_id", seasonId)
+    .in("status", ["open", "live", "deadline_passed"])
+    .order("number")
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+};
+
+export const getScoringRules = async () => {
+  const { data, error } = await supabase
+    .from("fantasy_scoring_rules")
+    .select("rules")
+    .eq("id", 1)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.rules ?? null;
+};
+
+// ---------- Players ----------
+
+export const searchFantasyPlayers = async ({
+  seasonId,
+  position,
+  clubApiId,
+  minPrice,
+  maxPrice,
+  search,
+  sort = "points",
+  limit = 60,
+  offset = 0,
+} = {}) => {
+  let q = supabase
+    .from("fantasy_players")
+    .select("*, fantasy_player_stats(points, season_id, gw)", { count: "exact" })
+    .eq("enabled", true);
+
+  if (position) q = q.eq("position", position);
+  if (clubApiId) q = q.eq("club_api_id", clubApiId);
+  if (minPrice != null) q = q.gte("price", minPrice);
+  if (maxPrice != null) q = q.lte("price", maxPrice);
+  if (search?.trim()) q = q.ilike("name", `%${search.trim()}%`);
+
+  // Sort by total points requires a computed column — fetch then sort client-side
+  // for the player pool sizes we deal with (hundreds, not millions).
+  const { data, error, count } = await q.limit(500);
+  if (error) throw error;
+
+  const seasonStats = (data ?? []).map(p => {
+    const stats = (p.fantasy_player_stats ?? []).filter(
+      s => String(s.season_id) === String(seasonId),
+    );
+    const total = stats.reduce((a, s) => a + Number(s.points ?? 0), 0);
+    const lastGw = stats.length
+      ? stats.reduce((a, s) => Math.max(a, s.gw ?? 0), 0)
+      : 0;
+    const lastPts = stats
+      .filter(s => s.gw === lastGw)
+      .reduce((a, s) => a + Number(s.points ?? 0), 0);
+    return { ...p, totalPoints: total, lastGwPoints: lastPts, apps: stats.length };
+  });
+
+  const sorted = seasonStats.sort((a, b) => {
+    switch (sort) {
+      case "price_asc": return a.price - b.price;
+      case "price_desc": return b.price - a.price;
+      case "name": return a.name.localeCompare(b.name);
+      case "points":
+      default: return b.totalPoints - a.totalPoints;
+    }
+  });
+
+  return {
+    players: sorted.slice(offset, offset + limit),
+    total: count ?? sorted.length,
+  };
+};
+
+// ---------- My team ----------
+
+export const getMyTeam = async seasonId => {
+  const id = await uid();
+  if (!id) return null;
+  const { data: team, error } = await supabase
+    .from("fantasy_teams")
+    .select("*")
+    .eq("user_id", id)
+    .eq("season_id", seasonId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!team) return null;
+
+  const [{ data: squad }, { data: lineup }] = await Promise.all([
+    supabase
+      .from("fantasy_team_players")
+      .select("player_id, price_paid, fantasy_players(*)")
+      .eq("team_id", team.id),
+    supabase
+      .from("fantasy_lineups")
+      .select("*")
+      .eq("team_id", team.id),
+  ]);
+
+  return { ...team, squad: squad ?? [], lineup: lineup ?? [] };
+};
+
+export const getTeamSquad = async teamId => {
+  const { data, error } = await supabase
+    .from("fantasy_team_players")
+    .select("player_id, price_paid, fantasy_players(*)")
+    .eq("team_id", teamId);
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const getLeaderboard = async ({ seasonId, limit = 50, gw } = {}) => {
+  let q = supabase
+    .from("fantasy_manager_points")
+    .select("team_id, gw, points, rank_overall, rank_gw, fantasy_teams(name, badge, total_points, user_id)")
+    .eq("season_id", seasonId);
+  if (gw != null) q = q.eq("gw", gw);
+  else q = q.order("points", { ascending: false }).limit(limit);
+  const { data, error } = await q;
+  if (error) throw error;
+  return data ?? [];
+};
+
+// ---------- Mutations (all go through validating RPCs) ----------
+
+export const fantasyCreateTeam = async ({ seasonId, name, badge, playerIds }) => {
+  const { data, error } = await supabase.rpc("fantasy_create_team", {
+    p_season_id: seasonId,
+    p_name: name,
+    p_badge: badge ?? null,
+    p_player_ids: playerIds,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const fantasyTransfer = async ({ teamId, outPlayerId, inPlayerId }) => {
+  const { data, error } = await supabase.rpc("fantasy_transfer", {
+    p_team_id: teamId,
+    p_out_player_id: outPlayerId,
+    p_in_player_id: inPlayerId,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export const fantasySetLineup = async ({
+  teamId, gw, starters, benchOrder, captain, vc,
+}) => {
+  const { error } = await supabase.rpc("fantasy_set_lineup", {
+    p_team_id: teamId,
+    p_gw: gw,
+    p_starters: starters,
+    p_bench_order: benchOrder,
+    p_captain: captain,
+    p_vc: vc ?? null,
+  });
+  if (error) throw new Error(error.message);
+};
+
+export const getMyPoints = async ({ seasonId, teamId, gw }) => {
+  let q = supabase
+    .from("fantasy_manager_points")
+    .select("*")
+    .eq("season_id", seasonId);
+  if (teamId) q = q.eq("team_id", teamId);
+  if (gw != null) q = q.eq("gw", gw);
+  const { data, error } = await q.order("gw");
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const getPlayerGameweekPoints = async ({ playerIds, seasonId }) => {
+  if (!playerIds?.length) return [];
+  const { data, error } = await supabase
+    .from("fantasy_player_stats")
+    .select("*")
+    .eq("season_id", seasonId)
+    .in("player_id", playerIds)
+    .order("gw");
+  if (error) throw error;
+  return data ?? [];
+};
+
+// ---------- Admin ----------
+
+export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
+  // Pulls players from API-Football via our /api/football proxy and upserts
+  // into fantasy_players. Called from the admin dashboard.
+  const { data: comp } = await supabase
+    .from("fantasy_comps")
+    .select("id")
+    .eq("api_league_id", compApiLeagueId)
+    .single();
+  if (!comp) throw new Error("Competition not configured");
+
+  const res = await fetch(
+    `/api/football?path=/players&league=${compApiLeagueId}&season=${apiSeason}`,
+  );
+  const json = await res.json();
+  const players = json?.response ?? [];
+  if (!players.length) throw new Error("No players returned by API");
+
+  const rows = players.map(p => ({
+    api_player_id: p.player.id,
+    name: p.player.name,
+    position: p.statistics?.[0]?.games?.position ?? "M",
+    club_api_id: p.statistics?.[0]?.team?.id ?? null,
+    club_name: p.statistics?.[0]?.team?.name ?? null,
+    club_logo: p.statistics?.[0]?.team?.logo ?? null,
+    photo: p.player.photo ?? null,
+    nationality: p.player.nationality ?? null,
+    enabled: true,
+    // Default price by position until admin adjusts
+    price: { G: 4.5, D: 4.5, M: 5.5, F: 7.0 }[p.statistics?.[0]?.games?.position] ?? 5.0,
+  }));
+
+  const { error } = await supabase
+    .from("fantasy_players")
+    .upsert(rows, { onConflict: "api_player_id" });
+  if (error) throw error;
+  return rows.length;
+};

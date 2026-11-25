@@ -26,6 +26,7 @@ const NAV_LINKS = [
   { to: "/equipes", key: "Équipes" },
   { to: "/joueurs", key: "Joueurs" },
   { to: "/assistant", key: "Assistant IA" },
+  { to: "/fantasy", key: "Fantasy" },
   { to: "/contact", key: "Contact" },
 ];
 

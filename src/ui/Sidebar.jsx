@@ -12,6 +12,7 @@ import {
   LuLayers,
   LuUsers,
   LuUser,
+  LuTrophy,
 } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { logout } from "../features/authentication/authSlice";
@@ -72,6 +73,12 @@ const Sidebar = () => {
             <LuBellRing />
           </DashLink.Icon>
           <DashLink.Name>Diffusion</DashLink.Name>
+        </DashLink>
+        <DashLink to="fantasy">
+          <DashLink.Icon>
+            <LuTrophy />
+          </DashLink.Icon>
+          <DashLink.Name>Fantasy</DashLink.Name>
         </DashLink>
         <DashLink to="users">
           <DashLink.Icon>
