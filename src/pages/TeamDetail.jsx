@@ -19,6 +19,7 @@ import EmptyState from "../components/football/EmptyState";
 import TeamLogo from "../components/football/TeamLogo";
 import Spinner from "../ui/Spinner";
 import FollowButton from "../components/user/FollowButton";
+import CountUp from "../ui/CountUp";
 import { useEntityFollowers } from "../hooks/user";
 import {
   LuArrowLeft,
@@ -148,17 +149,25 @@ const TeamDetail = () => {
               )}
             </div>
             <div className="flex flex-col items-center sm:items-end gap-3">
-              <FollowButton
-                entityType="team"
-                entityId={team.id}
-                entityName={team.name}
-                entityLogo={team.logo}
-              />
-              {followers != null && (
-                <p className="text-xs text-gray-500 -mt-1">
-                  {t("{{count}} abonné(s)", { count: followers })}
-                </p>
-              )}
+              <div className="flex items-center gap-4">
+                {followers != null && followers > 0 && (
+                  <div className="text-center">
+                    <CountUp
+                      value={followers}
+                      className="text-2xl font-semibold text-gray-50 tabular-nums"
+                    />
+                    <p className="text-[0.6rem] tracking-wide text-gray-500">
+                      {t("Abonnés")}
+                    </p>
+                  </div>
+                )}
+                <FollowButton
+                  entityType="team"
+                  entityId={team.id}
+                  entityName={team.name}
+                  entityLogo={team.logo}
+                />
+              </div>
               <select
                 value={activeSeason}
                 onChange={e => setSeason(Number(e.target.value))}
