@@ -70,7 +70,7 @@ export const useMyPoints = params =>
   useQuery({
     queryKey: ["fantasy", "points", params],
     queryFn: () => getMyPoints(params),
-    enabled: !!params?.seasonId,
+    enabled: !!params?.seasonId && !!params?.teamId,
   });
 
 export const usePlayerGameweekPoints = params =>

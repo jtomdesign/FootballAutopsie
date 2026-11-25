@@ -57,7 +57,7 @@ const FantasyPlayers = () => {
             <button
               key={p}
               onClick={() => setPos(p)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
                 pos === p ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-500"
               }`}
             >

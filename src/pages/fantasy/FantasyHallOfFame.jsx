@@ -26,7 +26,7 @@ const FantasyHallOfFame = () => {
     <div className="space-y-6">
       {/* Trophy cabinet */}
       <div>
-        <h2 className="font-black text-gray-900 mb-3 flex items-center gap-2">
+        <h2 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
           <LuTrophy className="text-amber-500" /> {t("Vitrine des succès")}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -45,7 +45,7 @@ const FantasyHallOfFame = () => {
                 <p className="text-sm font-bold text-gray-900">{a.name_fr}</p>
                 <p className="text-xs text-gray-500 mt-1">{a.description_fr}</p>
                 {mine && (
-                  <p className="text-[10px] font-black uppercase text-emerald-600 mt-2">
+                  <p className="text-[10px] font-bold uppercase text-emerald-600 mt-2">
                     {t("Débloqué par vous")}
                   </p>
                 )}
@@ -59,7 +59,7 @@ const FantasyHallOfFame = () => {
       <div className="rounded-2xl bg-emerald-950 text-white overflow-hidden">
         <div className="px-5 py-4 flex items-center gap-2">
           <LuMedal className="text-amber-400" />
-          <h3 className="font-black">{t("Légendes de la saison")}</h3>
+          <h3 className="font-bold">{t("Légendes de la saison")}</h3>
         </div>
         <table className="w-full text-sm">
           <tbody>
@@ -71,11 +71,11 @@ const FantasyHallOfFame = () => {
                   className={`border-t border-white/10 ${isMe ? "bg-emerald-500/20" : ""}`}>
                   <td className="px-5 py-3 w-12">
                     {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (
-                      <span className="font-black text-emerald-300/60">{i + 1}</span>
+                      <span className="font-bold text-emerald-300/60">{i + 1}</span>
                     )}
                   </td>
                   <td className="px-2 py-3 font-bold">{team?.name}</td>
-                  <td className="px-5 py-3 text-right font-black text-amber-300">
+                  <td className="px-5 py-3 text-right font-bold text-amber-300">
                     {row.points} pts
                   </td>
                 </tr>

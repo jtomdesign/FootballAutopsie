@@ -147,15 +147,32 @@ export const getTeamSquad = async teamId => {
 };
 
 export const getLeaderboard = async ({ seasonId, limit = 50, gw } = {}) => {
-  let q = supabase
+  if (gw != null) {
+    const { data, error } = await supabase
+      .from("fantasy_manager_points")
+      .select("team_id, gw, points, rank_overall, rank_gw, fantasy_teams(name, badge, total_points, user_id)")
+      .eq("season_id", seasonId)
+      .eq("gw", gw)
+      .order("points", { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return data ?? [];
+  }
+  // Overall: aggregate points across all gameweeks per team
+  const { data, error } = await supabase
     .from("fantasy_manager_points")
-    .select("team_id, gw, points, rank_overall, rank_gw, fantasy_teams(name, badge, total_points, user_id)")
+    .select("team_id, points, fantasy_teams(name, badge, total_points, user_id)")
     .eq("season_id", seasonId);
-  if (gw != null) q = q.eq("gw", gw);
-  else q = q.order("points", { ascending: false }).limit(limit);
-  const { data, error } = await q;
   if (error) throw error;
-  return data ?? [];
+  const totals = new Map();
+  (data ?? []).forEach(r => {
+    const cur = totals.get(r.team_id) ?? { team_id: r.team_id, points: 0, fantasy_teams: r.fantasy_teams };
+    cur.points += Number(r.points ?? 0);
+    totals.set(r.team_id, cur);
+  });
+  return [...totals.values()]
+    .sort((a, b) => b.points - a.points)
+    .slice(0, limit);
 };
 
 // ---------- Mutations (all go through validating RPCs) ----------
@@ -231,11 +248,19 @@ export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
     .single();
   if (!comp) throw new Error("Competition not configured");
 
-  const res = await fetch(
-    `/api/football?path=/players&league=${compApiLeagueId}&season=${apiSeason}`,
-  );
-  const json = await res.json();
-  const players = json?.response ?? [];
+  // API-Football paginates — fetch all pages (stop on empty page)
+  const all = [];
+  for (let page = 1; page <= 20; page++) {
+    const res = await fetch(
+      `/api/football?path=/players&league=${compApiLeagueId}&season=${apiSeason}&page=${page}`,
+    );
+    const json = await res.json();
+    const batch = json?.response ?? [];
+    all.push(...batch);
+    const total = json?.paging?.total ?? all.length;
+    if (!batch.length || all.length >= total) break;
+  }
+  const players = all;
   if (!players.length) throw new Error("No players returned by API");
 
   const POS = {
@@ -272,7 +297,7 @@ export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
 export const getFantasyLeagues = async seasonId => {
   const { data, error } = await supabase
     .from("fantasy_leagues")
-    .select("*, fantasy_league_members(count), fantasy_comps:fantasy_seasons!inner(comp_id)")
+    .select("*, fantasy_league_members(count)")
     .eq("season_id", seasonId)
     .eq("is_active", true)
     .order("type")

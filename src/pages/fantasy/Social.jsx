@@ -23,7 +23,7 @@ const StoryRing = ({ story, onOpen, isMine }) => (
         {story.image_url ? (
           <img src={story.image_url} alt="" className="w-full h-full object-cover rounded-full" />
         ) : (
-          <div className="w-full h-full rounded-full bg-emerald-100 flex items-center justify-center text-xl font-black text-emerald-600">
+          <div className="w-full h-full rounded-full bg-emerald-100 flex items-center justify-center text-xl font-bold text-emerald-600">
             {(story.author?.username ?? story.author?.full_name ?? "F")
               .slice(0, 1).toUpperCase()}
           </div>
@@ -70,7 +70,7 @@ export const StoriesRail = ({ seasonId, myTeam }) => {
   return (
     <div className="rounded-2xl bg-white border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-black text-gray-900 text-sm uppercase tracking-wide">
+        <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
           {t("Stories Fantasy")}
         </h3>
         {isAuthenticated && (
@@ -196,7 +196,7 @@ const StoryViewer = ({ stories, index, onClose, onNav, onDelete }) => {
 
         <div className="p-6 pt-12 min-h-[380px] flex flex-col">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-black">
+            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-bold">
               {(story.author?.username ?? "?").slice(0, 1).toUpperCase()}
             </div>
             <div>
@@ -261,7 +261,7 @@ export const AchievementsShelf = ({ teamId }) => {
 
   return (
     <div className="rounded-2xl bg-white border border-gray-200 p-4">
-      <h3 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
+      <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
         <LuTrophy className="text-amber-500" /> {t("Succès")}
       </h3>
       <div className="flex gap-3 overflow-x-auto pb-1">
@@ -287,7 +287,7 @@ export const ChallengesShelf = ({ seasonId }) => {
   if (!challenges?.length) return null;
   return (
     <div className="rounded-2xl bg-emerald-950 text-white p-4">
-      <h3 className="font-black text-sm uppercase tracking-wide text-emerald-300 mb-3">
+      <h3 className="font-bold text-sm uppercase tracking-wide text-emerald-300 mb-3">
         {t("Défis de la saison")}
       </h3>
       <div className="space-y-2">

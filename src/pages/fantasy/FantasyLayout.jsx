@@ -23,10 +23,10 @@ const FantasyLayout = () => {
       <div className="bg-emerald-950 text-white">
         <Container>
           <div className="py-6">
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-emerald-400">
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-emerald-400">
               Football Autopsie
             </p>
-            <h1 className="text-2xl sm:text-3xl font-black mt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold mt-1">
               {t("Fantasy")}
             </h1>
           </div>

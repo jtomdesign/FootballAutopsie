@@ -117,7 +117,7 @@ const CreateTeam = ({ season, onCreated }) => {
 
   return (
     <div className="rounded-2xl bg-white border border-gray-200 p-6">
-      <h2 className="text-xl font-black text-gray-900">{t("Créer mon équipe")}</h2>
+      <h2 className="text-xl font-bold text-gray-900">{t("Créer mon équipe")}</h2>
       <p className="text-sm text-gray-500 mt-1">
         {season.comp?.name} · {season.name} — £{budget}m, 15 joueurs (2G 5D 5M 3F)
       </p>
@@ -154,7 +154,7 @@ const CreateTeam = ({ season, onCreated }) => {
               <button
                 key={p}
                 onClick={() => setPosFilter(p)}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-black ${
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold ${
                   posFilter === p
                     ? "bg-emerald-600 text-white"
                     : "bg-gray-100 text-gray-500"
@@ -216,41 +216,36 @@ const MyTeamView = ({ team, season, gw }) => {
     ...s.fantasy_players,
     price_paid: s.price_paid,
   }));
-  const lineupRows = team.lineup ?? [];
+  const lineupRows = (team.lineup ?? []).filter(
+    l => !gw || l.gw === gw.number,
+  );
   const lineupMap = new Map(lineupRows.map(l => [l.player_id, l]));
 
   const byPos = pos => squad.filter(p => p.position === pos);
 
-  // Auto-pick XI: GK + formation counts, bench = rest ordered by position
-  const autoLineup = () => {
+  // XI derived from the selected formation; bench = remaining players,
+  // best performers first (bench_order feeds auto-substitution priority)
+  const { starters, bench } = useMemo(() => {
     const gks = byPos("G");
     const defs = byPos("D");
     const mids = byPos("M");
     const fwds = byPos("F");
-    const starters = [
+    const st = [
       ...(gks[0] ? [gks[0]] : []),
       ...defs.slice(0, formation.d),
       ...mids.slice(0, formation.m),
       ...fwds.slice(0, formation.f),
     ];
-    const starterIds = new Set(starters.map(p => p.id));
-    const bench = squad.filter(p => !starterIds.has(p.id));
-    return { starters, bench };
-  };
-
-  const [auto] = useState(autoLineup);
-  const starters = lineupRows.length
-    ? squad.filter(p => lineupMap.get(p.id)?.slot !== "bench")
-    : auto.starters;
-  const bench = lineupRows.length
-    ? squad
-        .filter(p => lineupMap.get(p.id)?.slot === "bench")
-        .sort(
-          (a, b) =>
-            (lineupMap.get(a.id)?.bench_order ?? 99) -
-            (lineupMap.get(b.id)?.bench_order ?? 99),
-        )
-    : auto.bench;
+    const stIds = new Set(st.map(p => p.id));
+    const bn = squad
+      .filter(p => !stIds.has(p.id))
+      .sort(
+        (a, b) =>
+          (Number(b.totalPoints ?? 0) + Number(b.lastGwPoints ?? 0)) -
+          (Number(a.totalPoints ?? 0) + Number(a.lastGwPoints ?? 0)),
+      );
+    return { starters: st, bench: bn };
+  }, [squad, formation]);
 
   const capId =
     captain ??
@@ -293,7 +288,7 @@ const MyTeamView = ({ team, season, gw }) => {
               : "border-gray-200 bg-white"
         }`}
       >
-        <span className="text-xs font-black text-gray-400 w-5">{index + 1}</span>
+        <span className="text-xs font-bold text-gray-400 w-5">{index + 1}</span>
         <div className="w-9 h-9 rounded-full bg-gray-100 overflow-hidden shrink-0">
           {p.photo && (
             <img src={p.photo} alt="" className="w-full h-full object-cover" />
@@ -308,7 +303,7 @@ const MyTeamView = ({ team, season, gw }) => {
           <p className="text-xs text-gray-500 truncate">{p.club_name}</p>
         </div>
         <PositionBadge position={p.position} />
-        <span className="text-xs font-black text-emerald-600">
+        <span className="text-xs font-bold text-emerald-600">
           £{Number(p.price ?? p.price_paid).toFixed(1)}m
         </span>
       </div>
@@ -319,7 +314,7 @@ const MyTeamView = ({ team, season, gw }) => {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-black text-gray-900">{team.name}</h2>
+          <h2 className="text-xl font-bold text-gray-900">{team.name}</h2>
           <p className="text-sm text-gray-500">
             {season?.comp?.name} · {season?.name} ·{" "}
             {t("{{pts}} points", { pts: team.total_points ?? 0 })}
@@ -330,7 +325,7 @@ const MyTeamView = ({ team, season, gw }) => {
             <button
               key={f.id}
               onClick={() => setFormation(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
                 formation.id === f.id
                   ? "bg-emerald-600 text-white"
                   : "bg-white border border-gray-200 text-gray-500"
@@ -344,7 +339,7 @@ const MyTeamView = ({ team, season, gw }) => {
 
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="rounded-2xl bg-white border border-gray-200 p-4">
-          <h3 className="font-black text-gray-900 mb-3">
+          <h3 className="font-bold text-gray-900 mb-3">
             {t("Titulaire")}
             <span className="text-xs font-normal text-gray-400 ml-2">
               {t("Cliquer pour nommer capitaine / vice-capitaine")}
@@ -358,7 +353,7 @@ const MyTeamView = ({ team, season, gw }) => {
         </div>
         <div className="space-y-5">
           <div className="rounded-2xl bg-white border border-gray-200 p-4">
-            <h3 className="font-black text-gray-900 mb-3">
+            <h3 className="font-bold text-gray-900 mb-3">
               {t("Remplaçants")}
             </h3>
             <div className="space-y-2">

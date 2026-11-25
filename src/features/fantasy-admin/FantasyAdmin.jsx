@@ -14,7 +14,7 @@ const inputCls =
 
 const Section = ({ title, children }) => (
   <div className="rounded-2xl bg-white border border-gray-200 p-5">
-    <h3 className="font-black text-gray-900 mb-4">{title}</h3>
+    <h3 className="font-bold text-gray-900 mb-4">{title}</h3>
     {children}
   </div>
 );
@@ -222,7 +222,7 @@ const FantasyAdmin = () => {
           "Transferts": counts.fantasy_transfers,
         }).map(([l, v]) => (
           <div key={l} className="rounded-2xl bg-white border border-gray-200 p-4">
-            <p className="text-2xl font-black text-gray-900">{v ?? "—"}</p>
+            <p className="text-2xl font-bold text-gray-900">{v ?? "—"}</p>
             <p className="text-xs text-gray-500 font-bold uppercase">{l}</p>
           </div>
         ))}
@@ -313,7 +313,7 @@ const FantasyAdmin = () => {
         <div className="space-y-4 max-h-[400px] overflow-y-auto">
           {seasons.map(s => (
             <div key={s.id}>
-              <p className="text-xs font-black uppercase text-gray-400 mb-2">
+              <p className="text-xs font-bold uppercase text-gray-400 mb-2">
                 {s.comp?.name} {s.name}
               </p>
               {(s.fantasy_gameweeks ?? []).map(gw => (

@@ -315,7 +315,21 @@ export default async function handler(req, res) {
       }).catch(() => null);
     }
 
-    // 8. Notify managers of their gameweek points
+    // 8. Credit free transfers for new gameweeks (1 per GW, cap = max_saved)
+    for (const gw of gws) {
+      const season = await sb(
+        `fantasy_seasons?id=eq.${gw.season_id}&select=max_saved_transfers`,
+      ).catch(() => null);
+      const cap = season?.[0]?.max_saved_transfers ?? 5;
+      await sb("rpc/fantasy_credit_free_transfers", {
+        method: "POST",
+        body: JSON.stringify({
+          p_season_id: gw.season_id, p_gw: gw.number, p_cap: cap,
+        }),
+      }).catch(() => null);
+    }
+
+    // 9. Notify managers of their gameweek points
     const notifRows = managerRows.map(r => {
       const team = teams.find(t => t.id === r.team_id);
       return team?.user_id ? {

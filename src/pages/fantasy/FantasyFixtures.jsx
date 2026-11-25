@@ -34,10 +34,10 @@ const FantasyFixtures = () => {
   return (
     <div className="space-y-4">
       <div className="rounded-2xl bg-emerald-950 text-white p-5">
-        <p className="text-xs font-black uppercase tracking-widest text-emerald-400">
+        <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">
           {season.comp?.name} · {season.name}
         </p>
-        <h2 className="text-xl font-black mt-1">
+        <h2 className="text-xl font-bold mt-1">
           {gw ? `${t("Gameweek")} ${gw.number}` : t("Prochains matchs")}
         </h2>
         {gw?.deadline && (
@@ -67,7 +67,7 @@ const FantasyFixtures = () => {
                       })}
                     </span>
                   ) : (
-                    <span className="font-black text-sm">
+                    <span className="font-bold text-sm">
                       {f.goals.home ?? 0} - {f.goals.away ?? 0}
                     </span>
                   )}

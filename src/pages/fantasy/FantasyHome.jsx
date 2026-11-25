@@ -18,7 +18,7 @@ const Stat = ({ icon, label, value, sub }) => (
       {icon}
       {label}
     </div>
-    <p className="text-2xl font-black text-gray-900 mt-1">{value}</p>
+    <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
     {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
   </div>
 );
@@ -58,7 +58,7 @@ const FantasyHome = () => {
     return (
       <div className="rounded-2xl bg-white border border-gray-200 p-10 text-center">
         <LuTrophy className="mx-auto text-4xl text-emerald-500 mb-3" />
-        <h2 className="text-xl font-black text-gray-900">
+        <h2 className="text-xl font-bold text-gray-900">
           {t("Fantasy arrive bientôt")}
         </h2>
         <p className="text-gray-500 mt-2 max-w-md mx-auto">
@@ -107,7 +107,7 @@ const FantasyHome = () => {
         <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black">
+            <h2 className="text-xl sm:text-2xl font-bold">
               {isAuthenticated
                 ? t("Bienvenue, {{name}}", { name: user?.name ?? "Manager" })
                 : t("Bienvenue sur Fantasy")}
@@ -166,7 +166,7 @@ const FantasyHome = () => {
       {/* Leaderboard */}
       <div className="rounded-2xl bg-white border border-gray-200 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="font-black text-gray-900">{t("Classement")}</h3>
+          <h3 className="font-bold text-gray-900">{t("Classement")}</h3>
           <span className="text-xs text-gray-400 font-bold uppercase">
             {t("Globale")}
           </span>
@@ -189,18 +189,18 @@ const FantasyHome = () => {
                       isMe ? "bg-emerald-50" : ""
                     }`}
                   >
-                    <td className="px-5 py-2.5 w-10 font-black text-gray-400">
+                    <td className="px-5 py-2.5 w-10 font-bold text-gray-400">
                       {i + 1}
                     </td>
                     <td className="px-2 py-2.5 font-bold text-gray-900">
                       {team?.name ?? "—"}
                       {isMe && (
-                        <span className="ml-2 text-[10px] font-black uppercase text-emerald-600">
+                        <span className="ml-2 text-[10px] font-bold uppercase text-emerald-600">
                           {t("Vous")}
                         </span>
                       )}
                     </td>
-                    <td className="px-5 py-2.5 text-right font-black text-emerald-600">
+                    <td className="px-5 py-2.5 text-right font-bold text-emerald-600">
                       {Number(row.points ?? team?.total_points ?? 0)} pts
                     </td>
                   </tr>

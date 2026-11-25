@@ -94,7 +94,7 @@ const FantasyLeagues = () => {
               <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{league.description}</p>
             )}
           </div>
-          <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black ${meta.cls}`}>
+          <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ${meta.cls}`}>
             <Icon className="w-3 h-3" /> {t(meta.label)}
           </span>
         </div>
@@ -135,7 +135,7 @@ const FantasyLeagues = () => {
   const Section = ({ title, items }) =>
     items?.length ? (
       <div>
-        <h3 className="text-sm font-black uppercase tracking-wide text-gray-400 mb-3">{title}</h3>
+        <h3 className="text-sm font-bold uppercase tracking-wide text-gray-400 mb-3">{title}</h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {items.map(l => <LeagueCard key={l.id} league={l} />)}
         </div>
@@ -172,7 +172,7 @@ const FantasyLeagues = () => {
               onClick={() => setShowCreate(true)} />
           ) : (
             <div className="rounded-2xl bg-white border border-gray-200 p-5 space-y-3">
-              <h3 className="font-black text-gray-900">{t("Nouvelle ligue")}</h3>
+              <h3 className="font-bold text-gray-900">{t("Nouvelle ligue")}</h3>
               <div className="grid sm:grid-cols-2 gap-3">
                 <input className="rounded-lg border border-gray-200 px-3 py-2 text-sm"
                   placeholder={t("Nom de la ligue")}

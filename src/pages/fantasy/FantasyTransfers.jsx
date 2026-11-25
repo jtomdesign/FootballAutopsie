@@ -108,12 +108,12 @@ const Transfers = () => {
         <p className="text-xs text-gray-500 truncate">{p.club_name}</p>
       </div>
       <PositionBadge position={p.position} />
-      <span className="text-xs font-black text-emerald-600">
+      <span className="text-xs font-bold text-emerald-600">
         £{Number(p.price ?? p.price_paid).toFixed(1)}m
       </span>
       <button
         onClick={() => (side === "sell" ? setSellPick(p) : setBuyPick(p))}
-        className="ml-1 px-3 py-1.5 rounded-full text-xs font-black bg-emerald-600 text-white hover:bg-emerald-700"
+        className="ml-1 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700"
       >
         {side === "sell" ? t("Vendre") : t("Acheter")}
       </button>
@@ -126,22 +126,22 @@ const Transfers = () => {
       <div className="rounded-2xl bg-emerald-950 text-white p-4 flex flex-wrap gap-6 text-sm">
         <div>
           <p className="text-emerald-300/70 text-xs uppercase font-bold">{t("Budget")}</p>
-          <p className="font-black">£{Number(team.budget ?? 0).toFixed(1)}m</p>
+          <p className="font-bold">£{Number(team.budget ?? 0).toFixed(1)}m</p>
         </div>
         <div>
           <p className="text-emerald-300/70 text-xs uppercase font-bold">{t("Transferts libres")}</p>
-          <p className="font-black">{freeLeft}</p>
+          <p className="font-bold">{freeLeft}</p>
         </div>
         <div>
           <p className="text-emerald-300/70 text-xs uppercase font-bold">{t("Prochains transferts")}</p>
-          <p className="font-black">−{deduction} pts</p>
+          <p className="font-bold">−{deduction} pts</p>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-5">
         {/* My squad — sell side */}
         <div className="rounded-2xl bg-white border border-gray-200 p-4">
-          <h3 className="font-black text-gray-900 mb-3">{t("Mon effectif")}</h3>
+          <h3 className="font-bold text-gray-900 mb-3">{t("Mon effectif")}</h3>
           <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
             {squad.map(p => (
               <PlayerRow key={p.id} p={p} side="sell" />
@@ -152,12 +152,12 @@ const Transfers = () => {
         {/* Market — buy side */}
         <div className="rounded-2xl bg-white border border-gray-200 p-4">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <h3 className="font-black text-gray-900 mr-auto">{t("Marché")}</h3>
+            <h3 className="font-bold text-gray-900 mr-auto">{t("Marché")}</h3>
             {["", "G", "D", "M", "F"].map(p => (
               <button
                 key={p}
                 onClick={() => setPosFilter(p)}
-                className={`px-3 py-1 rounded-lg text-xs font-black ${
+                className={`px-3 py-1 rounded-lg text-xs font-bold ${
                   posFilter === p
                     ? "bg-emerald-600 text-white"
                     : "bg-gray-100 text-gray-500"
@@ -176,6 +176,7 @@ const Transfers = () => {
           <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
             {players
               .filter(p => !squad.some(q => q.id === p.id))
+              .filter(p => !sellPick || p.position === sellPick.position)
               .slice(0, 60)
               .map(p => (
                 <PlayerRow key={p.id} p={p} side="buy" />

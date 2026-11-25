@@ -14,14 +14,14 @@ const FantasyRules = () => {
     <tr className="border-b border-gray-50 last:border-0">
       <td className="px-4 py-2.5 font-semibold text-gray-800">{event}</td>
       {[G, D, M, F].map((v, i) => (
-        <td key={i} className="px-4 py-2.5 text-center font-black text-gray-900">{v}</td>
+        <td key={i} className="px-4 py-2.5 text-center font-bold text-gray-900">{v}</td>
       ))}
     </tr>
   );
 
   const Section = ({ title, children }) => (
     <div className="rounded-2xl bg-white border border-gray-200 p-5">
-      <h3 className="font-black text-gray-900 mb-3">{title}</h3>
+      <h3 className="font-bold text-gray-900 mb-3">{title}</h3>
       {children}
     </div>
   );
@@ -29,7 +29,7 @@ const FantasyRules = () => {
   return (
     <div className="space-y-5 max-w-4xl">
       <div className="rounded-2xl bg-emerald-950 text-white p-6">
-        <h2 className="text-xl font-black flex items-center gap-2">
+        <h2 className="text-xl font-bold flex items-center gap-2">
           <LuBookOpen className="text-emerald-400" /> {t("Règles & Barème")}
         </h2>
         <p className="text-emerald-200/70 text-sm mt-2">

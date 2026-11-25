@@ -9,7 +9,7 @@ const POS_STYLE = {
 
 export const PositionBadge = ({ position, className = "" }) => (
   <span
-    className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-[11px] font-black ${POS_STYLE[position] ?? POS_STYLE.M} ${className}`}
+    className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-[11px] font-bold ${POS_STYLE[position] ?? POS_STYLE.M} ${className}`}
   >
     {position}
   </span>
@@ -30,7 +30,7 @@ export const PlayerCard = ({ player, selected, onClick, showPoints = true }) => 
         {player.photo ? (
           <img src={player.photo} alt={player.name} className="w-full h-full object-cover" loading="lazy" />
         ) : (
-          <span className="text-xs font-black text-gray-400">
+          <span className="text-xs font-bold text-gray-400">
             {player.name?.slice(0, 2).toUpperCase()}
           </span>
         )}
@@ -44,7 +44,7 @@ export const PlayerCard = ({ player, selected, onClick, showPoints = true }) => 
       <PositionBadge position={player.position} />
     </div>
     <div className="mt-2 flex items-center justify-between text-xs">
-      <span className="font-black text-emerald-600">£{Number(player.price).toFixed(1)}m</span>
+      <span className="font-bold text-emerald-600">£{Number(player.price).toFixed(1)}m</span>
       {showPoints && (
         <span className="text-gray-500">
           {player.totalPoints ?? 0} pts
