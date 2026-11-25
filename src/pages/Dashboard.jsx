@@ -88,15 +88,13 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/"
                 className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
               >
                 <LuEye className="sm:hidden" />
                 <span className="hidden sm:inline">Voir le site</span>
-              </a>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 rounded-full text-sm font-semibold text-red-300 hover:bg-red-500/15 transition-colors cursor-pointer"
@@ -141,14 +139,13 @@ const Dashboard = () => {
                 ))}
               </div>
               <div className="px-5 py-4 border-t border-white/10">
-                <a
-                  href="/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/"
+                  onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/15 text-emerald-50 text-sm font-semibold hover:bg-white/10 transition-colors"
                 >
                   <LuEye /> Voir le site
-                </a>
+                </Link>
               </div>
             </nav>
           </div>

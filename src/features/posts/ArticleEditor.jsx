@@ -199,14 +199,12 @@ const ArticleEditor = () => {
             onClick={() => setPreview(p => !p)}
           />
           {isEdit && post?.status === "published" && (
-            <a
-              href={`/news/${post.slug}`}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to={`/news/${post.slug}`}
               className="px-5 py-3 rounded-full border border-emerald-500/50 text-emerald-600 font-bold text-sm hover:bg-emerald-500/10 transition-colors"
             >
               Voir l'article
-            </a>
+            </Link>
           )}
         </div>
       </div>
