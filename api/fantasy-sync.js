@@ -306,7 +306,7 @@ export default async function handler(req, res) {
     // Stat rows keyed by player+gw — full raw stats so the scoring engine
     // can compute appearance/clean-sheet/etc. and auto-substitutions.
     const statByKey = new Map();
-    for (const u of upserts) statByKey.set(`${u.player_id}:${u.gw}`, u);
+    for (const u of upserts) statByKey.set(`${u.player_id}:${u.season_id}:${u.gw}`, u);
 
     const managerRows = [];
     for (const gw of gws) {
@@ -335,10 +335,19 @@ export default async function handler(req, res) {
           is_vc: l.is_vc,
           slot: l.slot,
           bench_order: l.bench_order,
-          stats: statByKey.get(`${l.player_id}:${gw.number}`) ?? null,
+          stats: statByKey.get(`${l.player_id}:${gw.season_id}:${gw.number}`) ?? null,
         }));
-        const { total } = computeGameweekPoints(lineup, rules);
+        const { total, players: scored } = computeGameweekPoints(lineup, rules);
         managerRows.push({ team_id: t.id, season_id: gw.season_id, gw: gw.number, points: total });
+
+        // Persist which bench players were auto-subbed for this GW
+        const autoIds = (scored ?? []).filter(r => r.auto_subbed).map(r => r.player_id);
+        if (autoIds.length) {
+          await sb(
+            `fantasy_lineups?team_id=eq.${t.id}&gw=eq.${gw.number}&player_id=in.(${autoIds.join(",")})`,
+            { method: "PATCH", body: JSON.stringify({ auto_subbed: true }) },
+          ).catch(() => null);
+        }
       }
     }
 

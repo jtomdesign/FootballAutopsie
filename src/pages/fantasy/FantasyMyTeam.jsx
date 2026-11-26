@@ -302,6 +302,7 @@ const MyTeamView = ({ team, season, gw }) => {
   const PlayerRow = ({ p, isStarter, index }) => {
     const isCap = p.id === capId;
     const isVc = p.id === vcId;
+    const autoSub = !!lineupMap.get(p.id)?.auto_subbed;
     return (
       <div
         onClick={() => pickPlayer(p)}
@@ -322,6 +323,11 @@ const MyTeamView = ({ team, season, gw }) => {
         <div className="min-w-0 flex-1">
           <p className="text-sm font-bold text-gray-100 truncate flex items-center gap-1">
             {p.name}
+            {autoSub && (
+              <span className="ml-1 text-[9px] font-bold uppercase text-sky-400">
+                {t("auto")}
+              </span>
+            )}
             {isCap && <LuCrown className="text-amber-500 w-4 h-4" />}
             {isVc && <LuCrown className="text-sky-400 w-3.5 h-3.5" />}
           </p>

@@ -83,11 +83,15 @@ export function computeGameweekPoints(lineup, rules, opts = {}) {
     if (played(s)) effective.set(s.player_id, { entry: s, isAuto: false });
   }
 
-  // Second pass: fill empty starter slots from bench in order
+  // Second pass: fill empty starter slots from bench in order.
+  // Prefer a same-position sub; otherwise any outfield player (GK only for GK).
   const emptySlots = starters.filter(s => !played(s));
   for (const slot of emptySlots) {
-    const sub = bench.find(b => !usedBench.has(b.player_id) && played(b)
-      && (slot.position === "G" ? b.position === "G" : b.position !== "G"));
+    const candidates = bench.filter(b =>
+      !usedBench.has(b.player_id) && played(b) &&
+      (slot.position === "G" ? b.position === "G" : b.position !== "G"),
+    );
+    const sub = candidates.find(b => b.position === slot.position) ?? candidates[0];
     if (!sub) continue;
     usedBench.add(sub.player_id);
     effective.set(sub.player_id, { entry: { ...sub, slot: slot.slot }, isAuto: true });
