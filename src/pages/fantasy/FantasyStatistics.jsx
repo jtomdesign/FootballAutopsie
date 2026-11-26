@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import {
-  useFantasyComps,
+  useFantasySeason,
   useFantasyPlayers,
   useLeaderboard,
   useMyTeam,
@@ -22,23 +22,16 @@ const StatCard = ({ label, value, sub }) => (
 const FantasyStatistics = () => {
   const { t } = useTranslation();
   const { user } = useSelector(s => s.user);
-  const { data: comps } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season } = useFantasySeason();
   const { data: team } = useMyTeam(season?.id);
   const { data: myPoints } = useMyPoints({ seasonId: season?.id, teamId: team?.id });
   const { data: board } = useLeaderboard({ seasonId: season?.id, limit: 100 });
 
   // Top players per position
-  const { data: gks } = useFantasyPlayers({ seasonId: season?.id, position: "G", sort: "points", limit: 5, enabled: !!season });
-  const { data: defs } = useFantasyPlayers({ seasonId: season?.id, position: "D", sort: "points", limit: 5, enabled: !!season });
-  const { data: mids } = useFantasyPlayers({ seasonId: season?.id, position: "M", sort: "points", limit: 5, enabled: !!season });
-  const { data: fwds } = useFantasyPlayers({ seasonId: season?.id, position: "F", sort: "points", limit: 5, enabled: !!season });
+  const { data: gks } = useFantasyPlayers({ seasonId: season?.id, apiLeagueId: season?.comp?.api_league_id, position: "G", sort: "points", limit: 5, enabled: !!season });
+  const { data: defs } = useFantasyPlayers({ seasonId: season?.id, apiLeagueId: season?.comp?.api_league_id, position: "D", sort: "points", limit: 5, enabled: !!season });
+  const { data: mids } = useFantasyPlayers({ seasonId: season?.id, apiLeagueId: season?.comp?.api_league_id, position: "M", sort: "points", limit: 5, enabled: !!season });
+  const { data: fwds } = useFantasyPlayers({ seasonId: season?.id, apiLeagueId: season?.comp?.api_league_id, position: "F", sort: "points", limit: 5, enabled: !!season });
 
   const myPts = (myPoints ?? []).map(p => Number(p.points ?? 0));
   const total = myPts.reduce((a, b) => a + b, 0);

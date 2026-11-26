@@ -1,18 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useFantasyComps, useFantasyPlayers } from "../../hooks/fantasy";
+import { useFantasySeason, useFantasyPlayers } from "../../hooks/fantasy";
 import { PlayerCard } from "./components";
 
 const FantasyPlayers = () => {
   const { t } = useTranslation();
-  const { data: comps } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season } = useFantasySeason();
 
   const [pos, setPos] = useState("");
   const [club, setClub] = useState("");
@@ -23,6 +16,7 @@ const FantasyPlayers = () => {
 
   const { data, isLoading } = useFantasyPlayers({
     seasonId: season?.id,
+    apiLeagueId: season?.comp?.api_league_id,
     position: pos || undefined,
     clubApiId: club ? Number(club) : undefined,
     minPrice: minP ? Number(minP) : undefined,

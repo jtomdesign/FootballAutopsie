@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import {
-  useFantasyComps,
+  useFantasySeason,
   useMyTeam,
   useMyPoints,
   useLeaderboard,
@@ -15,14 +15,7 @@ import { LuTrendingUp } from "react-icons/lu";
 const FantasyPoints = () => {
   const { t } = useTranslation();
   const { user } = useSelector(s => s.user);
-  const { data: comps } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season } = useFantasySeason();
   const { data: team } = useMyTeam(season?.id);
   const { data: myPoints } = useMyPoints({ seasonId: season?.id, teamId: team?.id });
   const { data: board } = useLeaderboard({ seasonId: season?.id, limit: 20 });
@@ -37,6 +30,7 @@ const FantasyPoints = () => {
   // Top performers this season across all fantasy players
   const { data: topPlayersData } = useFantasyPlayers({
     seasonId: season?.id,
+    apiLeagueId: season?.comp?.api_league_id,
     sort: "points",
     limit: 15,
     enabled: !!season,

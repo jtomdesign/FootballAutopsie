@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
-  useFantasyComps,
+  useFantasySeason,
   useMyTeam,
   useActiveGameweek,
   useFantasyPlayers,
@@ -13,6 +13,7 @@ import {
 } from "../../hooks/fantasy";
 import Button from "../../ui/Button";
 import { PositionBadge, PlayerCard } from "./components";
+import Pitch from "./Pitch";
 import { LuCrown, LuArrowLeft, LuCheck } from "react-icons/lu";
 
 const FORMATIONS = [
@@ -48,6 +49,7 @@ const CreateTeam = ({ season, onCreated }) => {
 
   const { data: playersData } = useFantasyPlayers({
     seasonId: season.id,
+    apiLeagueId: season.comp?.api_league_id,
     position: posFilter,
     search,
     limit: 100,
@@ -99,6 +101,7 @@ const CreateTeam = ({ season, onCreated }) => {
     try {
       await create.mutateAsync({
         seasonId: season.id,
+    apiLeagueId: season.comp?.api_league_id,
         name: name || `Team ${user?.name ?? ""}`.trim(),
         playerIds: selected,
       });
@@ -340,16 +343,21 @@ const MyTeamView = ({ team, season, gw }) => {
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
           <h3 className="font-bold text-gray-100 mb-3">
-            {t("Titulaire")}
+            {t("Composition")}
             <span className="text-xs font-normal text-gray-400 ml-2">
-              {t("Cliquer pour nommer capitaine / vice-capitaine")}
+              {t("Cliquer un joueur pour capitaine / vice-capitaine")}
             </span>
           </h3>
-          <div className="space-y-2">
-            {starters.map((p, i) => (
-              <PlayerRow key={p.id} p={p} isStarter index={i} />
-            ))}
-          </div>
+          <Pitch
+            starters={starters}
+            capId={capId}
+            vcId={vcId}
+            formation={formation}
+            onPick={p => {
+              if (p.id === capId) setVc(vcId === p.id ? null : p.id);
+              else setCaptain(p.id);
+            }}
+          />
         </div>
         <div className="space-y-5">
           <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
@@ -393,14 +401,7 @@ const MyTeamView = ({ team, season, gw }) => {
 const FantasyMyTeam = () => {
   const { t } = useTranslation();
   const { isAuthenticated } = useSelector(s => s.user);
-  const { data: comps } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season } = useFantasySeason();
   const { data: team, isLoading, refetch } = useMyTeam(season?.id);
   const { data: gw } = useActiveGameweek(season?.id);
 

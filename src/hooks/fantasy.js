@@ -19,7 +19,7 @@ import {
 export const useFantasyComps = () =>
   useQuery({ queryKey: ["fantasy", "comps"], queryFn: getFantasyComps });
 
-export const useFantasySeason = seasonId =>
+export const useFantasySeasonById = seasonId =>
   useQuery({
     queryKey: ["fantasy", "season", seasonId],
     queryFn: () => getFantasySeason(seasonId),
@@ -222,3 +222,78 @@ export const useChallenges = seasonId =>
 
 export const useCheckAchievements = () =>
   useMutation({ mutationFn: checkAchievements });
+
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "../services/supabase";
+
+const SEASON_KEY = "fantasy_season_id";
+
+/**
+ * Shared fantasy season selection — persisted in sessionStorage so every
+ * fantasy page respects the same competition choice.
+ */
+export const useFantasySeason = () => {
+  const { data: comps, isLoading } = useFantasyComps();
+  const seasons = useMemo(
+    () =>
+      (comps ?? []).flatMap(c =>
+        (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })),
+      ),
+    [comps],
+  );
+  const [picked, setPicked] = useState(() =>
+    sessionStorage.getItem(SEASON_KEY),
+  );
+
+  const season =
+    seasons.find(s => String(s.id) === String(picked)) ??
+    seasons.find(s => s.status === "active") ??
+    seasons[0] ??
+    null;
+
+  const selectSeason = id => {
+    setPicked(String(id));
+    sessionStorage.setItem(SEASON_KEY, String(id));
+  };
+
+  return { comps, seasons, season, selectSeason, isLoading };
+};
+
+/**
+ * Live updates: invalidates fantasy queries on any points/lineup/team change.
+ * Mount once inside FantasyLayout.
+ */
+export const useFantasyRealtime = () => {
+  const qc = useQueryClient();
+  useEffect(() => {
+    const ch = supabase
+      .channel("fantasy-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "fantasy_manager_points" },
+        () => qc.invalidateQueries({ queryKey: ["fantasy"] }),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "fantasy_player_stats" },
+        () => qc.invalidateQueries({ queryKey: ["fantasy"] }),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "fantasy_lineups" },
+        () => qc.invalidateQueries({ queryKey: ["fantasy", "myteam"] }),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "fantasy_teams" },
+        () => qc.invalidateQueries({ queryKey: ["fantasy"] }),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "fantasy_transfers" },
+        () => qc.invalidateQueries({ queryKey: ["fantasy"] }),
+      )
+      .subscribe();
+    return () => supabase.removeChannel(ch);
+  }, [qc]);
+};

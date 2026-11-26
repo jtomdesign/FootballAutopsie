@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import {
-  useFantasyComps,
   useMyTeam,
   useLeaderboard,
   useActiveGameweek,
+  useFantasySeason,
 } from "../../hooks/fantasy";
 import Button from "../../ui/Button";
 import { LuTrophy, LuClock, LuUsers, LuTarget } from "react-icons/lu";
@@ -26,21 +26,8 @@ const Stat = ({ icon, label, value, sub }) => (
 const FantasyHome = () => {
   const { t } = useTranslation();
   const { user, isAuthenticated } = useSelector(s => s.user);
-  const { data: comps, isLoading } = useFantasyComps();
-
-  // Default: first enabled competition's active season
-  const seasons = useMemo(
-    () =>
-      (comps ?? []).flatMap(c =>
-        (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })),
-      ),
-    [comps],
-  );
-  const [seasonId, setSeasonId] = useState(null);
-  const activeSeason =
-    seasons.find(s => String(s.id) === String(seasonId)) ??
-    seasons.find(s => s.status === "active") ??
-    seasons[0];
+  const { seasons, season: activeSeason, selectSeason, isLoading } =
+    useFantasySeason();
 
   const { data: myTeam } = useMyTeam(activeSeason?.id);
   const { data: gw } = useActiveGameweek(activeSeason?.id);
@@ -90,7 +77,7 @@ const FantasyHome = () => {
         {seasons.map(s => (
           <button
             key={s.id}
-            onClick={() => setSeasonId(s.id)}
+            onClick={() => selectSeason(s.id)}
             className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
               activeSeason?.id === s.id
                 ? "bg-emerald-600 text-white"

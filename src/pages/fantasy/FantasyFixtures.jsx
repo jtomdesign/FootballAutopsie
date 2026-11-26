@@ -1,19 +1,12 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useFantasyComps, useActiveGameweek } from "../../hooks/fantasy";
+import { useFantasySeason, useActiveGameweek } from "../../hooks/fantasy";
 import { Link } from "react-router-dom";
 
 // Upcoming fixtures for the active fantasy competition, grouped by gameweek.
 const FantasyFixtures = () => {
   const { t } = useTranslation();
-  const { data: comps, isLoading } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season, isLoading } = useFantasySeason();
   const { data: gw } = useActiveGameweek(season?.id);
 
   // Fixtures live in the site API, not Supabase — reuse the public proxy.

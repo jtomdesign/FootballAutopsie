@@ -1,21 +1,14 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { useAchievements, useLeaderboard, useFantasyComps } from "../../hooks/fantasy";
+import { useAchievements, useLeaderboard, useFantasySeason } from "../../hooks/fantasy";
 import { LuTrophy, LuMedal } from "react-icons/lu";
 
 const FantasyHallOfFame = () => {
   const { t } = useTranslation();
   const { user } = useSelector(s => s.user);
   const { data } = useAchievements();
-  const { data: comps } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season } = useFantasySeason();
   const { data: board } = useLeaderboard({ seasonId: season?.id, limit: 10 });
 
   const unlocked = data?.unlocked ?? [];

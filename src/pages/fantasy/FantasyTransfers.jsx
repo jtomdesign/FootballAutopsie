@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
-  useFantasyComps,
+  useFantasySeason,
   useMyTeam,
   useFantasyPlayers,
   useFantasyTransfer,
@@ -17,14 +17,7 @@ import { notify } from "../../services/user";
 const Transfers = () => {
   const { t } = useTranslation();
   const { isAuthenticated, user } = useSelector(s => s.user);
-  const { data: comps } = useFantasyComps();
-  const season = useMemo(
-    () =>
-      (comps ?? [])
-        .flatMap(c => (c.fantasy_seasons ?? []).map(s => ({ ...s, comp: c })))
-        .find(s => s.status === "active") ?? null,
-    [comps],
-  );
+  const { season } = useFantasySeason();
   const { data: team, isLoading } = useMyTeam(season?.id);
   const transfer = useFantasyTransfer();
 
@@ -35,6 +28,7 @@ const Transfers = () => {
 
   const { data: playersData } = useFantasyPlayers({
     seasonId: season?.id,
+    apiLeagueId: season?.comp?.api_league_id,
     position: posFilter || undefined,
     search,
     limit: 80,

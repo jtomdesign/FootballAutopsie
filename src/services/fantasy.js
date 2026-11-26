@@ -54,6 +54,7 @@ export const getScoringRules = async () => {
 
 export const searchFantasyPlayers = async ({
   seasonId,
+  apiLeagueId,
   position,
   clubApiId,
   minPrice,
@@ -69,6 +70,7 @@ export const searchFantasyPlayers = async ({
     .eq("enabled", true);
 
   if (position) q = q.eq("position", position);
+  if (apiLeagueId) q = q.eq("api_league_id", apiLeagueId);
   if (clubApiId) q = q.eq("club_api_id", clubApiId);
   if (minPrice != null) q = q.gte("price", minPrice);
   if (maxPrice != null) q = q.lte("price", maxPrice);
@@ -272,6 +274,7 @@ export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
     const pos = POS[rawPos] ?? rawPos ?? "M";
     return {
       api_player_id: p.player.id,
+      api_league_id: compApiLeagueId,
       name: p.player.name,
       position: ["G", "D", "M", "F"].includes(pos) ? pos : "M",
       club_api_id: p.statistics?.[0]?.team?.id ?? null,

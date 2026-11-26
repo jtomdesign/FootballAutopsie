@@ -3,6 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Container } from "../../ui/Container";
 import { LuTrophy } from "react-icons/lu";
+import { useFantasyRealtime } from "../../hooks/fantasy";
 
 const TABS = [
   { to: "/fantasy", end: true, key: "Accueil" },
@@ -18,6 +19,7 @@ const TABS = [
 
 const FantasyLayout = () => {
   const { t } = useTranslation();
+  useFantasyRealtime();
   return (
     <Container>
       <div className="py-8">
