@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import {
   useFantasyComps,
   useLeaveLeague,
   useGenerateH2H,
+  useActiveGameweek,
 } from "../../hooks/fantasy";
 import Button from "../../ui/Button";
 import { LuLogOut, LuSwords, LuCrown } from "react-icons/lu";
@@ -19,7 +20,8 @@ const FantasyLeagueDetail = () => {
   const { id } = useParams();
   const { user } = useSelector(s => s.user);
   const { data: league, isLoading, refetch } = useLeagueDetail(id);
-  const { data: table } = useLeagueTable(id);
+  const { data: curGw } = useActiveGameweek(league?.season_id);
+  const { data: table } = useLeagueTable(id, curGw?.number);
   const leave = useLeaveLeague();
   const genH2H = useGenerateH2H();
   const { data: comps } = useFantasyComps();
@@ -31,6 +33,23 @@ const FantasyLeagueDetail = () => {
     [comps, league],
   );
   const { data: myTeam } = useMyTeam(league?.season_id);
+
+  // Auto-generate H2H fixtures for the current gameweek (owner only —
+  // the RPC enforces ownership; silently skip for everyone else)
+  const autoGenRef = useRef(null);
+  useEffect(() => {
+    if (!league || league.type !== "h2h" || !curGw?.number) return;
+    if (String(league.owner_id) !== String(user?.id)) return;
+    const hasFixtures = (league.h2h ?? []).some(f => Number(f.gw) === Number(curGw.number));
+    if (hasFixtures) return;
+    if ((league.members ?? []).length < 2) return;
+    const key = `${league.id}:${curGw.number}`;
+    if (autoGenRef.current === key) return;
+    autoGenRef.current = key;
+    genH2H.mutateAsync({ leagueId: league.id, gw: curGw.number })
+      .then(() => refetch())
+      .catch(() => {});
+  }, [league, curGw?.number, user?.id]);
 
   if (isLoading) return <p className="text-gray-500 py-10 text-center">{t("Chargement…")}</p>;
   if (!league) {
@@ -116,6 +135,11 @@ const FantasyLeagueDetail = () => {
                       {row.name}
                       {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-400">{t("Vous")}</span>}
                     </td>
+                    {curGw?.number != null && (
+                      <td className="px-2 py-2.5 text-right text-xs font-bold text-gray-400">
+                        {t("GW{{n}}", { n: curGw.number })}: {row.gwPoints ?? 0}
+                      </td>
+                    )}
                     <td className="px-5 py-2.5 text-right font-bold text-emerald-400">
                       {row.points} pts
                     </td>

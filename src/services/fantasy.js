@@ -70,7 +70,8 @@ export const searchFantasyPlayers = async ({
     .eq("enabled", true);
 
   if (position) q = q.eq("position", position);
-  if (apiLeagueId) q = q.eq("api_league_id", apiLeagueId);
+  // NULL api_league_id = players synced before league scoping — keep them visible
+  if (apiLeagueId) q = q.or(`api_league_id.eq.${apiLeagueId},api_league_id.is.null`);
   if (clubApiId) q = q.eq("club_api_id", clubApiId);
   if (minPrice != null) q = q.gte("price", minPrice);
   if (maxPrice != null) q = q.lte("price", maxPrice);
@@ -370,8 +371,8 @@ export const generateH2H = async (leagueId, gw) => {
   return data;
 };
 
-export const getLeagueTable = async leagueId => {
-  // Points per member team across the season
+export const getLeagueTable = async (leagueId, gw) => {
+  // Season totals + optional current-gameweek points per member team
   const { data: members } = await supabase
     .from("fantasy_league_members")
     .select("team_id, fantasy_teams(name, badge, total_points, user_id)")
@@ -380,11 +381,15 @@ export const getLeagueTable = async leagueId => {
   const teamIds = members.map(m => m.team_id);
   const { data: pts } = await supabase
     .from("fantasy_manager_points")
-    .select("team_id, points")
+    .select("team_id, gw, points")
     .in("team_id", teamIds);
   const totals = {};
+  const gwTotals = {};
   (pts ?? []).forEach(p => {
     totals[p.team_id] = (totals[p.team_id] ?? 0) + Number(p.points ?? 0);
+    if (gw != null && Number(p.gw) === Number(gw)) {
+      gwTotals[p.team_id] = (gwTotals[p.team_id] ?? 0) + Number(p.points ?? 0);
+    }
   });
   return members
     .map(m => ({
@@ -393,6 +398,7 @@ export const getLeagueTable = async leagueId => {
       badge: m.fantasy_teams?.badge,
       user_id: m.fantasy_teams?.user_id,
       points: totals[m.team_id] ?? 0,
+      gwPoints: gw != null ? (gwTotals[m.team_id] ?? 0) : null,
     }))
     .sort((a, b) => b.points - a.points);
 };

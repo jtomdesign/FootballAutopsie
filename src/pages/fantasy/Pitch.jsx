@@ -22,7 +22,7 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
 
   return (
     <div
-      className="relative w-full rounded-2xl overflow-hidden shadow-inner"
+      className="relative w-full min-w-[440px] rounded-2xl overflow-hidden shadow-inner"
       style={{
         aspectRatio: "68/105",
         background:

@@ -139,10 +139,10 @@ export const useLeagueDetail = leagueId =>
     refetchInterval: 60_000,
   });
 
-export const useLeagueTable = leagueId =>
+export const useLeagueTable = (leagueId, gw) =>
   useQuery({
-    queryKey: ["fantasy", "leaguetable", leagueId],
-    queryFn: () => getLeagueTable(leagueId),
+    queryKey: ["fantasy", "leaguetable", leagueId, gw],
+    queryFn: () => getLeagueTable(leagueId, gw),
     enabled: !!leagueId,
     refetchInterval: 60_000,
   });
