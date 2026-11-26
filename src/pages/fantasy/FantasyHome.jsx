@@ -11,6 +11,7 @@ import {
 import Button from "../../ui/Button";
 import { LuTrophy, LuClock, LuUsers, LuTarget } from "react-icons/lu";
 import { StoriesRail, AchievementsShelf, ChallengesShelf } from "./Social";
+import DeadlineBadge from "./Countdown";
 
 const Stat = ({ icon, label, value, sub }) => (
   <div className="rounded-2xl bg-emerald-950/60 p-4">
@@ -57,15 +58,6 @@ const FantasyHome = () => {
     );
   }
 
-  const deadline = gw?.deadline
-    ? new Date(gw.deadline).toLocaleString("fr-FR", {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : null;
-
   const myRank = board?.findIndex(
     b => String(b.fantasy_teams?.user_id) === String(user?.id),
   );
@@ -102,8 +94,12 @@ const FantasyHome = () => {
             <p className="text-gray-300 text-sm mt-1">
               {activeSeason?.comp?.name} · {activeSeason?.name}
               {gw ? ` · ${t("Journée")} ${gw.number}` : ""}
-              {deadline ? ` · ${t("Deadline")} ${deadline}` : ""}
             </p>
+            {gw?.deadline && (
+              <div className="mt-2">
+                <DeadlineBadge deadline={gw.deadline} gwStatus={gw.status} />
+              </div>
+            )}
           </div>
           {isAuthenticated &&
             (myTeam ? (

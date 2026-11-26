@@ -2,5 +2,11 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/fantasy-sync",
+      "schedule": "*/15 * * * *"
+    }
   ]
 }

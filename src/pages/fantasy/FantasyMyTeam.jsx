@@ -14,6 +14,7 @@ import {
 import Button from "../../ui/Button";
 import { PositionBadge, PlayerCard } from "./components";
 import Pitch from "./Pitch";
+import DeadlineBadge from "./Countdown";
 import { LuCrown, LuArrowLeft, LuCheck } from "react-icons/lu";
 
 const FORMATIONS = [
@@ -348,6 +349,11 @@ const MyTeamView = ({ team, season, gw }) => {
               </span>
             )}
           </p>
+          {gw?.deadline && (
+            <div className="mt-1.5">
+              <DeadlineBadge deadline={gw.deadline} gwStatus={gw.status} />
+            </div>
+          )}
         </div>
         <div className="flex gap-2 overflow-x-auto max-w-full pb-1">
           {FORMATIONS.map(f => (
@@ -468,10 +474,16 @@ const MyTeamView = ({ team, season, gw }) => {
               {t("Aucune journée configurée pour cette saison — la composition ne peut pas encore être enregistrée.")}
             </p>
           )}
+          {gw?.deadline && new Date(gw.deadline) < new Date() && gw.status !== "completed" && (
+            <p className="text-xs text-red-400/90 text-center font-bold">
+              {t("Composition verrouillée — deadline dépassée")}
+            </p>
+          )}
           <Button
             name={setLineup.isPending ? t("Enregistrement…") : t("Enregistrer la composition")}
             type="primary"
             onClick={saveLineup}
+            disabled={!!gw?.deadline && new Date(gw.deadline) < new Date()}
             icon={<LuCheck />}
           />
         </div>

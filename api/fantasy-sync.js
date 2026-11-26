@@ -107,8 +107,12 @@ async function currentApiRound(league, season) {
 
 export default async function handler(req, res) {
   const key = req.query.key ?? req.headers["x-fantasy-key"];
+  const cronOk =
+    !!process.env.CRON_SECRET &&
+    req.headers.authorization === `Bearer ${process.env.CRON_SECRET}`;
   let authorized =
-    !!process.env.FANTASY_SYNC_KEY && key === process.env.FANTASY_SYNC_KEY;
+    cronOk ||
+    (!!process.env.FANTASY_SYNC_KEY && key === process.env.FANTASY_SYNC_KEY);
 
   // Or: a logged-in admin's Supabase JWT (for the dashboard "Sync" button)
   if (!authorized) {
@@ -155,7 +159,10 @@ export default async function handler(req, res) {
       );
       for (const gw of sGws ?? []) {
         let st = gw.status;
-        if (Number(gw.number) < round) st = "completed";
+        // Only auto-complete GWs that never opened — ones already
+        // open/live get finalized by the fixture-status check below,
+        // so postponed matches don't lose their points.
+        if (Number(gw.number) < round && st === "upcoming") st = "completed";
         else if (Number(gw.number) === round && st === "upcoming") st = "open";
         if (st !== gw.status) {
           await sb(`fantasy_gameweeks?id=eq.${gw.id}`, {
@@ -212,8 +219,24 @@ export default async function handler(req, res) {
       const hg = f.goals?.home ?? 0, ag = f.goals?.away ?? 0;
       fixtureMeta.set(fid, {
         homeId: home?.id, awayId: away?.id, hg, ag,
-        homeCS: hg === 0 && ag > 0 ? false : hg <= ag, // placeholder, refined below
+        date: f.fixture?.date ?? null,
+        status: f.fixture?.status?.short ?? null,
       });
+    }
+
+    // 4b. Deadlines: kickoff of the first fixture minus 15 minutes,
+    //     recomputed every run so rescheduled matches move the deadline.
+    for (const gw of gws) {
+      const dates = (gw.fixture_ids ?? [])
+        .map(fid => fixtureMeta.get(Number(fid))?.date)
+        .filter(Boolean);
+      if (!dates.length) continue;
+      const earliest = Math.min(...dates.map(d => new Date(d).getTime()));
+      const deadline = new Date(earliest - 15 * 60 * 1000).toISOString();
+      await sb(`fantasy_gameweeks?id=eq.${gw.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ deadline }),
+      }).catch(() => null);
     }
 
     // 5. Upsert player stats + points
@@ -280,6 +303,11 @@ export default async function handler(req, res) {
         [...new Set(gws.map(g => g.season_id))].join(",") + ")",
     );
 
+    // Stat rows keyed by player+gw — full raw stats so the scoring engine
+    // can compute appearance/clean-sheet/etc. and auto-substitutions.
+    const statByKey = new Map();
+    for (const u of upserts) statByKey.set(`${u.player_id}:${u.gw}`, u);
+
     const managerRows = [];
     for (const gw of gws) {
       const gwTeams = teams.filter(t => t.season_id === gw.season_id);
@@ -296,12 +324,6 @@ export default async function handler(req, res) {
       }
       const posByPlayer = new Map();
       for (const s of squadRows ?? []) posByPlayer.set(s.player_id, s.fantasy_players?.position);
-      // stats per player for this gw
-      const statPts = new Map();
-      for (const [k, pts] of pointsByPlayerGw) {
-        const [pid, , gwn] = k.split(":");
-        if (Number(gwn) === gw.number) statPts.set(Number(pid), pts);
-      }
 
       for (const t of gwTeams) {
         const lu = lineupsByTeam.get(t.id) ?? [];
@@ -313,37 +335,9 @@ export default async function handler(req, res) {
           is_vc: l.is_vc,
           slot: l.slot,
           bench_order: l.bench_order,
-          stats: { minutes: statPts.has(l.player_id) ? 1 : 0, _pts: statPts.get(l.player_id) ?? 0 },
+          stats: statByKey.get(`${l.player_id}:${gw.number}`) ?? null,
         }));
-        // computeGameweekPoints uses stats.minutes for "played" — but we need raw
-        // points not recomputed. Simpler: aggregate directly.
-        let total = 0;
-        const cap = lu.find(l => l.is_captain);
-        const vc = lu.find(l => l.is_vc);
-        const eff = new Map();
-        for (const l of lu) {
-          const pts = statPts.get(l.player_id) ?? 0;
-          if (l.slot === "bench") continue;
-          eff.set(l.player_id, pts);
-        }
-        // bench auto-sub: bench players with points replace zero-point starters (order)
-        const starters = lu.filter(l => l.slot !== "bench");
-        const bench = lu.filter(l => l.slot === "bench")
-          .sort((a, b) => (a.bench_order ?? 99) - (b.bench_order ?? 99));
-        for (const s of starters) {
-          if ((statPts.get(s.player_id) ?? 0) === 0) {
-            const sub = bench.find(b => !eff.has(b.player_id) && (statPts.get(b.player_id) ?? 0) > 0);
-            if (sub) { eff.delete(s.player_id); eff.set(sub.player_id, statPts.get(sub.player_id)); }
-          }
-        }
-        for (const [, pts] of eff) total += pts;
-        // captain multiplier on already-computed player points
-        const capPts = cap ? (statPts.get(cap.player_id) ?? 0) : 0;
-        const vcPts = vc ? (statPts.get(vc.player_id) ?? 0) : 0;
-        const capEffective = capPts > 0 ? cap.player_id : (vcPts > 0 ? vc.player_id : null);
-        if (capEffective && eff.has(capEffective)) {
-          total += eff.get(capEffective) * (rules.captain_multiplier ?? 2 - 1);
-        }
+        const { total } = computeGameweekPoints(lineup, rules);
         managerRows.push({ team_id: t.id, season_id: gw.season_id, gw: gw.number, points: total });
       }
     }
@@ -430,6 +424,26 @@ export default async function handler(req, res) {
           }),
         });
       }
+    }
+
+    // 11. Finalize gameweeks whose fixtures are all finished — locks points,
+    //     confirms stats, publishes final standings. Idempotent: upserts mean
+    //     re-runs never duplicate points.
+    for (const gw of gws) {
+      const metas = (gw.fixture_ids ?? [])
+        .map(fid => fixtureMeta.get(Number(fid)))
+        .filter(Boolean);
+      if (!metas.length) continue;
+      const pending = metas.filter(m => !["FT", "AET", "PEN", "CANC", "ABD", "AWD", "WO"].includes(m.status));
+      if (pending.length) continue;
+      await sb(`fantasy_gameweeks?id=eq.${gw.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: "completed" }),
+      }).catch(() => null);
+      await sb(
+        `fantasy_player_stats?season_id=eq.${gw.season_id}&gw=eq.${gw.number}&status=eq.provisional`,
+        { method: "PATCH", body: JSON.stringify({ status: "confirmed" }) },
+      ).catch(() => null);
     }
 
     return res.json({

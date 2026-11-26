@@ -7,6 +7,7 @@ const Button = ({
   role,
   icon = null,
   color = null,
+  disabled = false,
 }) => {
   const types = {
     primary:
@@ -20,7 +21,12 @@ const Button = ({
       " hover:text-emerald-950  hover:bg-emerald-100 transition-all bg-emerald-900/40 duration-300  px-7 py-3 flex items-center justify-center  gap-2 text-gray-100 rounded-full font-bold cursor-pointer",
   };
   return (
-    <button type={role} onClick={onClick} className={types[type]}>
+    <button
+      type={role}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={`${types[type]} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+    >
       <span className="flex items-center justify-center ">{icon && icon}</span>
       <span>{name}</span>
     </button>
