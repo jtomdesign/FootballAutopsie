@@ -23,9 +23,19 @@ const FantasyLayout = () => {
   return (
     <Container>
       <div className="py-8 max-w-7xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-4">
           <LuTrophy className="text-2xl text-emerald-400" />
           <h1 className="text-2xl font-bold text-gray-100">{t("Fantasy")}</h1>
+        </div>
+
+        <div className="mb-6 rounded-2xl bg-amber-500/10 px-4 py-3 flex items-center gap-3">
+          <span className="relative flex h-2.5 w-2.5 shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" />
+          </span>
+          <p className="text-sm font-semibold text-amber-300">
+            {t("Fantasy en construction — certaines fonctionnalités sont en cours de développement.")}
+          </p>
         </div>
 
         <nav className="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-1 px-1">

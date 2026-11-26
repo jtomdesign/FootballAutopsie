@@ -426,4 +426,6 @@ export default {
   "Mode clair": "Light mode",
   "Toutes": "All",
   "vues": "views",
+  "Fantasy en construction — certaines fonctionnalités sont en cours de développement.":
+    "Fantasy under construction — some features are still in development.",
 };
