@@ -133,7 +133,7 @@ const FantasyLeagueDetail = () => {
                     <td className="px-5 py-2.5 w-10 font-bold text-gray-400">{i + 1}</td>
                     <td className="px-2 py-2.5 font-bold text-gray-100">
                       {row.name}
-                      {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-400">{t("Vous")}</span>}
+                      {isMe && <span className="ml-2 text-[10px] font-bold text-emerald-400">{t("Vous")}</span>}
                     </td>
                     {curGw?.number != null && (
                       <td className="px-2 py-2.5 text-right text-xs font-bold text-gray-400">
@@ -208,7 +208,7 @@ const FantasyLeagueDetail = () => {
             <div className="space-y-4">
               {Object.entries(h2hByGw).sort((a, b) => a[0] - b[0]).map(([gw, matches]) => (
                 <div key={gw}>
-                  <p className="text-xs font-bold uppercase text-gray-400 mb-2">GW{gw}</p>
+                  <p className="text-xs font-bold text-gray-400 mb-2">GW{gw}</p>
                   <div className="grid sm:grid-cols-2 gap-2">
                     {matches.map(m => {
                       const mine =

@@ -119,15 +119,15 @@ const Transfers = () => {
       {/* Status bar */}
       <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4 flex flex-wrap gap-6 text-sm">
         <div>
-          <p className="text-gray-400 text-xs uppercase font-bold">{t("Budget")}</p>
+          <p className="text-gray-400 text-xs font-bold">{t("Budget")}</p>
           <p className="font-bold">£{Number(team.budget ?? 0).toFixed(1)}m</p>
         </div>
         <div>
-          <p className="text-gray-400 text-xs uppercase font-bold">{t("Transferts libres")}</p>
+          <p className="text-gray-400 text-xs font-bold">{t("Transferts libres")}</p>
           <p className="font-bold">{freeLeft}</p>
         </div>
         <div>
-          <p className="text-gray-400 text-xs uppercase font-bold">{t("Prochains transferts")}</p>
+          <p className="text-gray-400 text-xs font-bold">{t("Prochains transferts")}</p>
           <p className="font-bold">−{deduction} pts</p>
         </div>
       </div>

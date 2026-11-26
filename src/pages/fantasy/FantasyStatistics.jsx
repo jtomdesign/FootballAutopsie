@@ -13,7 +13,7 @@ import { LuChartSpline } from "react-icons/lu";
 
 const StatCard = ({ label, value, sub }) => (
   <div className="rounded-2xl bg-emerald-950/60 p-4">
-    <p className="text-xs font-bold uppercase text-gray-400">{label}</p>
+    <p className="text-xs font-bold text-gray-400">{label}</p>
     <p className="text-2xl font-bold text-gray-100 mt-1">{value}</p>
     {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
   </div>

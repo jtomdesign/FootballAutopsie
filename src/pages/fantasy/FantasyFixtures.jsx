@@ -27,7 +27,7 @@ const FantasyFixtures = () => {
   return (
     <div className="space-y-4">
       <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-5">
-        <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+        <p className="text-xs font-bold tracking-widest text-emerald-400">
           {season.comp?.name} · {season.name}
         </p>
         <h2 className="text-xl font-bold mt-1">

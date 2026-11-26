@@ -38,7 +38,7 @@ const FantasyHallOfFame = () => {
                 <p className="text-sm font-bold text-gray-100">{a.name_fr}</p>
                 <p className="text-xs text-gray-500 mt-1">{a.description_fr}</p>
                 {mine && (
-                  <p className="text-[10px] font-bold uppercase text-emerald-400 mt-2">
+                  <p className="text-[10px] font-bold text-emerald-400 mt-2">
                     {t("Débloqué par vous")}
                   </p>
                 )}

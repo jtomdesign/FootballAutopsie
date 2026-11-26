@@ -60,7 +60,7 @@ const FantasyRules = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-xs uppercase text-gray-400">
+              <tr className="text-xs text-gray-400">
                 <th className="px-4 py-2 text-left">{t("Événement")}</th>
                 <th className="px-4 py-2">G</th>
                 <th className="px-4 py-2">D</th>

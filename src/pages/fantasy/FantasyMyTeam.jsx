@@ -349,12 +349,12 @@ const MyTeamView = ({ team, season, gw }) => {
             )}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 overflow-x-auto max-w-full pb-1">
           {FORMATIONS.map(f => (
             <button
               key={f.id}
               onClick={() => setFormation(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shrink-0 ${
                 formation.id === f.id
                   ? "bg-emerald-600 text-white"
                   : "bg-emerald-950/60 text-gray-500"
@@ -368,11 +368,11 @@ const MyTeamView = ({ team, season, gw }) => {
 
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="rounded-2xl bg-emerald-950/60 p-4">
-          <div className="flex items-center justify-between mb-3 gap-2">
+          <div className="flex flex-wrap items-center justify-between mb-3 gap-2">
             <h3 className="font-bold text-gray-100">
               {t("Composition")}
             </h3>
-            <div className="flex rounded-lg bg-white/5 p-0.5 text-xs font-bold">
+            <div className="flex rounded-lg bg-white/5 p-0.5 text-xs font-bold shrink-0">
               {[
                 { id: "cap", label: t("Capitaine") },
                 { id: "vc", label: t("Vice-cap.") },
@@ -419,19 +419,51 @@ const MyTeamView = ({ team, season, gw }) => {
               ))}
             </div>
           </div>
-          <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4 flex items-center justify-between">
-            <div className="text-sm">
-              <p className="font-bold">{t("Capitaine")}</p>
-              <p className="text-gray-400 text-xs">
-                {squad.find(p => p.id === capId)?.name ?? "—"} · ×2
-              </p>
+          <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4 space-y-3">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <label className="block">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-amber-300 mb-1">
+                  <LuCrown className="w-3.5 h-3.5" /> {t("Capitaine")} · ×2
+                </span>
+                <select
+                  value={capId ?? ""}
+                  onChange={e => {
+                    const id = Number(e.target.value);
+                    setCaptain(id || null);
+                    if (id && id === vcId) setVc(null);
+                  }}
+                  className="w-full rounded-lg fa-input px-3 py-2 text-sm font-semibold"
+                >
+                  {squad.map(p => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-sky-300 mb-1">
+                  <LuCrown className="w-3.5 h-3.5" /> {t("Vice-capitaine")}
+                </span>
+                <select
+                  value={vcId ?? ""}
+                  onChange={e => {
+                    const id = Number(e.target.value);
+                    setVc(id || null);
+                    if (id && id === capId) setCaptain(null);
+                  }}
+                  className="w-full rounded-lg fa-input px-3 py-2 text-sm font-semibold"
+                >
+                  <option value="">{t("— Aucun —")}</option>
+                  {squad
+                    .filter(p => p.id !== capId)
+                    .map(p => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
+                </select>
+              </label>
             </div>
-            <div className="text-sm text-right">
-              <p className="font-bold">{t("Vice-capitaine")}</p>
-              <p className="text-gray-400 text-xs">
-                {squad.find(p => p.id === vcId)?.name ?? t("Aucun")}
-              </p>
-            </div>
+            <p className="text-xs text-gray-400 text-center">
+              {t("Ou cliquez un joueur sur le terrain selon le rôle choisi ci-dessus.")}
+            </p>
           </div>
           {!gw && (
             <p className="text-xs text-amber-400/90 text-center">

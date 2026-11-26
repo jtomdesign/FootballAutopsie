@@ -73,7 +73,7 @@ const FantasyPoints = () => {
             ].map(([l, v]) => (
               <div key={l} className="rounded-2xl bg-emerald-950/60 p-4 text-center">
                 <p className="text-2xl font-bold text-gray-100">{v}</p>
-                <p className="text-xs text-gray-500 font-bold uppercase">{l}</p>
+                <p className="text-xs text-gray-500 font-bold">{l}</p>
               </div>
             ))}
           </div>
@@ -81,7 +81,7 @@ const FantasyPoints = () => {
           <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-xs uppercase text-gray-400">
+                <tr className="text-left text-xs text-gray-400">
                   <th className="px-5 py-3">{t("Journée")}</th>
                   <th className="px-5 py-3 text-right">{t("Points")}</th>
                   <th className="px-5 py-3 text-right">{t("Rang GW")}</th>
@@ -146,7 +146,7 @@ const FantasyPoints = () => {
         <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase text-gray-400">
+              <tr className="text-left text-xs text-gray-400">
                 <th className="px-5 py-3">#</th>
                 <th className="px-5 py-3">{t("Joueur")}</th>
                 <th className="px-5 py-3">{t("Club")}</th>
@@ -182,7 +182,7 @@ const FantasyPoints = () => {
         <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs uppercase text-gray-400">
+              <tr className="text-left text-xs text-gray-400">
                 <th className="px-5 py-3">#</th>
                 <th className="px-5 py-3">{t("Manager")}</th>
                 <th className="px-5 py-3 text-right">{t("Points")}</th>
@@ -197,7 +197,7 @@ const FantasyPoints = () => {
                     <td className="px-5 py-2.5 font-bold text-gray-400">{i + 1}</td>
                     <td className="px-5 py-2.5 font-bold text-gray-100">
                       {teamRow?.name}
-                      {isMe && <span className="ml-2 text-[10px] font-bold uppercase text-emerald-400">{t("Vous")}</span>}
+                      {isMe && <span className="ml-2 text-[10px] font-bold text-emerald-400">{t("Vous")}</span>}
                     </td>
                     <td className="px-5 py-2.5 text-right font-bold text-emerald-400">
                       {row.points}

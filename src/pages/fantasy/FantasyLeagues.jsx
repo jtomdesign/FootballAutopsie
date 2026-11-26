@@ -128,7 +128,7 @@ const FantasyLeagues = () => {
   const Section = ({ title, items }) =>
     items?.length ? (
       <div>
-        <h3 className="text-sm font-bold uppercase tracking-wide text-gray-400 mb-3">{title}</h3>
+        <h3 className="text-sm font-bold tracking-wide text-gray-400 mb-3">{title}</h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {items.map(l => <LeagueCard key={l.id} league={l} />)}
         </div>

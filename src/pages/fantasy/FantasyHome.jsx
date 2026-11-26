@@ -14,7 +14,7 @@ import { StoriesRail, AchievementsShelf, ChallengesShelf } from "./Social";
 
 const Stat = ({ icon, label, value, sub }) => (
   <div className="rounded-2xl bg-emerald-950/60 p-4">
-    <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase">
+    <div className="flex items-center gap-2 text-gray-400 text-xs font-bold">
       {icon}
       {label}
     </div>
@@ -154,7 +154,7 @@ const FantasyHome = () => {
       <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
         <div className="px-5 py-4 flex items-center justify-between">
           <h3 className="font-bold text-gray-100">{t("Classement")}</h3>
-          <span className="text-xs text-gray-400 font-bold uppercase">
+          <span className="text-xs text-gray-400 font-bold">
             {t("Globale")}
           </span>
         </div>
@@ -180,7 +180,7 @@ const FantasyHome = () => {
                     <td className="px-2 py-2.5 font-bold text-gray-100">
                       {team?.name ?? "—"}
                       {isMe && (
-                        <span className="ml-2 text-[10px] font-bold uppercase text-emerald-400">
+                        <span className="ml-2 text-[10px] font-bold text-emerald-400">
                           {t("Vous")}
                         </span>
                       )}

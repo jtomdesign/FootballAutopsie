@@ -70,7 +70,7 @@ export const StoriesRail = ({ seasonId, myTeam }) => {
   return (
     <div className="rounded-2xl bg-emerald-950/60 p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-bold text-gray-100 text-sm uppercase tracking-wide">
+        <h3 className="font-bold text-gray-100 text-sm tracking-wide">
           {t("Stories Fantasy")}
         </h3>
         {isAuthenticated && (
@@ -261,7 +261,7 @@ export const AchievementsShelf = ({ teamId }) => {
 
   return (
     <div className="rounded-2xl bg-emerald-950/60 p-4">
-      <h3 className="font-bold text-gray-100 text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
+      <h3 className="font-bold text-gray-100 text-sm tracking-wide mb-3 flex items-center gap-2">
         <LuTrophy className="text-amber-500" /> {t("Succès")}
       </h3>
       <div className="flex gap-3 overflow-x-auto pb-1">
@@ -287,7 +287,7 @@ export const ChallengesShelf = ({ seasonId }) => {
   if (!challenges?.length) return null;
   return (
     <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4">
-      <h3 className="font-bold text-sm uppercase tracking-wide text-emerald-300 mb-3">
+      <h3 className="font-bold text-sm tracking-wide text-emerald-300 mb-3">
         {t("Défis de la saison")}
       </h3>
       <div className="space-y-2">
