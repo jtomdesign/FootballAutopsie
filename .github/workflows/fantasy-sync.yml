@@ -1,0 +1,24 @@
+name: Fantasy Sync
+
+# Runs the fantasy points/deadline/GW-status engine every 15 minutes.
+# Alternative to Vercel Cron (Hobby plan = 1/day). Requires repo secrets:
+#   FANTASY_SITE_URL  e.g. https://footautopsie.com
+#   FANTASY_SYNC_KEY  same value as the Vercel/Fantasy env var
+# Note: GitHub scheduled runs can be delayed a few minutes under load —
+# fine for fantasy scoring, not suitable for sub-minute live data.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger fantasy sync
+        run: |
+          curl -sf --max-time 300 -X POST \
+            "${{ secrets.FANTASY_SITE_URL }}/api/fantasy-sync" \
+            -H "x-fantasy-key: ${{ secrets.FANTASY_SYNC_KEY }}" \
+            -H "Content-Type: application/json"

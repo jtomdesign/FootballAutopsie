@@ -341,6 +341,16 @@ export const syncFantasyPlayers = async ({ compApiLeagueId, apiSeason }) => {
     };
   });
 
+  // Preserve admin-adjusted prices — don't reset them to defaults on re-sync
+  const { data: existing } = await supabase
+    .from("fantasy_players")
+    .select("api_player_id, price")
+    .in("api_player_id", rows.map(r => r.api_player_id));
+  const priceMap = new Map((existing ?? []).map(e => [e.api_player_id, e.price]));
+  rows.forEach(r => {
+    if (priceMap.has(r.api_player_id)) r.price = priceMap.get(r.api_player_id);
+  });
+
   const { error } = await supabase
     .from("fantasy_players")
     .upsert(rows, { onConflict: "api_player_id" });
