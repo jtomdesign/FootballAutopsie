@@ -41,6 +41,7 @@ const ClubCount = players => {
 
 const CreateTeam = ({ season, onCreated }) => {
   const { t } = useTranslation();
+  const { user } = useSelector(s => s.user);
   const [name, setName] = useState("");
   const [squad, setSquad] = useState([]); // selected player objects
   const [posFilter, setPosFilter] = useState("G");
