@@ -22,7 +22,7 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
 
   return (
     <div
-      className="relative w-full rounded-2xl overflow-hidden border border-emerald-500/40 shadow-inner"
+      className="relative w-full rounded-2xl overflow-hidden shadow-inner"
       style={{
         aspectRatio: "68/105",
         background:
@@ -82,7 +82,7 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
                     : "bg-white/50"
               }`}
             >
-              <span className="block w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-emerald-950 border-2 border-white/40">
+              <span className="block w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-emerald-950 border-2 border-white/40 relative">
                 {p.photo ? (
                   <img
                     src={p.photo}
@@ -95,6 +95,9 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
                     {p.name?.slice(0, 2).toUpperCase()}
                   </span>
                 )}
+                <span className="absolute bottom-0 right-0 text-[7px] font-bold bg-black/70 text-emerald-300 px-0.5 rounded-tl">
+                  {p.position}
+                </span>
               </span>
               {isCap && (
                 <LuCrown className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 text-amber-300 drop-shadow" />
@@ -103,19 +106,27 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
                 <LuCrown className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 text-sky-300 drop-shadow" />
               )}
             </span>
-            <span className="mt-1 flex flex-col items-center leading-none">
+            <span className="mt-1 flex flex-col items-center leading-none max-w-[90px]">
               <span className="px-1.5 py-px rounded bg-black/55 text-white text-[9px] sm:text-[10px] font-semibold whitespace-nowrap max-w-[76px] truncate group-hover:bg-black/75">
-                {p.name?.split(" ").slice(-1)[0]}
+                {p.name}
               </span>
-              {pts !== 0 && (
-                <span
-                  className={`mt-0.5 text-[8px] sm:text-[9px] font-bold px-1 rounded-full ${
-                    pts > 0 ? "bg-emerald-500/80 text-white" : "bg-red-500/80 text-white"
-                  }`}
-                >
-                  {pts > 0 ? `+${pts}` : pts}
+              <span className="text-[7px] sm:text-[8px] text-emerald-200/70 whitespace-nowrap max-w-[90px] truncate">
+                {p.club_name}
+              </span>
+              <span className="mt-0.5 flex items-center gap-1">
+                <span className="text-[8px] sm:text-[9px] font-bold text-white/80">
+                  £{Number(p.price ?? p.price_paid ?? 0).toFixed(1)}m
                 </span>
-              )}
+                {pts !== 0 && (
+                  <span
+                    className={`text-[8px] sm:text-[9px] font-bold px-1 rounded-full ${
+                      pts > 0 ? "bg-emerald-500/80 text-white" : "bg-red-500/80 text-white"
+                    }`}
+                  >
+                    {pts > 0 ? `+${pts}` : pts}
+                  </span>
+                )}
+              </span>
             </span>
           </button>
         );

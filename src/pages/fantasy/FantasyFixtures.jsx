@@ -26,7 +26,7 @@ const FantasyFixtures = () => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-5">
+      <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-5">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">
           {season.comp?.name} · {season.name}
         </p>
@@ -40,7 +40,7 @@ const FantasyFixtures = () => {
         )}
       </div>
 
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
+      <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
         {!fixtures.length ? (
           <p className="p-8 text-center text-gray-400 text-sm">{t("Aucun match à venir.")}</p>
         ) : (

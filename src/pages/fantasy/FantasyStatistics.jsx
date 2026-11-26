@@ -12,7 +12,7 @@ import { PositionBadge } from "./components";
 import { LuChartSpline } from "react-icons/lu";
 
 const StatCard = ({ label, value, sub }) => (
-  <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+  <div className="rounded-2xl bg-emerald-950/60 p-4">
     <p className="text-xs font-bold uppercase text-gray-400">{label}</p>
     <p className="text-2xl font-bold text-gray-100 mt-1">{value}</p>
     {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
@@ -42,14 +42,14 @@ const FantasyStatistics = () => {
   );
 
   const PosTable = ({ title, players }) => (
-    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
-      <div className="px-4 py-3 border-b border-white/10">
+    <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
+      <div className="px-4 py-3">
         <h3 className="font-bold text-gray-100 text-sm">{title}</h3>
       </div>
       <table className="w-full text-sm">
         <tbody>
           {(players?.players ?? []).slice(0, 5).map((p, i) => (
-            <tr key={p.id} className="border-b border-white/5 last:border-0">
+            <tr key={p.id}>
               <td className="px-4 py-2 w-6 font-bold text-gray-400">{i + 1}</td>
               <td className="px-2 py-2 font-semibold text-gray-100 truncate max-w-[140px]">{p.name}</td>
               <td className="px-2 py-2 text-xs text-gray-500">{p.club_name}</td>
@@ -82,7 +82,7 @@ const FantasyStatistics = () => {
 
       {/* Weekly performance bars */}
       {myPts.length > 0 && (
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+        <div className="rounded-2xl bg-emerald-950/60 p-4">
           <h3 className="font-bold text-gray-100 text-sm mb-3">{t("Performance par journée")}</h3>
           <div className="flex items-end gap-1.5 h-28">
             {myPts.map((p, i) => (

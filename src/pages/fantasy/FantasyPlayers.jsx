@@ -39,7 +39,7 @@ const FantasyPlayers = () => {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 flex flex-wrap gap-2 items-center">
+      <div className="rounded-2xl bg-emerald-950/60 p-4 flex flex-wrap gap-2 items-center">
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -107,7 +107,7 @@ const FantasyPlayers = () => {
         ))}
       </div>
       {!isLoading && !players.length && (
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center text-gray-500">
+        <div className="rounded-2xl bg-emerald-950/60 p-10 text-center text-gray-500">
           {t("Aucun joueur ne correspond aux filtres.")}
         </div>
       )}

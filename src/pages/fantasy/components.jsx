@@ -19,10 +19,10 @@ export const PlayerCard = ({ player, selected, onClick, showPoints = true }) => 
   <button
     type="button"
     onClick={onClick}
-    className={`w-full text-left rounded-xl p-3 transition-all border ${
+    className={`w-full text-left rounded-xl p-3 transition-all ${
       selected
-        ? "border-emerald-500 bg-emerald-500/100/10"
-        : "border-white/10 hover:border-emerald-500/50 bg-white/5"
+        ? "bg-emerald-500/15"
+        : "bg-white/5 hover:bg-white/10"
     }`}
   >
     <div className="flex items-center gap-3">

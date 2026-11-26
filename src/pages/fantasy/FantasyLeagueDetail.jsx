@@ -35,7 +35,7 @@ const FantasyLeagueDetail = () => {
   if (isLoading) return <p className="text-gray-500 py-10 text-center">{t("Chargement…")}</p>;
   if (!league) {
     return (
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center text-gray-500">
+      <div className="rounded-2xl bg-emerald-950/60 p-10 text-center text-gray-500">
         {t("Ligue introuvable ou privée.")}
       </div>
     );
@@ -77,7 +77,7 @@ const FantasyLeagueDetail = () => {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-6 relative overflow-hidden">
+      <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-6 relative overflow-hidden">
         <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-emerald-500/100/20 blur-3xl" />
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -99,8 +99,8 @@ const FantasyLeagueDetail = () => {
 
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Table */}
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
-          <div className="px-5 py-4 border-b border-white/10 flex items-center gap-2">
+        <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
+          <div className="px-5 py-4 flex items-center gap-2">
             <LuCrown className="text-amber-500" />
             <h3 className="font-bold text-gray-100">{t("Classement")}</h3>
           </div>
@@ -110,7 +110,7 @@ const FantasyLeagueDetail = () => {
                 const isMe = String(row.user_id) === String(user?.id);
                 return (
                   <tr key={row.team_id}
-                    className={`border-b border-white/5 last:border-0 ${isMe ? "bg-emerald-500/10" : ""}`}>
+                    className={`${isMe ? "bg-emerald-500/10" : ""}`}>
                     <td className="px-5 py-2.5 w-10 font-bold text-gray-400">{i + 1}</td>
                     <td className="px-2 py-2.5 font-bold text-gray-100">
                       {row.name}
@@ -130,14 +130,14 @@ const FantasyLeagueDetail = () => {
         </div>
 
         {/* Members */}
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+        <div className="rounded-2xl bg-emerald-950/60 p-4">
           <h3 className="font-bold text-gray-100 mb-3">{t("Membres")}</h3>
           <div className="space-y-2">
             {members.map(m => {
               const isMe = String(m.fantasy_teams?.user_id) === String(user?.id);
               return (
                 <div key={m.team_id}
-                  className={`flex items-center gap-3 rounded-xl border p-2.5 ${isMe ? "border-emerald-500/40 bg-emerald-500/10" : "border-white/10"}`}>
+                  className={`flex items-center gap-3 rounded-xl p-2.5 ${isMe ? "bg-emerald-500/10" : "bg-white/5"}`}>
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
                     {(m.fantasy_teams?.name ?? "?").slice(0, 1).toUpperCase()}
                   </div>
@@ -156,7 +156,7 @@ const FantasyLeagueDetail = () => {
 
       {/* H2H fixtures */}
       {league.type === "h2h" && (
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-5">
+        <div className="rounded-2xl bg-emerald-950/60 p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-gray-100 flex items-center gap-2">
               <LuSwords className="text-rose-500" /> {t("Matchs head-to-head")}
@@ -191,7 +191,7 @@ const FantasyLeagueDetail = () => {
                         m.home_team_id === myTeam?.id || m.away_team_id === myTeam?.id;
                       return (
                         <div key={m.id}
-                          className={`flex items-center justify-between rounded-xl border p-3 text-sm ${mine ? "border-emerald-500/40 bg-emerald-500/10" : "border-white/10"}`}>
+                          className={`flex items-center justify-between rounded-xl p-3 text-sm ${mine ? "bg-emerald-500/10" : "bg-white/5"}`}>
                           <span className={`font-bold truncate ${m.home_team_id === myTeam?.id ? "text-emerald-300" : "text-gray-200"}`}>
                             {teamName(m.home_team_id)}
                           </span>

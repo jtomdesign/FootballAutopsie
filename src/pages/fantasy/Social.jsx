@@ -68,7 +68,7 @@ export const StoriesRail = ({ seasonId, myTeam }) => {
   };
 
   return (
-    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+    <div className="rounded-2xl bg-emerald-950/60 p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-bold text-gray-100 text-sm uppercase tracking-wide">
           {t("Stories Fantasy")}
@@ -99,7 +99,7 @@ export const StoriesRail = ({ seasonId, myTeam }) => {
       </div>
 
       {compose && (
-        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-500/10/50 p-4 space-y-2">
+        <div className="mt-4 rounded-xl bg-emerald-500/10 p-4 space-y-2">
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
@@ -176,7 +176,7 @@ const StoryViewer = ({ stories, index, onClose, onNav, onDelete }) => {
     <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
       onClick={onClose}>
       <div
-        className="relative w-full max-w-sm rounded-2xl overflow-hidden bg-emerald-500/10 border border-emerald-500/30 text-gray-100"
+        className="relative w-full max-w-sm rounded-2xl overflow-hidden bg-emerald-500/10 text-gray-100"
         onClick={e => e.stopPropagation()}
       >
         {/* progress bars */}
@@ -260,7 +260,7 @@ export const AchievementsShelf = ({ teamId }) => {
   );
 
   return (
-    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+    <div className="rounded-2xl bg-emerald-950/60 p-4">
       <h3 className="font-bold text-gray-100 text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
         <LuTrophy className="text-amber-500" /> {t("Succès")}
       </h3>
@@ -270,7 +270,7 @@ export const AchievementsShelf = ({ teamId }) => {
           return (
             <div key={a.id}
               title={a.description_fr ?? a.name_fr}
-              className={`shrink-0 w-24 rounded-xl border p-3 text-center ${got ? "border-amber-500/40 bg-amber-500/10" : "border-white/10 opacity-50"}`}>
+              className={`shrink-0 w-24 rounded-xl p-3 text-center ${got ? "bg-amber-500/10" : "opacity-50"}`}>
               <div className="text-2xl mb-1">{got ? "🏆" : "🔒"}</div>
               <p className="text-[11px] font-bold text-gray-300 leading-tight">{a.name_fr}</p>
             </div>
@@ -286,7 +286,7 @@ export const ChallengesShelf = ({ seasonId }) => {
   const { data: challenges } = useChallenges(seasonId);
   if (!challenges?.length) return null;
   return (
-    <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-4">
+    <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4">
       <h3 className="font-bold text-sm uppercase tracking-wide text-emerald-300 mb-3">
         {t("Défis de la saison")}
       </h3>

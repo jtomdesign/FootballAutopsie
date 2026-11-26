@@ -31,8 +31,8 @@ const FantasyHallOfFame = () => {
             );
             return (
               <div key={a.id}
-                className={`rounded-2xl border p-4 text-center ${
-                  got ? "border-amber-500/40 bg-amber-500/10" : "border-white/10 opacity-50"
+                className={`rounded-2xl p-4 text-center ${
+                  got ? "bg-amber-500/10" : "opacity-50"
                 }`}>
                 <div className="text-3xl mb-2">{got ? "🏆" : "🔒"}</div>
                 <p className="text-sm font-bold text-gray-100">{a.name_fr}</p>
@@ -49,7 +49,7 @@ const FantasyHallOfFame = () => {
       </div>
 
       {/* Legends — top managers */}
-      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 overflow-hidden">
+      <div className="rounded-2xl bg-emerald-500/10 text-gray-100 overflow-hidden">
         <div className="px-5 py-4 flex items-center gap-2">
           <LuMedal className="text-amber-400" />
           <h3 className="font-bold">{t("Légendes de la saison")}</h3>
@@ -61,7 +61,7 @@ const FantasyHallOfFame = () => {
               const isMe = String(team?.user_id) === String(user?.id);
               return (
                 <tr key={row.team_id}
-                  className={`border-t border-white/10 ${isMe ? "bg-emerald-500/100/20" : ""}`}>
+                  className={`${isMe ? "bg-emerald-500/10" : ""}`}>
                   <td className="px-5 py-3 w-12">
                     {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (
                       <span className="font-bold text-gray-500">{i + 1}</span>

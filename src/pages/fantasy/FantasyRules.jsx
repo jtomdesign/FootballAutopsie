@@ -11,7 +11,7 @@ const FantasyRules = () => {
   const csByPos = rules?.clean_sheet ?? {};
 
   const Row = ({ event, G, D, M, F }) => (
-    <tr className="border-b border-white/5 last:border-0">
+    <tr>
       <td className="px-4 py-2.5 font-semibold text-gray-200">{event}</td>
       {[G, D, M, F].map((v, i) => (
         <td key={i} className="px-4 py-2.5 text-center font-bold text-gray-100">{v}</td>
@@ -20,7 +20,7 @@ const FantasyRules = () => {
   );
 
   const Section = ({ title, children }) => (
-    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-5">
+    <div className="rounded-2xl bg-emerald-950/60 p-5">
       <h3 className="font-bold text-gray-100 mb-3">{title}</h3>
       {children}
     </div>
@@ -28,7 +28,7 @@ const FantasyRules = () => {
 
   return (
     <div className="space-y-5 max-w-4xl">
-      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-6">
+      <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-6">
         <h2 className="text-xl font-bold flex items-center gap-2">
           <LuBookOpen className="text-emerald-400" /> {t("Règles & Barème")}
         </h2>
@@ -60,7 +60,7 @@ const FantasyRules = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-xs uppercase text-gray-400 border-b border-white/10">
+              <tr className="text-xs uppercase text-gray-400">
                 <th className="px-4 py-2 text-left">{t("Événement")}</th>
                 <th className="px-4 py-2">G</th>
                 <th className="px-4 py-2">D</th>

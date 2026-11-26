@@ -13,7 +13,7 @@ import { LuTrophy, LuClock, LuUsers, LuTarget } from "react-icons/lu";
 import { StoriesRail, AchievementsShelf, ChallengesShelf } from "./Social";
 
 const Stat = ({ icon, label, value, sub }) => (
-  <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+  <div className="rounded-2xl bg-emerald-950/60 p-4">
     <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase">
       {icon}
       {label}
@@ -43,7 +43,7 @@ const FantasyHome = () => {
 
   if (!seasons.length) {
     return (
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+      <div className="rounded-2xl bg-emerald-950/60 p-10 text-center">
         <LuTrophy className="mx-auto text-4xl text-emerald-500 mb-3" />
         <h2 className="text-xl font-bold text-gray-100">
           {t("Fantasy arrive bientôt")}
@@ -81,7 +81,7 @@ const FantasyHome = () => {
             className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
               activeSeason?.id === s.id
                 ? "bg-emerald-600 text-white"
-                : "bg-emerald-950/60 border border-emerald-900/60 text-gray-400 hover:border-emerald-400"
+                : "bg-emerald-950/60 text-gray-400"
             }`}
           >
             {s.comp?.name} · {s.name}
@@ -90,7 +90,7 @@ const FantasyHome = () => {
       </div>
 
       {/* Welcome */}
-      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-6 sm:p-8 relative overflow-hidden">
+      <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-6 sm:p-8 relative overflow-hidden">
         <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-emerald-500/100/20 blur-3xl" />
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -151,8 +151,8 @@ const FantasyHome = () => {
       </div>
 
       {/* Leaderboard */}
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 overflow-hidden">
-        <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+      <div className="rounded-2xl bg-emerald-950/60 overflow-hidden">
+        <div className="px-5 py-4 flex items-center justify-between">
           <h3 className="font-bold text-gray-100">{t("Classement")}</h3>
           <span className="text-xs text-gray-400 font-bold uppercase">
             {t("Globale")}
@@ -172,9 +172,7 @@ const FantasyHome = () => {
                 return (
                   <tr
                     key={row.team_id}
-                    className={`border-b border-white/5 last:border-0 ${
-                      isMe ? "bg-emerald-500/10" : ""
-                    }`}
+                    className={isMe ? "bg-emerald-500/10" : ""}
                   >
                     <td className="px-5 py-2.5 w-10 font-bold text-gray-400">
                       {i + 1}

@@ -78,7 +78,7 @@ const FantasyLeagues = () => {
     return (
       <Link
         to={`/fantasy/ligues/${league.id}`}
-        className="block rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 hover:border-emerald-400 transition-colors"
+        className="block rounded-2xl bg-emerald-950/60 p-4 transition-colors"
       >
         <div className="flex items-start justify-between gap-2">
           <div>
@@ -137,7 +137,7 @@ const FantasyLeagues = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+      <div className="rounded-2xl bg-emerald-950/60 p-10 text-center">
         <p className="text-gray-400">{t("Connectez-vous pour voir les ligues.")}</p>
       </div>
     );
@@ -146,7 +146,7 @@ const FantasyLeagues = () => {
   return (
     <div className="space-y-6">
       {/* Join by code */}
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4 flex flex-wrap items-center gap-3">
+      <div className="rounded-2xl bg-emerald-950/60 p-4 flex flex-wrap items-center gap-3">
         <input
           value={joinCode}
           onChange={e => setJoinCode(e.target.value.toUpperCase())}
@@ -164,7 +164,7 @@ const FantasyLeagues = () => {
             <Button name={t("Créer une ligue")} type="secondary" icon={<LuPlus />}
               onClick={() => setShowCreate(true)} />
           ) : (
-            <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-5 space-y-3">
+            <div className="rounded-2xl bg-emerald-950/60 p-5 space-y-3">
               <h3 className="font-bold text-gray-100">{t("Nouvelle ligue")}</h3>
               <div className="grid sm:grid-cols-2 gap-3">
                 <input className="rounded-lg fa-input px-3 py-2 text-sm"

@@ -120,7 +120,7 @@ const CreateTeam = ({ season, onCreated }) => {
     Object.values(clubCounts).every(c => c <= maxClub);
 
   return (
-    <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-6">
+    <div className="rounded-2xl bg-emerald-950/60 p-6">
       <h2 className="text-xl font-bold text-gray-100">{t("Créer mon équipe")}</h2>
       <p className="text-sm text-gray-500 mt-1">
         {season.comp?.name} · {season.name} — £{budget}m, 15 joueurs (2G 5D 5M 3F)
@@ -215,6 +215,7 @@ const MyTeamView = ({ team, season, gw }) => {
   const [formation, setFormation] = useState(FORMATIONS[3]); // 4-4-2
   const [captain, setCaptain] = useState(null);
   const [vc, setVc] = useState(null);
+  const [role, setRole] = useState("cap"); // "cap" | "vc" — what a click assigns
 
   const squad = (team.squad ?? []).map(s => ({
     ...s.fantasy_players,
@@ -251,6 +252,28 @@ const MyTeamView = ({ team, season, gw }) => {
     return { starters: st, bench: bn };
   }, [squad, formation]);
 
+  // Clicking a player assigns the active role; clicking the player who
+  // already holds it clears it. Assigning VC to the captain swaps them.
+  const pickPlayer = p => {
+    if (role === "cap") {
+      if (p.id === capId) {
+        setCaptain(null);
+      } else {
+        setCaptain(p.id);
+        if (p.id === vcId) setVc(null);
+      }
+    } else {
+      if (p.id === vcId) {
+        setVc(null);
+      } else if (p.id === capId) {
+        setVc(capId);
+        setCaptain(vcId ?? null);
+      } else {
+        setVc(p.id);
+      }
+    }
+  };
+
   const capId =
     captain ??
     squad.find(p => lineupMap.get(p.id)?.is_captain)?.id ??
@@ -280,16 +303,13 @@ const MyTeamView = ({ team, season, gw }) => {
     const isVc = p.id === vcId;
     return (
       <div
-        onClick={() => {
-          if (isCap) setVc(isVc ? null : p.id);
-          else setCaptain(p.id);
-        }}
-        className={`flex items-center gap-3 rounded-xl border p-2.5 cursor-pointer transition-colors ${
+        onClick={() => pickPlayer(p)}
+        className={`flex items-center gap-3 rounded-xl p-2.5 cursor-pointer transition-colors ${
           isCap
-            ? "border-amber-400 bg-amber-500/10"
+            ? "bg-amber-500/15"
             : isVc
-              ? "border-sky-500/40 bg-sky-500/10"
-              : "border-white/10 bg-white/5"
+              ? "bg-sky-500/15"
+              : "bg-white/5 hover:bg-white/10"
         }`}
       >
         <span className="text-xs font-bold text-gray-400 w-5">{index + 1}</span>
@@ -337,7 +357,7 @@ const MyTeamView = ({ team, season, gw }) => {
               className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
                 formation.id === f.id
                   ? "bg-emerald-600 text-white"
-                  : "bg-emerald-950/60 border border-emerald-900/60 text-gray-500"
+                  : "bg-emerald-950/60 text-gray-500"
               }`}
             >
               {f.id}
@@ -347,26 +367,47 @@ const MyTeamView = ({ team, season, gw }) => {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-5">
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
-          <h3 className="font-bold text-gray-100 mb-3">
-            {t("Composition")}
-            <span className="text-xs font-normal text-gray-400 ml-2">
-              {t("Cliquer un joueur pour capitaine / vice-capitaine")}
-            </span>
-          </h3>
+        <div className="rounded-2xl bg-emerald-950/60 p-4">
+          <div className="flex items-center justify-between mb-3 gap-2">
+            <h3 className="font-bold text-gray-100">
+              {t("Composition")}
+            </h3>
+            <div className="flex rounded-lg bg-white/5 p-0.5 text-xs font-bold">
+              {[
+                { id: "cap", label: t("Capitaine") },
+                { id: "vc", label: t("Vice-cap.") },
+              ].map(r => (
+                <button
+                  key={r.id}
+                  onClick={() => setRole(r.id)}
+                  className={`px-3 py-1 rounded-md transition-colors ${
+                    role === r.id
+                      ? r.id === "cap"
+                        ? "bg-amber-500 text-white"
+                        : "bg-sky-500 text-white"
+                      : "text-gray-400 hover:text-gray-100"
+                  }`}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 -mt-2 mb-3">
+            {role === "cap"
+              ? t("Cliquez un joueur pour le nommer capitaine (×2 points)")
+              : t("Cliquez un joueur pour le nommer vice-capitaine")}
+          </p>
           <Pitch
             starters={starters}
             capId={capId}
             vcId={vcId}
             formation={formation}
-            onPick={p => {
-              if (p.id === capId) setVc(vcId === p.id ? null : p.id);
-              else setCaptain(p.id);
-            }}
+            onPick={pickPlayer}
           />
         </div>
         <div className="space-y-5">
-          <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+          <div className="rounded-2xl bg-emerald-950/60 p-4">
             <h3 className="font-bold text-gray-100 mb-3">
               {t("Remplaçants")}
             </h3>
@@ -376,7 +417,7 @@ const MyTeamView = ({ team, season, gw }) => {
               ))}
             </div>
           </div>
-          <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-4 flex items-center justify-between">
+          <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4 flex items-center justify-between">
             <div className="text-sm">
               <p className="font-bold">{t("Capitaine")}</p>
               <p className="text-gray-400 text-xs">
@@ -418,7 +459,7 @@ const FantasyMyTeam = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+      <div className="rounded-2xl bg-emerald-950/60 p-10 text-center">
         <p className="text-gray-400">{t("Connectez-vous pour gérer votre équipe fantasy.")}</p>
         <Link to="/compte" className="text-emerald-400 font-bold text-sm mt-2 inline-block">
           {t("Se connecter")}

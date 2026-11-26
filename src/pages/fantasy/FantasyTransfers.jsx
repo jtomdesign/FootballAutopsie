@@ -43,7 +43,7 @@ const Transfers = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+      <div className="rounded-2xl bg-emerald-950/60 p-10 text-center">
         <p className="text-gray-400">{t("Connectez-vous pour effectuer des transferts.")}</p>
         <Link to="/compte" className="text-emerald-400 font-bold text-sm mt-2 inline-block">
           {t("Se connecter")}
@@ -54,7 +54,7 @@ const Transfers = () => {
   if (isLoading) return <p className="text-gray-500 py-10 text-center">{t("Chargement…")}</p>;
   if (!team) {
     return (
-      <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-10 text-center">
+      <div className="rounded-2xl bg-emerald-950/60 p-10 text-center">
         <p className="text-gray-400">{t("Créez d'abord votre équipe.")}</p>
         <Link to="/fantasy/equipe" className="text-emerald-400 font-bold text-sm mt-2 inline-block">
           {t("Mon équipe")}
@@ -93,7 +93,7 @@ const Transfers = () => {
   const deduction = freeLeft > 0 ? 0 : (season?.extra_transfer_cost ?? 4);
 
   const PlayerRow = ({ p, side }) => (
-    <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5">
+    <div className="flex items-center gap-3 rounded-xl bg-white/5 p-2.5">
       <div className="w-9 h-9 rounded-full bg-white/5 overflow-hidden shrink-0">
         {p.photo && <img src={p.photo} alt="" className="w-full h-full object-cover" />}
       </div>
@@ -117,7 +117,7 @@ const Transfers = () => {
   return (
     <div className="space-y-5">
       {/* Status bar */}
-      <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-gray-100 p-4 flex flex-wrap gap-6 text-sm">
+      <div className="rounded-2xl bg-emerald-500/10 text-gray-100 p-4 flex flex-wrap gap-6 text-sm">
         <div>
           <p className="text-gray-400 text-xs uppercase font-bold">{t("Budget")}</p>
           <p className="font-bold">£{Number(team.budget ?? 0).toFixed(1)}m</p>
@@ -134,7 +134,7 @@ const Transfers = () => {
 
       <div className="grid lg:grid-cols-2 gap-5">
         {/* My squad — sell side */}
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+        <div className="rounded-2xl bg-emerald-950/60 p-4">
           <h3 className="font-bold text-gray-100 mb-3">{t("Mon effectif")}</h3>
           <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
             {squad.map(p => (
@@ -144,7 +144,7 @@ const Transfers = () => {
         </div>
 
         {/* Market — buy side */}
-        <div className="rounded-2xl bg-emerald-950/60 border border-emerald-900/60 p-4">
+        <div className="rounded-2xl bg-emerald-950/60 p-4">
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <h3 className="font-bold text-gray-100 mr-auto">{t("Marché")}</h3>
             {["", "G", "D", "M", "F"].map(p => (
@@ -181,7 +181,7 @@ const Transfers = () => {
 
       {/* Confirmation bar */}
       {(sellPick || buyPick) && (
-        <div className="rounded-2xl bg-emerald-950/60 border-2 border-emerald-500 p-4 flex flex-wrap items-center gap-4">
+        <div className="rounded-2xl bg-emerald-950/60 p-4 flex flex-wrap items-center gap-4">
           <LuArrowLeftRight className="text-emerald-400 text-2xl" />
           <div className="flex-1 min-w-[200px] text-sm">
             <p className="font-bold text-gray-100">
