@@ -31,6 +31,9 @@ const FantasyAdmin = () => {
   const [syncing, setSyncing] = useState(false);
   const [challenges, setChallenges] = useState([]);
   const [newChallenge, setNewChallenge] = useState({ title: "", description: "", reward: "", endsAt: "" });
+  const [manage, setManage] = useState({ leagues: [], teams: [], loaded: false });
+  const [playerQuery, setPlayerQuery] = useState("");
+  const [playerResults, setPlayerResults] = useState([]);
 
   const loadChallenges = async () => {
     const { data } = await supabase
@@ -62,6 +65,56 @@ const FantasyAdmin = () => {
     const { error } = await supabase.from("fantasy_challenges").delete().eq("id", id);
     if (error) return toast.error(error.message);
     loadChallenges();
+  };
+
+  // ---------- Moderation ----------
+
+  const loadManage = async () => {
+    const [{ data: leagues }, { data: teams }] = await Promise.all([
+      supabase
+        .from("fantasy_leagues")
+        .select("id, name, type, season_id, fantasy_seasons(name, fantasy_comps(name))")
+        .order("name"),
+      supabase
+        .from("fantasy_teams")
+        .select("id, name, total_points, user_id, season_id, fantasy_seasons(name, fantasy_comps(name))")
+        .order("total_points", { ascending: false })
+        .limit(300),
+    ]);
+    setManage({ leagues: leagues ?? [], teams: teams ?? [], loaded: true });
+  };
+
+  const deleteLeague = async l => {
+    if (!window.confirm(`Supprimer la ligue « ${l.name} » ? Membres et matchs H2H seront aussi supprimés.`)) return;
+    const { error } = await supabase.from("fantasy_leagues").delete().eq("id", l.id);
+    if (error) return toast.error(error.message);
+    toast.success("Ligue supprimée");
+    loadManage();
+  };
+
+  const deleteTeam = async t => {
+    if (!window.confirm(`Supprimer l'équipe « ${t.name} » ? Effectif, compositions, points et transferts seront aussi supprimés.`)) return;
+    const { error } = await supabase.from("fantasy_teams").delete().eq("id", t.id);
+    if (error) return toast.error(error.message);
+    toast.success("Équipe supprimée");
+    loadManage();
+    loadCounts();
+  };
+
+  const searchPlayersAdmin = async q => {
+    if (!q.trim()) return setPlayerResults([]);
+    const { data } = await supabase
+      .from("fantasy_players")
+      .select("id, name, position, price, enabled, club_name")
+      .ilike("name", `%${q.trim()}%`)
+      .limit(15);
+    setPlayerResults(data ?? []);
+  };
+
+  const updatePlayer = async (id, patch) => {
+    const { error } = await supabase.from("fantasy_players").update(patch).eq("id", id);
+    if (error) return toast.error(error.message);
+    setPlayerResults(rs => rs.map(r => (r.id === id ? { ...r, ...patch } : r)));
   };
 
   const seasons = useMemo(
@@ -397,6 +450,105 @@ const FantasyAdmin = () => {
             <Button name="Annuler" type="simple"
               onClick={() => setRulesText(null)} />
           )}
+        </div>
+      </Section>
+
+      {/* Moderation */}
+      <Section title="Gestion & modération">
+        <div className="mb-4">
+          <Button
+            name={manage.loaded ? "Recharger" : "Charger les données"}
+            type="secondary" icon={<LuRefreshCw />}
+            onClick={loadManage} />
+        </div>
+
+        {manage.loaded && (
+          <div className="grid lg:grid-cols-2 gap-5">
+            {/* Leagues */}
+            <div>
+              <p className="text-xs font-bold text-gray-400 mb-2">Ligues ({manage.leagues.length})</p>
+              <div className="space-y-1.5 max-h-72 overflow-y-auto">
+                {manage.leagues.map(l => (
+                  <div key={l.id} className="flex items-center gap-2 text-sm bg-white/5 rounded-lg px-3 py-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-100 truncate">{l.name}</p>
+                      <p className="text-[11px] text-gray-400 truncate">
+                        {l.type} · {l.fantasy_seasons?.fantasy_comps?.name} {l.fantasy_seasons?.name}
+                      </p>
+                    </div>
+                    <button onClick={() => deleteLeague(l)}
+                      className="text-xs font-bold text-red-400 hover:text-red-300 shrink-0">
+                      Supprimer
+                    </button>
+                  </div>
+                ))}
+                {!manage.leagues.length && <p className="text-xs text-gray-400">Aucune ligue.</p>}
+              </div>
+            </div>
+
+            {/* Teams */}
+            <div>
+              <p className="text-xs font-bold text-gray-400 mb-2">Équipes ({manage.teams.length})</p>
+              <div className="space-y-1.5 max-h-72 overflow-y-auto">
+                {manage.teams.map(t => (
+                  <div key={t.id} className="flex items-center gap-2 text-sm bg-white/5 rounded-lg px-3 py-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-gray-100 truncate">{t.name}</p>
+                      <p className="text-[11px] text-gray-400 truncate">
+                        {t.fantasy_seasons?.fantasy_comps?.name} {t.fantasy_seasons?.name} · {t.total_points ?? 0} pts · #{t.user_id?.slice(0, 8)}
+                      </p>
+                    </div>
+                    <button onClick={() => deleteTeam(t)}
+                      className="text-xs font-bold text-red-400 hover:text-red-300 shrink-0">
+                      Supprimer
+                    </button>
+                  </div>
+                ))}
+                {!manage.teams.length && <p className="text-xs text-gray-400">Aucune équipe.</p>}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Players */}
+        <div className="mt-6 pt-4 border-t border-white/10">
+          <p className="text-xs font-bold text-gray-400 mb-2">Joueurs — prix & activation</p>
+          <input
+            className={`${inputCls} mb-3`}
+            placeholder="Rechercher un joueur…"
+            value={playerQuery}
+            onChange={e => { setPlayerQuery(e.target.value); searchPlayersAdmin(e.target.value); }}
+          />
+          <div className="space-y-1.5 max-h-72 overflow-y-auto">
+            {playerResults.map(p => (
+              <div key={p.id} className="flex items-center gap-2 text-sm bg-white/5 rounded-lg px-3 py-2">
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-gray-100 truncate">
+                    {p.name} {!p.enabled && <span className="text-[10px] text-red-400">(désactivé)</span>}
+                  </p>
+                  <p className="text-[11px] text-gray-400">{p.position} · {p.club_name}</p>
+                </div>
+                <input
+                  type="number" step="0.5" min="0"
+                  defaultValue={p.price}
+                  className="w-20 rounded-lg fa-input px-2 py-1 text-xs"
+                  onBlur={e => {
+                    const v = Number(e.target.value);
+                    if (v !== Number(p.price)) updatePlayer(p.id, { price: v });
+                  }}
+                />
+                <button
+                  onClick={() => updatePlayer(p.id, { enabled: !p.enabled })}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold ${p.enabled ? "bg-emerald-500/15 text-emerald-300" : "bg-white/10 text-gray-400"}`}
+                >
+                  {p.enabled ? "Actif" : "Inactif"}
+                </button>
+              </div>
+            ))}
+            {playerQuery.trim() && !playerResults.length && (
+              <p className="text-xs text-gray-400">Aucun joueur trouvé.</p>
+            )}
+          </div>
         </div>
       </Section>
     </div>
