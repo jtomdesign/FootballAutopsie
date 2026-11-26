@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { footballApi } from "./football/client";
 
 const uid = async () => {
   const { data } = await supabase.auth.getUser();
@@ -38,6 +39,57 @@ export const getActiveGameweek = async seasonId => {
     .maybeSingle();
   if (error) throw error;
   return data;
+};
+
+export const getSeasonGameweeks = async seasonId => {
+  const { data, error } = await supabase
+    .from("fantasy_gameweeks")
+    .select("*")
+    .eq("season_id", seasonId)
+    .order("number");
+  if (error) throw error;
+  return data ?? [];
+};
+
+// API league id + api-sports season year for a fantasy season
+export const getSeasonApiInfo = async seasonId => {
+  const { data } = await supabase
+    .from("fantasy_seasons")
+    .select("api_season, fantasy_comps(api_league_id)")
+    .eq("id", seasonId)
+    .maybeSingle();
+  return {
+    apiSeason: data?.api_season ?? null,
+    apiLeagueId: data?.fantasy_comps?.api_league_id ?? null,
+  };
+};
+
+const FINISHED = new Set(["FT", "AET", "PEN", "AWD", "WO"]);
+const LIVE = new Set(["1H", "HT", "2H", "ET", "BT", "P", "INT"]);
+
+// Round number of the matchweek currently being played (or next to be played)
+// according to real API-Football fixtures.
+export const getCurrentApiRound = async (apiLeagueId, apiSeason) => {
+  try {
+    const fixtures = await footballApi("/fixtures", {
+      league: apiLeagueId,
+      season: apiSeason,
+      next: 100,
+    });
+    const pending = (fixtures ?? [])
+      .filter(f => !FINISHED.has(f?.fixture?.status?.short))
+      .sort((a, b) => {
+        const la = LIVE.has(a?.fixture?.status?.short) ? 0 : 1;
+        const lb = LIVE.has(b?.fixture?.status?.short) ? 0 : 1;
+        if (la !== lb) return la - lb;
+        return new Date(a.fixture.date) - new Date(b.fixture.date);
+      });
+    const round = pending[0]?.league?.round;
+    const m = String(round ?? "").match(/(\d+)\s*$/);
+    return m ? Number(m[1]) : null;
+  } catch {
+    return null;
+  }
 };
 
 export const getScoringRules = async () => {

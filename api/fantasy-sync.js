@@ -42,11 +42,12 @@ async function sb(path, opts = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-async function apiFetch(params) {
+async function apiFetch(path, params = {}) {
   const qs = new URLSearchParams(params).toString();
+  const url = `https://${API_HOST}${path}${qs ? `?${qs}` : ""}`;
   // One retry on throttle
   for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await fetch(`https://${API_HOST}${qs}`, {
+    const res = await fetch(url, {
       headers: { "x-apisports-key": API_KEY },
     });
     if (res.status === 429 || res.status === 403) {
@@ -83,6 +84,27 @@ function extractStats(teamPlayers) {
   return out;
 }
 
+const FINISHED_STATUS = new Set(["FT", "AET", "PEN", "AWD", "WO"]);
+const LIVE_STATUS = new Set(["1H", "HT", "2H", "ET", "BT", "P", "INT"]);
+
+// Round number of the matchweek currently being played (or next to play)
+async function currentApiRound(league, season) {
+  try {
+    const json = await apiFetch("/fixtures", { league, season, next: 100 });
+    const pending = (json?.response ?? [])
+      .filter(f => !FINISHED_STATUS.has(f?.fixture?.status?.short))
+      .sort((a, b) => {
+        const la = LIVE_STATUS.has(a?.fixture?.status?.short) ? 0 : 1;
+        const lb = LIVE_STATUS.has(b?.fixture?.status?.short) ? 0 : 1;
+        return la !== lb ? la - lb : new Date(a.fixture.date) - new Date(b.fixture.date);
+      });
+    const m = String(pending[0]?.league?.round ?? "").match(/(\d+)\s*$/);
+    return m ? Number(m[1]) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   const key = req.query.key ?? req.headers["x-fantasy-key"];
   let authorized =
@@ -116,6 +138,34 @@ export default async function handler(req, res) {
   }
 
   try {
+    // 0. Auto-advance gameweek statuses to the real current round so the
+    //    fantasy calendar follows the actual competition — no manual admin
+    //    status flips needed. Runs before selecting active gameweeks.
+    const activeSeasons = await sb(
+      "fantasy_seasons?status=eq.active&select=id,api_season,fantasy_comps(api_league_id)",
+    );
+    for (const s of activeSeasons ?? []) {
+      const lg = s.fantasy_comps?.api_league_id;
+      const yr = s.api_season;
+      if (!lg || !yr) continue;
+      const round = await currentApiRound(lg, yr);
+      if (round == null) continue;
+      const sGws = await sb(
+        `fantasy_gameweeks?season_id=eq.${s.id}&select=id,number,status`,
+      );
+      for (const gw of sGws ?? []) {
+        let st = gw.status;
+        if (Number(gw.number) < round) st = "completed";
+        else if (Number(gw.number) === round && st === "upcoming") st = "open";
+        if (st !== gw.status) {
+          await sb(`fantasy_gameweeks?id=eq.${gw.id}`, {
+            method: "PATCH",
+            body: JSON.stringify({ status: st }),
+          });
+        }
+      }
+    }
+
     // 1. Active gameweeks (status open/live/deadline_passed)
     const gws = await sb(
       "fantasy_gameweeks?status=in.(open,live,deadline_passed)&select=id,season_id,number,fixture_ids",
@@ -139,7 +189,7 @@ export default async function handler(req, res) {
     for (const gw of gws) {
       const fixtureIds = (gw.fixture_ids ?? []).filter(Boolean);
       for (const fid of fixtureIds) {
-        const json = await apiFetch({ path: `/fixtures/players?fixture=${fid}` });
+        const json = await apiFetch("/fixtures/players", { fixture: fid });
         const rows = extractStats(json?.response);
         for (const r of rows) {
           const fp = byApiId.get(r.api_player_id);
@@ -155,7 +205,7 @@ export default async function handler(req, res) {
     const fixtureMeta = new Map();
     const allFixtureIds = [...new Set(gws.flatMap(g => g.fixture_ids ?? []))];
     for (const fid of allFixtureIds) {
-      const json = await apiFetch({ path: `/fixtures?id=${fid}` });
+      const json = await apiFetch("/fixtures", { id: fid });
       const f = json?.response?.[0];
       if (!f) continue;
       const home = f.teams?.home, away = f.teams?.away;

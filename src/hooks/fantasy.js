@@ -2,7 +2,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getFantasyComps,
   getFantasySeason,
-  getActiveGameweek,
+  getSeasonGameweeks,
+  getSeasonApiInfo,
+  getCurrentApiRound,
   getScoringRules,
   searchFantasyPlayers,
   getMyTeam,
@@ -26,13 +28,43 @@ export const useFantasySeasonById = seasonId =>
     enabled: !!seasonId,
   });
 
-export const useActiveGameweek = seasonId =>
-  useQuery({
-    queryKey: ["fantasy", "gw", seasonId],
-    queryFn: () => getActiveGameweek(seasonId),
+// Resolves the "current" gameweek two ways and prefers the real one:
+//  1. The fantasy_gameweeks row whose number matches the competition's
+//     actual current round (live now, or next to be played) — automatic.
+//  2. Fallback: first GW with an open-ish status, else last completed.
+export const useActiveGameweek = seasonId => {
+  const gwsQuery = useQuery({
+    queryKey: ["fantasy", "gws", seasonId],
+    queryFn: () => getSeasonGameweeks(seasonId),
     enabled: !!seasonId,
     refetchInterval: 60_000,
   });
+
+  const { data: apiInfo } = useQuery({
+    queryKey: ["fantasy", "seasonapi", seasonId],
+    queryFn: () => getSeasonApiInfo(seasonId),
+    enabled: !!seasonId,
+  });
+
+  const { data: realRound } = useQuery({
+    queryKey: ["fantasy", "realround", apiInfo?.apiLeagueId, apiInfo?.apiSeason],
+    queryFn: () => getCurrentApiRound(apiInfo.apiLeagueId, apiInfo.apiSeason),
+    enabled: !!apiInfo?.apiLeagueId && !!apiInfo?.apiSeason,
+    staleTime: 5 * 60_000,
+  });
+
+  const gws = gwsQuery.data ?? [];
+  const byRound =
+    realRound != null
+      ? gws.find(g => Number(g.number) === Number(realRound)) ?? null
+      : null;
+  const byStatus =
+    gws.find(g => ["upcoming", "open", "live", "deadline_passed"].includes(g.status)) ??
+    [...gws].reverse().find(g => g.status === "completed") ??
+    null;
+
+  return { ...gwsQuery, data: byRound ?? byStatus ?? null };
+};
 
 export const useScoringRules = () =>
   useQuery({ queryKey: ["fantasy", "rules"], queryFn: getScoringRules });
