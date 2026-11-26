@@ -322,6 +322,11 @@ const MyTeamView = ({ team, season, gw }) => {
           <p className="text-sm text-gray-500">
             {season?.comp?.name} · {season?.name} ·{" "}
             {t("{{pts}} points", { pts: team.total_points ?? 0 })}
+            {gw?.number != null && (
+              <span className="ml-2 text-emerald-400/80">
+                · {t("Journée {{n}}", { n: gw.number })}
+              </span>
+            )}
           </p>
         </div>
         <div className="flex gap-2">
@@ -385,6 +390,11 @@ const MyTeamView = ({ team, season, gw }) => {
               </p>
             </div>
           </div>
+          {!gw && (
+            <p className="text-xs text-amber-400/90 text-center">
+              {t("Aucune journée configurée pour cette saison — la composition ne peut pas encore être enregistrée.")}
+            </p>
+          )}
           <Button
             name={setLineup.isPending ? t("Enregistrement…") : t("Enregistrer la composition")}
             type="primary"

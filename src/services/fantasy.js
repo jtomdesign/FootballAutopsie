@@ -32,7 +32,7 @@ export const getActiveGameweek = async seasonId => {
     .from("fantasy_gameweeks")
     .select("*")
     .eq("season_id", seasonId)
-    .in("status", ["open", "live", "deadline_passed"])
+    .in("status", ["upcoming", "open", "live", "deadline_passed"])
     .order("number")
     .limit(1)
     .maybeSingle();
