@@ -398,15 +398,13 @@ const MyTeamView = ({ team, season, gw }) => {
               ? t("Cliquez un joueur pour le nommer capitaine (×2 points)")
               : t("Cliquez un joueur pour le nommer vice-capitaine")}
           </p>
-          <div className="overflow-x-auto">
-            <Pitch
-              starters={starters}
-              capId={capId}
-              vcId={vcId}
-              formation={formation}
-              onPick={pickPlayer}
-            />
-          </div>
+          <Pitch
+            starters={starters}
+            capId={capId}
+            vcId={vcId}
+            formation={formation}
+            onPick={pickPlayer}
+          />
         </div>
         <div className="space-y-5">
           <div className="rounded-2xl bg-emerald-950/60 p-4">

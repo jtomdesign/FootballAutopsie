@@ -22,7 +22,7 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
 
   return (
     <div
-      className="relative w-full min-w-[440px] rounded-2xl overflow-hidden shadow-inner"
+      className="relative w-full rounded-2xl overflow-hidden shadow-inner"
       style={{
         aspectRatio: "68/105",
         background:
@@ -82,7 +82,7 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
                     : "bg-white/50"
               }`}
             >
-              <span className="block w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-emerald-950 border-2 border-white/40 relative">
+              <span className="block w-9 h-9 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-emerald-950 border-2 border-white/40 relative">
                 {p.photo ? (
                   <img
                     src={p.photo}
@@ -91,7 +91,7 @@ const Pitch = ({ starters, capId, vcId, onPick }) => {
                     loading="lazy"
                   />
                 ) : (
-                  <span className="w-full h-full flex items-center justify-center text-[11px] font-bold text-emerald-300">
+                  <span className="w-full h-full flex items-center justify-center text-[10px] font-bold text-emerald-300">
                     {p.name?.slice(0, 2).toUpperCase()}
                   </span>
                 )}
